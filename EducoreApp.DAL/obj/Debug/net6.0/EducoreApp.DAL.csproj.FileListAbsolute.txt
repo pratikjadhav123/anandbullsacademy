@@ -1,0 +1,12 @@
+D:\Project\EducoreApp\EducoreApp.DAL\bin\Debug\net6.0\EducoreApp.DAL.deps.json
+D:\Project\EducoreApp\EducoreApp.DAL\bin\Debug\net6.0\EducoreApp.DAL.dll
+D:\Project\EducoreApp\EducoreApp.DAL\bin\Debug\net6.0\EducoreApp.DAL.pdb
+D:\Project\EducoreApp\EducoreApp.DAL\obj\Debug\net6.0\EducoreApp.DAL.csproj.AssemblyReference.cache
+D:\Project\EducoreApp\EducoreApp.DAL\obj\Debug\net6.0\EducoreApp.DAL.GeneratedMSBuildEditorConfig.editorconfig
+D:\Project\EducoreApp\EducoreApp.DAL\obj\Debug\net6.0\EducoreApp.DAL.AssemblyInfoInputs.cache
+D:\Project\EducoreApp\EducoreApp.DAL\obj\Debug\net6.0\EducoreApp.DAL.AssemblyInfo.cs
+D:\Project\EducoreApp\EducoreApp.DAL\obj\Debug\net6.0\EducoreApp.DAL.csproj.CoreCompileInputs.cache
+D:\Project\EducoreApp\EducoreApp.DAL\obj\Debug\net6.0\EducoreApp.DAL.dll
+D:\Project\EducoreApp\EducoreApp.DAL\obj\Debug\net6.0\refint\EducoreApp.DAL.dll
+D:\Project\EducoreApp\EducoreApp.DAL\obj\Debug\net6.0\EducoreApp.DAL.pdb
+D:\Project\EducoreApp\EducoreApp.DAL\obj\Debug\net6.0\ref\EducoreApp.DAL.dll
