@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32516.85
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EducoreApp.Web", "EducoreApp.Web\EducoreApp.Web.csproj", "{0D61D77F-7DA8-4615-AD8A-E9E53CE48248}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EducoreApp.DAL", "EducoreApp.DAL\EducoreApp.DAL.csproj", "{A429FDE1-5745-47C5-9205-ED93B4E58A61}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0D61D77F-7DA8-4615-AD8A-E9E53CE48248}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D61D77F-7DA8-4615-AD8A-E9E53CE48248}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D61D77F-7DA8-4615-AD8A-E9E53CE48248}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D61D77F-7DA8-4615-AD8A-E9E53CE48248}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A429FDE1-5745-47C5-9205-ED93B4E58A61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A429FDE1-5745-47C5-9205-ED93B4E58A61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A429FDE1-5745-47C5-9205-ED93B4E58A61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A429FDE1-5745-47C5-9205-ED93B4E58A61}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4BCB3544-91D1-49DD-9B32-873751763DE8}
+	EndGlobalSection
+EndGlobal
