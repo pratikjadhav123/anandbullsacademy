@@ -10,3 +10,15 @@ D:\Project\EducoreApp\EducoreApp.DAL\obj\Release\net6.0\EducoreApp.DAL.dll
 D:\Project\EducoreApp\EducoreApp.DAL\obj\Release\net6.0\refint\EducoreApp.DAL.dll
 D:\Project\EducoreApp\EducoreApp.DAL\obj\Release\net6.0\EducoreApp.DAL.pdb
 D:\Project\EducoreApp\EducoreApp.DAL\obj\Release\net6.0\ref\EducoreApp.DAL.dll
+D:\Project\new\anandbullsacademy\EducoreApp.DAL\bin\Release\net6.0\EducoreApp.DAL.deps.json
+D:\Project\new\anandbullsacademy\EducoreApp.DAL\bin\Release\net6.0\EducoreApp.DAL.dll
+D:\Project\new\anandbullsacademy\EducoreApp.DAL\bin\Release\net6.0\EducoreApp.DAL.pdb
+D:\Project\new\anandbullsacademy\EducoreApp.DAL\obj\Release\net6.0\EducoreApp.DAL.csproj.AssemblyReference.cache
+D:\Project\new\anandbullsacademy\EducoreApp.DAL\obj\Release\net6.0\EducoreApp.DAL.GeneratedMSBuildEditorConfig.editorconfig
+D:\Project\new\anandbullsacademy\EducoreApp.DAL\obj\Release\net6.0\EducoreApp.DAL.AssemblyInfoInputs.cache
+D:\Project\new\anandbullsacademy\EducoreApp.DAL\obj\Release\net6.0\EducoreApp.DAL.AssemblyInfo.cs
+D:\Project\new\anandbullsacademy\EducoreApp.DAL\obj\Release\net6.0\EducoreApp.DAL.csproj.CoreCompileInputs.cache
+D:\Project\new\anandbullsacademy\EducoreApp.DAL\obj\Release\net6.0\EducoreApp.DAL.dll
+D:\Project\new\anandbullsacademy\EducoreApp.DAL\obj\Release\net6.0\refint\EducoreApp.DAL.dll
+D:\Project\new\anandbullsacademy\EducoreApp.DAL\obj\Release\net6.0\EducoreApp.DAL.pdb
+D:\Project\new\anandbullsacademy\EducoreApp.DAL\obj\Release\net6.0\ref\EducoreApp.DAL.dll

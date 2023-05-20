@@ -1,0 +1,19 @@
+﻿# Compiled output
+/build/
+
+# Dependencies
+/node_modules/
+/packages/
+
+x64/
+x86/
+build/
+bld/
+bin/
+Bin/
+obj/
+Obj/
+
+# IDE-specific files
+.idea/
+.vscode/

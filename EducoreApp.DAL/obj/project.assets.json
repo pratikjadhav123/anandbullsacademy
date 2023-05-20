@@ -1564,11 +1564,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Project\\EducoreApp\\EducoreApp.DAL\\EducoreApp.DAL.csproj",
+      "projectUniqueName": "D:\\Project\\new\\anandbullsacademy\\EducoreApp.DAL\\EducoreApp.DAL.csproj",
       "projectName": "EducoreApp.DAL",
-      "projectPath": "D:\\Project\\EducoreApp\\EducoreApp.DAL\\EducoreApp.DAL.csproj",
+      "projectPath": "D:\\Project\\new\\anandbullsacademy\\EducoreApp.DAL\\EducoreApp.DAL.csproj",
       "packagesPath": "C:\\Users\\Satyam\\.nuget\\packages\\",
-      "outputPath": "D:\\Project\\EducoreApp\\EducoreApp.DAL\\obj\\",
+      "outputPath": "D:\\Project\\new\\anandbullsacademy\\EducoreApp.DAL\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Satyam\\AppData\\Roaming\\NuGet\\NuGet.Config",
