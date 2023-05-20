@@ -248,7 +248,7 @@ function HomePageTwoHeader() {
                   onClick={scrollTop}
                   to={`${process.env.PUBLIC_URL}/`}
                 >
-                  <img src={process.env.PUBLIC_URL + "/images/logo-w.png"} alt="logo" />
+                  <img src={process.env.PUBLIC_URL + "/images/logo.png"} alt="logo" />
                 </Link>
                 <div className="mobile-menu d-flex ">
                   <div className="d-flex align-items-center">

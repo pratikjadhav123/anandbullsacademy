@@ -5,12 +5,12 @@ import { Link, NavLink } from "react-router-dom";
 
 function Header() {
   const [isCatagoryActive, setCatagoryActive] = useState(false);
-  const [isUserDropdown, setUserDropdown]= useState(false);
+  const [isUserDropdown, setUserDropdown] = useState(false);
   const [mobileSideberMenu, setMobileSideberMenu] = useState(0);
-  const handleUserDropDown = ()=>{
-    if(isUserDropdown === false || isUserDropdown ===0){
+  const handleUserDropDown = () => {
+    if (isUserDropdown === false || isUserDropdown === 0) {
       setUserDropdown(1);
-    } else{
+    } else {
       setUserDropdown(false)
     }
   }
@@ -33,7 +33,7 @@ function Header() {
     // Add scroll event when the component is loaded
     window.addEventListener('scroll', isSticky);
     return () => {
-        window.removeEventListener('scroll', isSticky);
+      window.removeEventListener('scroll', isSticky);
     };
   });
   /* Method that will fix header after a specific scrollable */
@@ -41,157 +41,154 @@ function Header() {
     const header = document.querySelector('header');
     const scrollTop = window.scrollY;
     scrollTop >= 200 ? header.classList.add('sticky') : header.classList.remove('sticky');
-}
- 
+  }
 
- 
+
+
   const scrollTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
   return (
     <>
-    <header>
-      <div className={`${"header-area header-style-two"} ${isSticky && 'sticky'}`} >
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-xl-7 col-lg-8 col-md-8 col-sm-6 col-xs-6">
-              <nav className={mobileSideberMenu === 1 ?"main-nav slidenav": "main-nav"}>
-                <div className="inner-logo d-xl-none text-center">
+      <header>
+        <div className={`${"header-area header-style-two"} ${isSticky && 'sticky'}`} >
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-xl-7 col-lg-8 col-md-8 col-sm-6 col-xs-6">
+                <nav className={mobileSideberMenu === 1 ? "main-nav slidenav" : "main-nav"}>
+                  <div className="inner-logo d-xl-none text-center">
+                    <Link
+                      onClick={scrollTop}
+                      to={`${process.env.PUBLIC_URL}/`}
+                    >
+                    <img src={process.env.PUBLIC_URL + "/images/logo.png"} alt="Logo" />
+                    </Link>
+                  </div>
+                  <ul>
+                    <li >
+                      <Link to={`${process.env.PUBLIC_URL}/`}>Home</Link>
+                    </li>
+                    <li>
+                      <Link
+                        onClick={scrollTop}
+                        to={`${process.env.PUBLIC_URL}/about`}
+                      >
+                        About Us
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to={`${process.env.PUBLIC_URL}/courses`}>Courses</Link>
+                    </li>
+                    <li>
+                      <Link
+                        onClick={scrollTop}
+                        to={`${process.env.PUBLIC_URL}/contact`}
+                      >
+                        Contact Us
+                      </Link>
+                    </li>
+                  </ul>
+                  <div className="inner-contact-options d-xl-none">
+                    <div className="contact-box-inner">
+                      <i className="bi bi-telephone-fill" />
+                      <Link to={"tel:+91 94048 55782"}>+91 94048 55782</Link>
+                    </div>
+                    <div className="contact-box-inner">
+                      <i className="bi bi-envelope-fill" />
+                      <Link to={"mailto:info@domainname.com"}>
+                        info@domainname.com
+                      </Link>
+                    </div>
+                  </div>
+                </nav>
+              </div>
+              <div className="col-xl-2 col-lg-12 col-md-12 col-sm-12 col-xs-12 align-items-center d-xl-flex d-lg-block">
+                <div className="nav-logo d-flex justify-content-between align-items-center">
                   <Link
                     onClick={scrollTop}
                     to={`${process.env.PUBLIC_URL}/`}
                   >
-                    <img src={process.env.PUBLIC_URL + "/images/logo.png"} alt="Logo" />
+                  <img src={process.env.PUBLIC_URL + "/images/logo.png"} alt="logo" />
                   </Link>
-                </div>
-                <ul>
-                  <li >
-                    <Link to={`${process.env.PUBLIC_URL}/`}>Home</Link>
-                  </li>
-                  <li>
-                    <Link
-                      onClick={scrollTop}
-                      to={`${process.env.PUBLIC_URL}/about`}
-                    >
-                      About Us 
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to={`${process.env.PUBLIC_URL}/courses`}>Courses</Link>
-                  </li>
-                  <li>
-                    <NavLink
-                      onClick={scrollTop}
-                      to={`${process.env.PUBLIC_URL}/contact`}
-                    >
-                      Contact Us
-                    </NavLink>
-                  </li>
-                </ul>
-                <div className="inner-contact-options d-xl-none">
-                  <div className="contact-box-inner">
-                    <i className="bi bi-telephone-fill" />
-                    <Link to={"tel:+91 94048 55782"}>+91 94048 55782</Link>
-                  </div>
-                  <div className="contact-box-inner">
-                    <i className="bi bi-envelope-fill" />
-                    <Link to={"mailto:info@domainname.com"}>
-                      info@domainname.com
-                    </Link>
-                  </div>
-                </div>
-              </nav>
-            </div>
-            <div className="col-xl-2 col-lg-12 col-md-12 col-sm-12 col-xs-12 align-items-center d-xl-flex d-lg-block">
-              <div className="nav-logo d-flex justify-content-between align-items-center">
-                <Link
-                  onClick={scrollTop}
-                  to={`${process.env.PUBLIC_URL}/`}
-                >
-                  <img src={process.env.PUBLIC_URL + "/images/logo-w.png"} alt="logo" />
-                </Link>
-                <div className="mobile-menu d-flex ">
-                  <div className="d-flex align-items-center">
-                    <div className="nav-right-icons d-xl-none d-flex align-items-center ">
-                      <div className="user-dropdown">
-                        <i onClick={handleUserDropDown} className="bx bx-user-circle" />
-                        <ul className={`${"user-drop-list"} ${isUserDropdown === 1? "account-drop-active" : ""}`}>
-                          <li>
-                            <NavLink to={"#"}>My Account</NavLink>
-                          </li>
-                          <li>
-                            <NavLink to={"#"}>Login</NavLink>
-                          </li>
-                          <li>
-                            <NavLink to={"#"}>Registration</NavLink>
-                          </li>
-                          <li>
-                            <NavLink to={"#"}>Setting</NavLink>
-                          </li>
-                        </ul>
+                  <div className="mobile-menu d-flex ">
+                    <div className="d-flex align-items-center">
+                      <div className="nav-right-icons d-xl-none d-flex align-items-center ">
+                        <div className="user-dropdown">
+                          <i onClick={handleUserDropDown} className="bx bx-user-circle" />
+                          <ul className={`${"user-drop-list"} ${isUserDropdown === 1 ? "account-drop-active" : ""}`}>
+                            <li>
+                              <NavLink to={`${process.env.PUBLIC_URL}/myProfile`}>My Account</NavLink>
+                            </li>
+                            <li>
+                              <NavLink to={"#"}>Login</NavLink>
+                            </li>
+                            <li>
+                              <NavLink to={"#"}>Registration</NavLink>
+                            </li>
+                            <li>
+                              <NavLink to={"#"}>Setting</NavLink>
+                            </li>
+                          </ul>
+                        </div>
+                        <div onClick={handleCatagorybtn} className="category-toggle">
+                          <i className="bx bx-category" />
+                        </div>
                       </div>
-                      <div onClick={handleCatagorybtn} className="category-toggle">
-                        <i className="bx bx-category" />
-                      </div>
+                      <Link
+                        to={"#"}
+                        onClick={handleMobileSiderbar}
+                        className={
+                          mobileSideberMenu === 1
+                            ? "hamburger d-block d-xl-none h-active"
+                            : "hamburger d-block d-xl-none"
+                        }
+                      >
+                        <span className="h-top" />
+                        <span className="h-middle" />
+                        <span className="h-bottom" />
+                      </Link>
                     </div>
-                    <Link
-                      to={"#"}
-                      onClick={handleMobileSiderbar}
-                      className={
-                        mobileSideberMenu === 1
-                          ? "hamburger d-block d-xl-none h-active"
-                          : "hamburger d-block d-xl-none"
-                      }
-                    >
-                      <span className="h-top" />
-                      <span className="h-middle" />
-                      <span className="h-bottom" />
-                    </Link>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="col-xl-3">
-              <div className="nav-right d-xl-flex d-none">
-                <div className="nav-right-icons">
-                  <div className="user-dropdown">
-                    <i onClick={handleUserDropDown} className="bx bx-user-circle" />
-                    <ul className={`${"user-drop-list"} ${isUserDropdown === 1? "account-drop-active" : ""}`}>
-                      <li>
-                        <Link to={"#"}>My Account</Link>
-                      </li>
-                      <li>
-                        <Link to={"#"}>Login</Link>
-                      </li>
-                      <li>
-                        <Link to={"#"}>Registration</Link>
-                      </li>
-                      <li>
-                        <Link to={"#"}>Setting</Link>
-                      </li>
-                    </ul>
+              <div className="col-xl-3">
+                <div className="nav-right d-xl-flex d-none">
+                  <div className="nav-right-icons">
+                    <div className="user-dropdown">
+                      <i onClick={handleUserDropDown} className="bx bx-user-circle" />
+                      <ul className={`${"user-drop-list"} ${isUserDropdown === 1 ? "account-drop-active" : ""}`}>
+                        <li>
+                          <Link to={`${process.env.PUBLIC_URL}/myProfile`}>My Account</Link>
+                        </li>
+                        <li>
+                          <Link to={`${process.env.PUBLIC_URL}/auth`}>Login</Link>
+                        </li>
+                        <li>
+                          <Link to={"#"}>Setting</Link>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
-                </div>
-                <div className="nav-right-hotline">
-                  <div className="hotline-icon">
-                    <i className="bi bi-phone-vibrate" />
-                  </div>
-                  <div className="hotline-info">
-                    <span>Hot Line Number</span>
-                    <h6>
-                      <a rel="noopener noreferrer" href="tel: +91 94048 55782">
-                      +91 94048 55782
-                      </a>
-                    </h6>
+                  <div className="nav-right-hotline">
+                    <div className="hotline-icon">
+                      <i className="bi bi-phone-vibrate" />
+                    </div>
+                    <div className="hotline-info">
+                      <span>Hot Line Number</span>
+                      <h6>
+                        <a rel="noopener noreferrer" href="tel: +91 94048 55782">
+                          +91 94048 55782
+                        </a>
+                      </h6>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </header>
-  </>
+      </header>
+    </>
   )
 }
 

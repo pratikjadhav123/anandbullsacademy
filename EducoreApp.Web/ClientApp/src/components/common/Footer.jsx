@@ -136,7 +136,7 @@ function Footer(props) {
               <div className="col-lg-4  order-lg-2 order-1">
                 <div className="footer-logo text-center">
                   <Link onClick={scrollTop} to={`${process.env.PUBLIC_URL}/`}>
-                    <img src={process.env.PUBLIC_URL + "/images/logo-w.png"} alt="FooterIMG" />
+                    <img src={process.env.PUBLIC_URL + "/images/logo.png"} alt="FooterIMG" />
                   </Link>
                 </div>
               </div>

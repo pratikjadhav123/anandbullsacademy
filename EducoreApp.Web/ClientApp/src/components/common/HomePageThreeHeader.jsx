@@ -227,7 +227,7 @@ function HomePageThreeHeader() {
                 <div className="nav-logo d-flex justify-content-between align-items-center">
                   <a href="index.html">
                     <img
-                      src={process.env.PUBLIC_URL + "/images/logo-w.png"}
+                      src={process.env.PUBLIC_URL + "/images/logo.png"}
                       alt="logo"
                     />
                   </a>

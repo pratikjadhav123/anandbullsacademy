@@ -15,6 +15,8 @@ import SimpleReactLightbox from "simple-react-lightbox";
 // import all css
 import "./index.css";
 import CourseDetails from './components/pages/courseDetails/CourseDetails';
+import Profile from './components/pages/profile/Profile';
+import Auth from './components/pages/auth/Auth';
 
 /*
  * Version :Tourx-pro 0.1
@@ -70,6 +72,16 @@ function Root() {
             exact
             path={`${process.env.PUBLIC_URL}/contact`}
             component={Contact}
+          />
+          <Route
+            exact
+            path={`${process.env.PUBLIC_URL}/myProfile`}
+            component={Profile}
+          />
+          <Route
+            exact
+            path={`${process.env.PUBLIC_URL}/auth`}
+            component={Auth}
           />
           <Route
             exact
