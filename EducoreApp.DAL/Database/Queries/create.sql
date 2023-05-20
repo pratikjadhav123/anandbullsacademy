@@ -28,7 +28,7 @@ UpdatedAt datetime
 Create table Topics(
 TopicId int identity(1,1),
 CourseId int, 
-Topic varchar(1000),
+Name varchar(1000),
 CreatedAt datetime,
 UpdatedAt datetime
 );
@@ -40,3 +40,4 @@ Name varchar(1000),
 VideoUrl varchar(1000),
 CreatedAt datetime,
 UpdatedAt datetime);
+
