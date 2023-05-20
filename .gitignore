@@ -1,0 +1,25 @@
+# ASP.NET Core
+bin/
+obj/
+
+# Node.js
+node_modules/
+.vs/
+
+
+# Visual Studio Code
+.vscode/
+
+# Compiled React files
+build/
+dist/
+
+# Environment variables
+.env
+
+# Package manager files
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
