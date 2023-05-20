@@ -14,7 +14,9 @@ namespace EducoreApp.DAL.Interface
         public Task<Users> UpdateUser(Users users, UserRequest userRequest);
 
         public Task<Users> DeleteUser(Users users);
-        public  Task<Users> GetUserByEmail(string Email);
+
+        public Task<Users> GetUserByEmail(string Email);
+
         public Task<Users> UpdatePassword(Users users, string Password);
     }
 }

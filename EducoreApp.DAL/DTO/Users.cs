@@ -8,8 +8,10 @@ namespace EducoreApp.DAL.DTO
         public string FirstName { get; set; } = String.Empty;
         public string LastName { get; set; } = String.Empty;
         public string Email { get; set; } = String.Empty;
+
         [JsonIgnore]
         public string Password { get; set; } = String.Empty;
+
         public string Mobile { get; set; } = String.Empty;
         public bool Active { get; set; } = true;
         public string Role { get; set; } = "User";

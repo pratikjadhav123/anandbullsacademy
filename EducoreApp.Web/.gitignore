@@ -24,6 +24,9 @@ Bin/
 obj/
 Obj/
 
+/Web/bin
+/Web/Bin
+
 # Visual Studio 2015 cache/options directory
 .vs/
 /wwwroot/dist/

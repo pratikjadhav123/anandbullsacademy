@@ -28,7 +28,7 @@ namespace EducoreApp.DAL.Middlewares
                 if (user == null)
                 {
                     context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                    await context.Response.WriteAsJsonAsync(new {message= "Please login again" } );
+                    await context.Response.WriteAsJsonAsync(new { message = "Please login again" });
                     return;
                 }
                 if (user.ExpiredDate <= DateTime.Now)

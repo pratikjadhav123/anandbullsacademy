@@ -12,8 +12,8 @@ namespace EducoreApp.DAL.Services
 {
     public class UserTokenService : IUserTokens
     {
-         DatabaseConnection connection;
-         IConfiguration configuration;
+        private DatabaseConnection connection;
+        private IConfiguration configuration;
 
         public UserTokenService(DatabaseConnection connection, IConfiguration configuration)
         {
@@ -31,7 +31,6 @@ namespace EducoreApp.DAL.Services
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
                     new Claim("Date", DateTime.Now.ToString()),
                     new Claim("UserId", user.UserId.ToString()),
-
                     new Claim(ClaimTypes.Role, user.Role),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 };
@@ -69,7 +68,7 @@ namespace EducoreApp.DAL.Services
                 UserTokens UserTokens = new UserTokens();
                 UserTokens.RequestedBy = users.Email;
                 UserTokens.RequestedType = RequestedType;
-                UserTokens.Token = new Random().Next(1000,9999).ToString();
+                UserTokens.Token = new Random().Next(1000, 9999).ToString();
                 UserTokens.ExpiredDate = DateTime.Now.AddDays(1);
 
                 string query = "Insert into UserTokens OUTPUT inserted.* values(@RequestedBy,@RequestedType,@Token,@ExpiredDate)";
@@ -113,6 +112,7 @@ namespace EducoreApp.DAL.Services
                 }
             });
         }
+
         public async Task<UserTokens> GetToken(string token)
         {
             using (var db = this.connection.connection())
@@ -120,10 +120,11 @@ namespace EducoreApp.DAL.Services
                 return await db.QueryFirstOrDefaultAsync<UserTokens>("select * from UserTokens where Token=@Token", new { token });
             }
         }
+
         public async Task<UserTokens> DeleteToken(string token)
         {
             using (var db = this.connection.connection())
-            { 
+            {
                 return await db.QueryFirstOrDefaultAsync<UserTokens>("delete from UserTokens where Token=@Token", new { token });
             }
         }

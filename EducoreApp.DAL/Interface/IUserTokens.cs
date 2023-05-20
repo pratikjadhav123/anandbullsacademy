@@ -13,7 +13,9 @@ namespace EducoreApp.DAL.Interface
         public Task<UserTokens> SaveAuthToken(Users users, string Token);
 
         public Task<UserTokens> DeleteUser(UserTokens UserTokens);
-        public  Task<UserTokens> GetToken(string token);
+
+        public Task<UserTokens> GetToken(string token);
+
         public Task<UserTokens> DeleteToken(string token);
     }
 }

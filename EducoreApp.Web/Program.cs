@@ -36,10 +36,14 @@ builder.Services.Configure<SMTPConfigModel>(builder.Configuration.GetSection("SM
 
 //References
 
-builder.Services.AddScoped<IAuthorizationMiddlewareResultHandler, AuthorizationMiddlewareService>();
-builder.Services.AddScoped<IEmailService, EmailService>();
-builder.Services.AddScoped<DatabaseConnection>();
-builder.Services.AddScoped<IUser, UserService>();
+builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, AuthorizationMiddlewareService>();
+builder.Services.AddSingleton<IEmailService, EmailService>();
+builder.Services.AddSingleton<DatabaseConnection>();
+builder.Services.AddSingleton<IUser, UserService>();
+builder.Services.AddSingleton<ICourse, CourseService>();
+builder.Services.AddSingleton<ITopic, TopicService>();
+builder.Services.AddSingleton<IVideos, VideoService>();
+
 builder.Services.AddScoped<IUserTokens, UserTokenService>();
 
 builder.Services.AddSwaggerGen(option =>
@@ -92,7 +96,10 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(options =>
+{
+    options.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
+});
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
