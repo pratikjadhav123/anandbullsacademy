@@ -1,16 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace EducoreApp.DAL.Request
 {
     public class VideoRequest
     {
         [Required]
-        public int TopicId { get; set; }
+        public int CourseId { get; set; }
 
         [Required]
         public string Name { get; set; } = string.Empty;
 
         [Required]
-        public string VideoUrl { get; set; } = string.Empty;
+        public IFormFile? Video { get; set; }
     }
 }

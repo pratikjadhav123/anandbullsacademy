@@ -25,17 +25,18 @@ CreatedAt datetime,
 UpdatedAt datetime
 );
 
-Create table Topics(
-TopicId int identity(1,1),
-CourseId int, 
-Name varchar(1000),
-CreatedAt datetime,
-UpdatedAt datetime
-);
+--Create table Topics(
+--TopicId int identity(1,1),
+--CourseId int, 
+--Name varchar(1000),
+--CreatedAt datetime,
+--UpdatedAt datetime
+--);
 
+drop table Videos
 Create table Videos(
 VideoId int identity(1,1),
-TopicId int,
+CourseId int,
 Name varchar(1000),
 VideoUrl varchar(1000),
 CreatedAt datetime,

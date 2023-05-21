@@ -3,13 +3,15 @@ global using EducoreApp.DAL.DTO;
 global using EducoreApp.DAL.Interface;
 global using EducoreApp.DAL.Request;
 global using EducoreApp.DAL.Services;
-using EducoreApp.DAL.Middlewares;
+global using EducoreApp.DAL.Helper;
+global using EducoreApp.DAL.Middlewares;
 using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,7 +37,9 @@ builder.Services.AddCors(option => option.AddPolicy("pocilyCor", o =>
 builder.Services.Configure<SMTPConfigModel>(builder.Configuration.GetSection("SMTPConfig"));
 
 //References
+builder.Services.AddSingleton<UploadFiles>();
 
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, AuthorizationMiddlewareService>();
 builder.Services.AddSingleton<IEmailService, EmailService>();
 builder.Services.AddSingleton<DatabaseConnection>();
@@ -43,11 +47,12 @@ builder.Services.AddSingleton<IUser, UserService>();
 builder.Services.AddSingleton<ICourse, CourseService>();
 builder.Services.AddSingleton<ITopic, TopicService>();
 builder.Services.AddSingleton<IVideos, VideoService>();
-
-builder.Services.AddScoped<IUserTokens, UserTokenService>();
+builder.Services.AddSingleton<IUserTokens, UserTokenService>();
 
 builder.Services.AddSwaggerGen(option =>
 {
+    option.OperationFilter<AddSwaggerService>();
+
     option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
     {
         Name = "Authorization",
@@ -71,6 +76,7 @@ builder.Services.AddSwaggerGen(option =>
         new string[] {}
         }
     });
+
 });
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -91,17 +97,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 var app = builder.Build();
 
-if (!app.Environment.IsDevelopment())
-{
-    app.UseHsts();
-}
+
 app.UseSwagger();
-app.UseSwaggerUI(options =>
+app.UseSwaggerUI(c =>
 {
-    options.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
+    c.DocExpansion(DocExpansion.None);
 });
-app.UseHttpsRedirection();
+
 app.UseStaticFiles();
+app.UseHttpsRedirection();
 app.UseRouting();
 app.UseCors("pocilyCor");
 

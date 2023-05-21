@@ -15,6 +15,6 @@ namespace EducoreApp.DAL.Interface
 
         public Task<Videos> DeleteVideos(Videos Videos);
 
-        public Task<IEnumerable<Videos>> GetVideosByTopic(int TopicId);
+        public Task<IEnumerable<Videos>> GetVideosByTopic(int CourseId);
     }
 }

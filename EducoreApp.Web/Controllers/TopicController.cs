@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿/*using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EducoreApp.Web.Controllers
@@ -86,4 +86,4 @@ namespace EducoreApp.Web.Controllers
             return Ok(await this.iTopic.DeleteTopic(Topic));
         }
     }
-}
+}*/

@@ -48,7 +48,7 @@ namespace EducoreApp.DAL.Middlewares
             if (authorizeResult.Forbidden)
             {
                 context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-                await context.Response.WriteAsJsonAsync(new { message = "Forbidden" });
+                await context.Response.WriteAsJsonAsync(new { message = "Only Admin have access to open this!!!" });
                 return;
             }
             await DefaultHandler.HandleAsync(next, context, policy, authorizeResult);

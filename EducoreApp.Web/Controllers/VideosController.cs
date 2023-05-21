@@ -3,27 +3,27 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EducoreApp.Web.Controllers
 {
-    [Authorize(Roles = "Admin")]
+   
     [Route("[controller]/[action]")]
     [ApiController]
     public class VideosController : ControllerBase
     {
-        private ITopic iTopic;
+        private ICourse iCourse;
         private IVideos iVideos;
 
-        public VideosController(ITopic iTopic, IVideos iVideos)
+        public VideosController(ICourse iCourse, IVideos iVideos)
         {
-            this.iTopic = iTopic;
+            this.iCourse = iCourse;
             this.iVideos = iVideos;
         }
-
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Videos>>> GetVideos()
         {
             IEnumerable<Videos> Videos = await this.iVideos.GetVideos();
             return Ok(Videos);
         }
-
+        [Authorize]
         [HttpGet("{VideoId}")]
         public async Task<ActionResult<Videos>> GetVideo(int VideoId)
         {
@@ -34,49 +34,52 @@ namespace EducoreApp.Web.Controllers
             }
             return Ok(Videos);
         }
-
-        [HttpGet("{TopicId}")]
-        public async Task<ActionResult<IEnumerable<Videos>>> GetVideosByTopic(int TopicId)
+        [Authorize]
+        [HttpGet("{CourseId}")]
+        public async Task<ActionResult<IEnumerable<Videos>>> GetVideosByCourse(int CourseId)
         {
-            Topic Topic = await this.iTopic.GetTopic(TopicId);
-            if (Topic == null)
+            Course Course = await this.iCourse.GetCourse(CourseId);
+            if (Course == null)
             {
-                return NotFound(new { message = "Topic not found" });
+                return NotFound(new { message = "Course not found" });
             }
-            IEnumerable<Videos> videos = await this.iVideos.GetVideosByTopic(TopicId);
+            IEnumerable<Videos> videos = await this.iVideos.GetVideosByTopic(CourseId);
             return Ok(videos);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<Videos>> SaveVideos([FromForm] VideoRequest videoRequest)
         {
-            Topic Topic = await this.iTopic.GetTopic(videoRequest.TopicId);
-            if (Topic == null)
+            Course Course = await this.iCourse.GetCourse(videoRequest.CourseId);
+            if (Course == null)
             {
-                return NotFound(new { message = "Topic not found" });
+                return NotFound(new { message = "Course not found" });
             }
             Videos Videos = await this.iVideos.SaveVideos(videoRequest);
             return Ok(Videos);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{VideoId}")]
-        public async Task<ActionResult<Topic>> UpdateVideos(int VideoId, [FromForm] VideoRequest videoRequest)
+        public async Task<ActionResult<Course>> UpdateVideos(int VideoId, [FromForm] VideoRequest videoRequest)
         {
             Videos Videos = await this.iVideos.GetVideo(VideoId);
             if (Videos == null)
             {
                 return NotFound(new { message = "Videos not found" });
             }
-            Topic Topic = await this.iTopic.GetTopic(videoRequest.TopicId);
-            if (Topic == null)
+            Course Course = await this.iCourse.GetCourse(videoRequest.CourseId);
+            if (Course == null)
             {
-                return NotFound(new { message = "Topic not found" });
+                return NotFound(new { message = "Course not found" });
             }
             return Ok(await this.iVideos.UpdateVideos(Videos, videoRequest));
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{VideoId}")]
-        public async Task<ActionResult<Topic>> DeleteVideos(int VideoId)
+        public async Task<ActionResult<Course>> DeleteVideos(int VideoId)
         {
             Videos Videos = await this.iVideos.GetVideo(VideoId);
             if (Videos == null)

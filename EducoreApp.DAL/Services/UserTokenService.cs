@@ -40,7 +40,7 @@ namespace EducoreApp.DAL.Services
                 var token = new JwtSecurityToken(this.configuration["JwtAuth:Issuer"],
                 this.configuration["JwtAuth:Issuer"],
                 claims,
-                expires: DateTime.Now.AddMinutes(3),
+                expires: DateTime.Now.AddMinutes(48),
                 signingCredentials: credentials);
 
                 string tokens = new JwtSecurityTokenHandler().WriteToken(token);
