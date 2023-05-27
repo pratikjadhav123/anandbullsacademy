@@ -17,6 +17,7 @@ import "./index.css";
 import CourseDetails from './components/pages/courseDetails/CourseDetails';
 import Profile from './components/pages/profile/Profile';
 import Auth from './components/pages/auth/Auth';
+import { ApplicationDataProvider } from './plugins/AppContext';
 
 /*
  * Version :Tourx-pro 0.1
@@ -31,76 +32,81 @@ import Auth from './components/pages/auth/Auth';
 function Root() {
   return (
     <>
-    <BrowserRouter basename="/">
-      <Switch>
-        {/*main layout*/}
-        <Route exact path="/" component={HomePageTwoLayout} />
-        {/* secound layout */}
-       
-        {/* all inner page load layout component */}
-        <Layout>
-          <Route
-            exact
-            path={`${process.env.PUBLIC_URL}/about`}
-            component={About}
-          />
+      <BrowserRouter basename="/">
+        <Switch>
+          {/*main layout*/}
+          <Route exact path="/" component={HomePageTwoLayout} />
+          {/* secound layout */}
 
-          {/* all package pages component */}
-          <Route
-            exact
-            path={`${process.env.PUBLIC_URL}/courses`}
-            component={CourseGrid}
-          />
-          <Route
-            exact
-            path={`${process.env.PUBLIC_URL}/course-details`}
-            component={CourseDetails}
-          />
+          {/* all inner page load layout component */}
+          <Layout>
+            <Route
+              exact
+              path={`${process.env.PUBLIC_URL}/about`}
+              component={About}
+            />
 
-          {/* all blog pages */}
-          <Route
-            exact
-            path={`${process.env.PUBLIC_URL}/guide`}
-            component={GuidePage}
-          />
-          <Route
-            exact
-            path={`${process.env.PUBLIC_URL}/faq`}
-            component={FaqPage}
-          />
-          <Route
-            exact
-            path={`${process.env.PUBLIC_URL}/contact`}
-            component={Contact}
-          />
-          <Route
-            exact
-            path={`${process.env.PUBLIC_URL}/myProfile`}
-            component={Profile}
-          />
-          <Route
-            exact
-            path={`${process.env.PUBLIC_URL}/auth`}
-            component={Auth}
-          />
-          <Route
-            exact
-            path={`${process.env.PUBLIC_URL}/error`}
-            component={Error}
-          />
-        </Layout>
-      </Switch>
-    </BrowserRouter>
-  </>
+            {/* all package pages component */}
+            <Route
+              exact
+              path={`${process.env.PUBLIC_URL}/courses`}
+              component={CourseGrid}
+            />
+            <Route
+              exact
+              path={`${process.env.PUBLIC_URL}/course-details`}
+              component={CourseDetails}
+            />
+
+            {/* all blog pages */}
+            <Route
+              exact
+              path={`${process.env.PUBLIC_URL}/guide`}
+              component={GuidePage}
+            />
+            <Route
+              exact
+              path={`${process.env.PUBLIC_URL}/faq`}
+              component={FaqPage}
+            />
+            <Route
+              exact
+              path={`${process.env.PUBLIC_URL}/contact`}
+              component={Contact}
+            />
+            <Route
+              exact
+              path={`${process.env.PUBLIC_URL}/myProfile`}
+              component={Profile}
+            />
+            <Route
+              exact
+              path={`${process.env.PUBLIC_URL}/auth`}
+              component={Auth}
+            />
+            <Route
+              exact
+              path={`${process.env.PUBLIC_URL}/error`}
+              component={Error}
+            />
+          </Layout>
+        </Switch>
+      </BrowserRouter>
+    </>
   )
 }
 
 export default Root
 ReactDOM.render(
   <React.StrictMode>
-    <SimpleReactLightbox>
-      <Root />
-    </SimpleReactLightbox>
+    <ApplicationDataProvider>
+      {/* <AppContext> */}
+        <SimpleReactLightbox>
+          <Root />
+        </SimpleReactLightbox>
+      {/* </AppContext> */}
+    </ApplicationDataProvider>
+
   </React.StrictMode>,
   document.getElementById("root")
 );

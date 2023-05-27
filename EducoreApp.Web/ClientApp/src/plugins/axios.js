@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useState, useEffect, useMemo } from 'react';
-import auth from '../utilities/api/auth';
-import notistack from './notistack';
+import auth from './../utils/auth'
+// import notistack from './notistack';
 const api = axios.create({
     baseURL: process.env.REACT_APP_URL,
     headers: {
@@ -10,7 +10,8 @@ const api = axios.create({
         'Content-Type': 'multipart/form-data'
     },
 });
-console.log("process.env",process.env.REACT_APP_URL);
+
+console.log(process.env.REACT_APP_URL);
 export function useAxiosLoader() {
     const [count, setCount] = useState(0);
     const interceptors = useMemo(() => {
@@ -27,7 +28,7 @@ export function useAxiosLoader() {
             },
             error: (error) => {
                 dec()
-                notistack.apiError(error.response);
+                // notistack.apiError(error.response);
                 return Promise.reject(error);
             }
         });
@@ -82,4 +83,4 @@ const ApiService = {
     },
 };
 
-export default ApiService;import axios from 'axios';
+export default ApiService;

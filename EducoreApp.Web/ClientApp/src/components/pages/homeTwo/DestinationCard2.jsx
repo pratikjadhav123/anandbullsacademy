@@ -14,7 +14,7 @@ function DestinationCard2(props) {
           <h4 className="destination-title">
             <Link
               onClick={() => props.setOpen(true)}
-              // to={`${process.env.PUBLIC_URL}/destination-details`}
+              to={`#`}
             >
               {props.placeName}
             </Link>

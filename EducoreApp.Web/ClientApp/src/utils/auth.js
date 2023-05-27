@@ -1,4 +1,4 @@
-import axios from '../../plugin/axios'
+import axios from '../plugins/axios'
 // import notistack from '../../plugin/notistack';
 // import notistack from '../plugin/notistack';
 const ID_TOKEN_KEY = 'tokens';

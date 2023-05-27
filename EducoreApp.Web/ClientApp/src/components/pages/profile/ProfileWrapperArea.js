@@ -62,21 +62,26 @@ function ProfileWrapperArea() {
                                         role="tabpanel"
                                         aria-labelledby="pills-about1"
                                     >
-                                        <p>
-                                            Duis rutrum nisl urna. Maecenas vel libero faucibus nisi
-                                            venenatis hendrerit a id lectus. Suspendissendt blandit
-                                            interdum. Sed pellentesque at nunc eget consente
-                                            consectetur.Duis rutrum nisl urna. Maecenas vel libero
-                                            faucibus nisi venenatis hendrerit a id lectus.
-                                            Suspendissendt blandit interdum. Sed pellentesque at
-                                            nunc consectetur.Duis rutrum nisl urna. Maecenas vel
-                                            libero faucibus nisi venenatis hendrerit a id lectus.
-                                            Suspendissendt blandit interdum. Sed pellentesque at
-                                            nunc consectetur.Duis rutrum nisl urna. Maecenas vel
-                                            libero faucibus nisi venenatis hendrerit a id lectus.
-                                            Suspendissendt blandit interdum. Sed pellentesque at
-                                            nunc consectetur.
-                                        </p>
+                                        
+                                        <div className="package-card-alpha">
+                                            <div className="package-thumb">
+                                                <p>
+                                                    Duis rutrum nisl urna. Maecenas vel libero faucibus nisi
+                                                    venenatis hendrerit a id lectus. Suspendissendt blandit
+                                                    interdum. Sed pellentesque at nunc eget consente
+                                                    consectetur.Duis rutrum nisl urna. Maecenas vel libero
+                                                    faucibus nisi venenatis hendrerit a id lectus.
+                                                    Suspendissendt blandit interdum. Sed pellentesque at
+                                                    nunc consectetur.Duis rutrum nisl urna. Maecenas vel
+                                                    libero faucibus nisi venenatis hendrerit a id lectus.
+                                                    Suspendissendt blandit interdum. Sed pellentesque at
+                                                    nunc consectetur.Duis rutrum nisl urna. Maecenas vel
+                                                    libero faucibus nisi venenatis hendrerit a id lectus.
+                                                    Suspendissendt blandit interdum. Sed pellentesque at
+                                                    nunc consectetur.
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         className="tab-pane fade"

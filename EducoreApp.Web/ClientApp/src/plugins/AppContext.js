@@ -1,18 +1,15 @@
 import React, { createContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import auth from "../utilities/api/auth";
-import programme from "../utilities/api/programme";
+import auth from "./../utils/auth";
+import { useHistory } from "react-router-dom/cjs/react-router-dom";
 
 export const AppContext = createContext();
 
 export const ApplicationDataProvider = ({ children }) => {
-    const navigate = useNavigate();
+    const navigate = useHistory();
     const [user, setUser] = useState();
-    const [programmesList, setProgrammesList] = useState([]);
     const getAllData = () => {
         console.log("AppContext");
         getUser();
-        getProgrammes();
     };
     const getUser = () => {
         if (auth.getToken()) {
@@ -22,27 +19,20 @@ export const ApplicationDataProvider = ({ children }) => {
                     if (data.Active) {
                         setUser(data);
                     } else {
-                        navigate("/auths/auth-login");
+                        navigate.push("/auths/auth-login");
                     }
                 })
                 .catch(() => {
-                    navigate("/auths/auth-login");
+                    navigate.push("/auths/auth-login");
                 });
         } else {
-            navigate("/auths/auth-login");
+            navigate.push("/auths/auth-login");
         }
     };
-    const getProgrammes = () => {
-        programme.list().then((data) => {
-            setProgrammesList(data);
-        })
-    }
 
     const providerState = {
         user,
         setUser,
-        programmesList,
-        setProgrammesList,
         getAllData: getAllData,
         getUser: getUser,
     };
