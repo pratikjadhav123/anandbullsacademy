@@ -1,29 +1,30 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function PackageCardAlpha(props) {
-  const scrollTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
-
+function MyCourseCard(props) {
+  const scrollTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  
   return (
     <>
       <div className="package-card-alpha">
         <div className="package-thumb">
           <Link
             onClick={scrollTop}
-            to={`${process.env.PUBLIC_URL}/course-details`}
+            to={`${process.env.PUBLIC_URL}/video/${props.id}`}
           >
-            <img src={props.image} alt="PackgerIMG" />
+            <img src={props.image} alt="images" />
           </Link>
           <p className="card-lavel">
-            <i className="bi bi-clock" />
-            <span>{props.date}</span>
+            <i className="bi bi-clock" /> <span>{props.hours}</span>
           </p>
         </div>
         <div className="package-card-body">
           <h3 className="p-card-title">
             <Link
               onClick={scrollTop}
-              to={`${process.env.PUBLIC_URL}/course-details`}
+              to={`${process.env.PUBLIC_URL}/video/${props.id}`}
             >
               {props.title}
             </Link>
@@ -32,16 +33,10 @@ function PackageCardAlpha(props) {
             <div className="book-btn">
               <Link
                 onClick={scrollTop}
-                to={`${process.env.PUBLIC_URL}/course-details`}
+                to={`${process.env.PUBLIC_URL}/video/${props.id}`}
               >
-                Book Now <i className="bx bxs-right-arrow-alt" />
+                start Learning <i className="bx bxs-right-arrow-alt" />
               </Link>
-            </div>
-            <div className="p-card-info">
-              <span>From</span>
-              <h6>
-                {props.price} <span>Per Person</span>
-              </h6>
             </div>
           </div>
         </div>
@@ -50,4 +45,4 @@ function PackageCardAlpha(props) {
   );
 }
 
-export default PackageCardAlpha;
+export default MyCourseCard;

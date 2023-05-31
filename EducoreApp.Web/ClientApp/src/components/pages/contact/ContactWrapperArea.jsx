@@ -25,9 +25,9 @@ function ContactWrapperArea() {
                     <a
                       rel="noopener noreferrer"
                       target="_blank"
-                      href="tel:+91 94048 55782"
+                      href="tel:+91 8208667300"
                     >
-                      WhatsApp No:+91 94048 55782 
+                      WhatsApp No:+91 8208667300 
                     </a>
                   </li>
                   <li>

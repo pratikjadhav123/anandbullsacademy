@@ -11,8 +11,9 @@ function HomePageTwo() {
       <Hero2 />
       <LetesBlogArea/>
       {/* <Package /> */}
-      <DestinationArea />
-      <NewsLetterArea />
+      {/* we can add this as a youtube video  */}
+      {/* <DestinationArea /> */}
+      {/* <NewsLetterArea /> */}
       <TestimonialArea />
     </>
   );

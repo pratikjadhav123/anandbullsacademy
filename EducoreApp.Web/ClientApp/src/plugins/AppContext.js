@@ -8,33 +8,46 @@ export const ApplicationDataProvider = ({ children }) => {
     const navigate = useHistory();
     const [user, setUser] = useState();
     const getAllData = () => {
-        console.log("AppContext");
         getUser();
     };
     const getUser = () => {
+        console.log("getUser");
         if (auth.getToken()) {
             auth
                 .getUser()
                 .then((data) => {
+                    console.log(data);
                     if (data.Active) {
                         setUser(data);
                     } else {
-                        navigate.push("/auths/auth-login");
+                        setUser();
                     }
                 })
                 .catch(() => {
-                    navigate.push("/auths/auth-login");
+                    console.log("error");
+                    setUser();
                 });
         } else {
-            navigate.push("/auths/auth-login");
+            console.log("not token");
+            setUser();
         }
     };
+
+    const logout = () => {
+        console.log("abc");
+        auth.logout().then((data)=>{
+            getUser();
+        }).catch((error)=>{
+console.log(error);
+        })
+    }
 
     const providerState = {
         user,
         setUser,
         getAllData: getAllData,
         getUser: getUser,
+        logout: logout,
     };
     return (
         <AppContext.Provider value={providerState}>{children}</AppContext.Provider>

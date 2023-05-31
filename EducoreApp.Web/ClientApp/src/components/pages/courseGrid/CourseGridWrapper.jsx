@@ -1,8 +1,20 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CourseCard from "./CourseCard";
+import course from "../../../utils/course";
 
 function CourseGridWrapper() {
-  
+  const [courseList, setCourseList] = useState([]);
+  useEffect(() => {
+    getCourseList();
+  }, [])
+
+  const getCourseList = () => {
+    course.list().then((data) => {
+      setCourseList(data)
+    }).catch((error) => {
+      console.error("course errorr:", error);
+    })
+  }
   return (
     <>
       {/* ===============  Package gird area start =============== */}
@@ -42,7 +54,7 @@ function CourseGridWrapper() {
               />
             </div>
             <div className="col-lg-4 col-md-6">
-            <CourseCard
+              <CourseCard
                 image={process.env.PUBLIC_URL + "/images/package/p-alpha5.png"}
                 hours="30h:50m"
                 title="Pellentesque habitant morbi malesua tristique senectus."
@@ -50,13 +62,13 @@ function CourseGridWrapper() {
               />
             </div>
             <div className="col-lg-4 col-md-6">
-            <CourseCard
+              <CourseCard
                 image={process.env.PUBLIC_URL + "/images/package/p-alpha6.png"}
                 hours="03h:55m"
                 title="San francisco golden gate bridge, cable & fog."
                 price="₹199.00"
               />
-              
+
             </div>
           </div>
           {/* <Pagination />   */}

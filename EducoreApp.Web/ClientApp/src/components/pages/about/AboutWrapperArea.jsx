@@ -13,8 +13,8 @@ function AboutWrapperArea() {
             <div className="row justify-content-center">
               <div className="col-lg-6">
                 <div className="about-tab-image-grid text-center">
-                  <div className="about-video d-inline-block">
-                    <img src={process.env.PUBLIC_URL + "/images/about/about-g2.png"} alt="aboutIMG" />
+                  <div className="about-video d-inline-block mb-5">
+                    <img src={process.env.PUBLIC_URL + "/images/youtubeVideo.png"} alt="aboutIMG" />
                     <div className="video-overlay">
                       <div className="play-icon video-popup">
                         <i
@@ -27,12 +27,12 @@ function AboutWrapperArea() {
                   <div className="row float-images g-4">
                     <div className="col-lg-6 col-md-6 col-sm-6">
                       <div className="about-image">
-                        <img src={process.env.PUBLIC_URL + "/images/about/about-g1.png"} alt="aboutIMG" />
+                        <img src={process.env.PUBLIC_URL + "/images/chart1.png"} alt="aboutIMG" />
                       </div>
                     </div>
                     <div className="col-lg-6 col-md-6 col-sm-6">
                       <div className="about-image">
-                        <img src={process.env.PUBLIC_URL + "/images/about/about-g3.png"} alt="aboutIMG" />
+                        <img src={process.env.PUBLIC_URL + "/images/canddles1.png"} alt="aboutIMG" />
                       </div>
                     </div>
                   </div>
@@ -117,7 +117,7 @@ function AboutWrapperArea() {
           channel="youtube"
           autoplay
           isOpen={isOpen}
-          videoId="3SsK-cxlj_w"
+          videoId="pXu8QVvh3SI"
           onClose={() => setOpen(false)}
         />
       </React.Fragment>

@@ -18,7 +18,9 @@ import CourseDetails from './components/pages/courseDetails/CourseDetails';
 import Profile from './components/pages/profile/Profile';
 import Auth from './components/pages/auth/Auth';
 import { ApplicationDataProvider } from './plugins/AppContext';
-
+import CourseVideo from './components/pages/profile/Video/CourseVideo';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 /*
  * Version :Tourx-pro 0.1
  * Event : Rendering all content to web.
@@ -81,6 +83,11 @@ function Root() {
             />
             <Route
               exact
+              path={`${process.env.PUBLIC_URL}/video/:id`}
+              component={CourseVideo}
+            />
+            <Route
+              exact
               path={`${process.env.PUBLIC_URL}/auth`}
               component={Auth}
             />
@@ -101,9 +108,10 @@ ReactDOM.render(
   <React.StrictMode>
     <ApplicationDataProvider>
       {/* <AppContext> */}
-        <SimpleReactLightbox>
-          <Root />
-        </SimpleReactLightbox>
+      <ToastContainer />
+      <SimpleReactLightbox>
+        <Root />
+      </SimpleReactLightbox>
       {/* </AppContext> */}
     </ApplicationDataProvider>
 

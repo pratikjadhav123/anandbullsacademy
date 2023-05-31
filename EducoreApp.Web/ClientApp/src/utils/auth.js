@@ -1,4 +1,5 @@
 import axios from '../plugins/axios'
+import notice from '../plugins/notice';
 // import notistack from '../../plugin/notistack';
 // import notistack from '../plugin/notistack';
 const ID_TOKEN_KEY = 'tokens';
@@ -21,7 +22,7 @@ const auth = {
         return new Promise((resolve, reject) => {
             axios.setToken();
             axios
-                .get('Auth/UserDetails')
+                .post('Auth/UserDetails')
                 .then(({ data }) => {
                     resolve(data);
                 })
@@ -35,7 +36,7 @@ const auth = {
         return new Promise((resolve, reject) => {
             axios.setToken();
             axios
-                .get('Auth/Logout')
+                .post('Auth/Logout')
                 .then(({ data }) => {
                     this.destroyToken();
                     resolve(data);
@@ -127,6 +128,7 @@ const auth = {
                 })
                 .catch(({ response }) => {
                     reject(response);
+                    notice.apiError(response)
                 });
         });
     },

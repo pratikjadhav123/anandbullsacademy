@@ -1,5 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link, NavLink } from "react-router-dom";
+import { AppContext } from '../../plugins/AppContext';
+import auth from '../../utils/auth';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom';
+import notice from '../../plugins/notice';
 
 
 
@@ -7,6 +11,8 @@ function Header() {
   const [isCatagoryActive, setCatagoryActive] = useState(false);
   const [isUserDropdown, setUserDropdown] = useState(false);
   const [mobileSideberMenu, setMobileSideberMenu] = useState(0);
+  const contextObj = useContext(AppContext);
+  const navigate = useHistory()
   const handleUserDropDown = () => {
     if (isUserDropdown === false || isUserDropdown === 0) {
       setUserDropdown(1);
@@ -43,7 +49,14 @@ function Header() {
     scrollTop >= 200 ? header.classList.add('sticky') : header.classList.remove('sticky');
   }
 
-
+  const logout = () => {
+    auth.logout().then((data)=>{
+      navigate.push("/")
+      notice.warning("Login Again to Continue learning ")
+      contextObj.getUser();
+    })
+  }
+  console.log(contextObj?.user);
 
   const scrollTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -61,7 +74,7 @@ function Header() {
                       onClick={scrollTop}
                       to={`${process.env.PUBLIC_URL}/`}
                     >
-                    <img src={process.env.PUBLIC_URL + "/images/logo.png"} alt="Logo" />
+                      <img src={process.env.PUBLIC_URL + "/images/anandbullsweblogo310.png"} alt="Logo" />
                     </Link>
                   </div>
                   <ul>
@@ -91,24 +104,24 @@ function Header() {
                   <div className="inner-contact-options d-xl-none">
                     <div className="contact-box-inner">
                       <i className="bi bi-telephone-fill" />
-                      <Link to={"tel:+91 94048 55782"}>+91 94048 55782</Link>
+                      <Link to={"tel:+91 8208667300"}>+91 8208667300</Link>
                     </div>
                     <div className="contact-box-inner">
                       <i className="bi bi-envelope-fill" />
-                      <Link to={"mailto:info@domainname.com"}>
-                        info@domainname.com
+                      <Link to={"mailto:anandbulls08@gmail.com"}>
+                        anandbulls08@gmail.com
                       </Link>
                     </div>
                   </div>
                 </nav>
               </div>
               <div className="col-xl-2 col-lg-12 col-md-12 col-sm-12 col-xs-12 align-items-center d-xl-flex d-lg-block">
-                <div className="nav-logo d-flex justify-content-between align-items-center">
+                <div className="nav-logo d-flex justify-content-between align-items-center mr-2">
                   <Link
                     onClick={scrollTop}
                     to={`${process.env.PUBLIC_URL}/`}
                   >
-                  <img src={process.env.PUBLIC_URL + "/images/logo.png"} alt="logo" />
+                    <img src={process.env.PUBLIC_URL + "/images/anandbullsweblogo310.png"} alt="logo" />
                   </Link>
                   <div className="mobile-menu d-flex ">
                     <div className="d-flex align-items-center">
@@ -116,18 +129,23 @@ function Header() {
                         <div className="user-dropdown">
                           <i onClick={handleUserDropDown} className="bx bx-user-circle" />
                           <ul className={`${"user-drop-list"} ${isUserDropdown === 1 ? "account-drop-active" : ""}`}>
-                            <li>
-                              <NavLink to={`${process.env.PUBLIC_URL}/myProfile`}>My Account</NavLink>
-                            </li>
-                            <li>
-                              <NavLink to={"#"}>Login</NavLink>
-                            </li>
-                            <li>
+                            {contextObj.user ?
+                              (<> <li>
+                                <NavLink to={`${process.env.PUBLIC_URL}/myProfile`}>My Account</NavLink>
+                              </li>
+                                <li>
+                                  <NavLink to={`#`} onClick={logout}>logout</NavLink>
+                                </li>
+                              </>) :
+                              <li>
+                                <NavLink to={`${process.env.PUBLIC_URL}/auth`}>Login</NavLink>
+                              </li>}
+                            {/* <li>
                               <NavLink to={"#"}>Registration</NavLink>
                             </li>
                             <li>
                               <NavLink to={"#"}>Setting</NavLink>
-                            </li>
+                            </li> */}
                           </ul>
                         </div>
                         <div onClick={handleCatagorybtn} className="category-toggle">
@@ -157,15 +175,19 @@ function Header() {
                     <div className="user-dropdown">
                       <i onClick={handleUserDropDown} className="bx bx-user-circle" />
                       <ul className={`${"user-drop-list"} ${isUserDropdown === 1 ? "account-drop-active" : ""}`}>
-                        <li>
-                          <Link to={`${process.env.PUBLIC_URL}/myProfile`}>My Account</Link>
+                        {contextObj.user ? (<> <li>
+                          <NavLink to={`${process.env.PUBLIC_URL}/myProfile`}>My Account</NavLink>
                         </li>
-                        <li>
-                          <Link to={`${process.env.PUBLIC_URL}/auth`}>Login</Link>
-                        </li>
-                        <li>
+                          <li>
+                            <NavLink to={`#`} onClick={logout}>logout</NavLink>
+                          </li>
+                        </>) :
+                          <li>
+                            <Link to={`${process.env.PUBLIC_URL}/auth`}>Login</Link>
+                          </li>}
+                        {/* <li>
                           <Link to={"#"}>Setting</Link>
-                        </li>
+                        </li> */}
                       </ul>
                     </div>
                   </div>
@@ -176,8 +198,8 @@ function Header() {
                     <div className="hotline-info">
                       <span>Hot Line Number</span>
                       <h6>
-                        <a rel="noopener noreferrer" href="tel: +91 94048 55782">
-                          +91 94048 55782
+                        <a rel="noopener noreferrer" href="tel: +91 8208667300">
+                          +91 8208667300
                         </a>
                       </h6>
                     </div>

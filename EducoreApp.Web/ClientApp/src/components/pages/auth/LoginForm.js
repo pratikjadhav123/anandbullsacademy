@@ -1,12 +1,19 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import auth from "../../../utils/auth";
+import { AppContext } from "../../../plugins/AppContext";
+import { useHistory } from "react-router-dom/cjs/react-router-dom";
+import notice from "../../../plugins/notice";
 const reset = {
   Email: "",
   Password: ""
 }
 function LoginForm({ setCurrentPage }) {
   const [login, setLogin] = useState(reset);
+  const navigate = useHistory()
+
+  const contextObj = useContext(AppContext);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     handleSetData(name, value)
@@ -20,15 +27,15 @@ function LoginForm({ setCurrentPage }) {
     })
   }
   const handlelogin = (e) => {
-    console.log(login);
-
     auth.login(login).then((data) => {
-      console.log("data",data);
+      contextObj.getAllData();
+      notice.success("Login Successfully")
+      navigate.push("/myProfile")
+
     }).catch(error =>
-      console.log("error",error)
+      console.log("error", error)
     )
   }
-  console.log(login);
   return (
     <>
       <aside className="package-widget-style-2 widget-form">

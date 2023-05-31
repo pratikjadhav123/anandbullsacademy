@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState, useEffect, useMemo } from 'react';
 import auth from './../utils/auth'
+import notice from './notice';
 // import notistack from './notistack';
 const api = axios.create({
     baseURL: process.env.REACT_APP_URL,
@@ -28,7 +29,6 @@ export function useAxiosLoader() {
             },
             error: (error) => {
                 dec()
-                // notistack.apiError(error.response);
                 return Promise.reject(error);
             }
         });

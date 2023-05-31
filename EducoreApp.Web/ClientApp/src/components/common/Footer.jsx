@@ -38,15 +38,6 @@ function Footer(props) {
                       <li>
                         <a
                           rel="noopener noreferrer"
-                          href="https://www.facebook.com/"
-                          target="_blank"
-                        >
-                          <i className="bx bxl-facebook" />
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          rel="noopener noreferrer"
                           href="https://t.me/Anandbullsak"
                           target="_blank"
                         >
@@ -97,7 +88,7 @@ function Footer(props) {
                     <li>
                       <Link
                         onClick={scrollTop}
-                        to={`${process.env.PUBLIC_URL}/guide`}
+                        to={`${process.env.PUBLIC_URL}/myProfile`}
                       >
                         My Account
                       </Link>
@@ -111,8 +102,8 @@ function Footer(props) {
               <ul className="footer-contact-list">
                 <li>
                   <i className="bi bi-telephone-x" />{" "}
-                  <a rel="noopener noreferrer" href="tel:+91 94048 55782">
-                    +91 94048 55782
+                  <a rel="noopener noreferrer" href="tel:+91 8208667300">
+                    +91 8208667300
                   </a>
                 </li>
                 <li>
@@ -136,7 +127,7 @@ function Footer(props) {
               <div className="col-lg-4  order-lg-2 order-1">
                 <div className="footer-logo text-center">
                   <Link onClick={scrollTop} to={`${process.env.PUBLIC_URL}/`}>
-                    <img src={process.env.PUBLIC_URL + "/images/logo.png"} alt="FooterIMG" />
+                    <img src={process.env.PUBLIC_URL + "/images/anandbullsweblogo310.png"} alt="FooterIMG" />
                   </Link>
                 </div>
               </div>

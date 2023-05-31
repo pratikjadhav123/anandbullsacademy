@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import users from "../../../utils/users";
+import notice from "../../../plugins/notice";
 const reset = {
   FirstName: "",
   LastName: "",
@@ -27,7 +28,8 @@ function RegisterForm({ setCurrentPage }) {
     console.log(register);
     e.preventDefault()
     users.create(register).then((data) => {
-      console.log("data", data);
+      notice.success("Successfully register Please Login to continue")
+      setCurrentPage("Login")
     }).catch(error =>
       console.log("error", error)
     )
@@ -56,7 +58,7 @@ function RegisterForm({ setCurrentPage }) {
                 <input type="email" placeholder="Your Email" id="Email" name="Email" value={register.Email} onChange={handleChange} />
               </div>
               <div className="custom-input-group">
-                <input type="tel" placeholder="Phone" id="Phone" name="Phone" value={register.Phone} onChange={handleChange} />
+                <input type="tel" placeholder="Mobile" id="Mobile" name="Mobile" value={register.Mobile} onChange={handleChange} />
               </div>
               <div className="custom-input-group">
                 <input type="password" placeholder="Set Your Password" id="Password" name="Password" value={register.Password} onChange={handleChange} />
