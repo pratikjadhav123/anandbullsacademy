@@ -107,7 +107,17 @@ namespace EducoreApp.DAL.Services
                 }
             });
         }
-
+        public async Task<Users> GetUserByMobile(string Mobile)
+        {
+            return await Task.Run(async () =>
+            {
+                using (var con = this.connection.connection())
+                {
+                    Users users = await con.QueryFirstOrDefaultAsync<Users>("Select * from Users where Mobile=@Mobile", new { Mobile });
+                    return users;
+                }
+            });
+        }
         public async Task<Users> UpdatePassword(Users users, string Password)
         {
             return await Task.Run(async () =>

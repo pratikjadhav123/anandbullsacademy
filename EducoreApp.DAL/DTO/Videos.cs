@@ -12,6 +12,6 @@ namespace EducoreApp.DAL.DTO
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
         [NotMapped]
-        public string? VideoPath { get; set; }
+        public string VideoPath { get; set; }=String.Empty;
     }
 }

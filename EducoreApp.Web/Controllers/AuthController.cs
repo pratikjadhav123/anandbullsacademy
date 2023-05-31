@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
+using RestSharp;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
 
 namespace EducoreApp.Web.Controllers
 {
@@ -18,7 +22,6 @@ namespace EducoreApp.Web.Controllers
             this.iUserTokens = iUserTokens;
             this.iEmailService = iEmailService;
         }
-
         private int UserId
         {
             get { return Convert.ToInt32(HttpContext.User.FindFirst("UserId").Value); }
@@ -36,6 +39,19 @@ namespace EducoreApp.Web.Controllers
             if (!(BCrypt.Net.BCrypt.Verify(loginRequest.Password, users.Password)))
             {
                 return NotFound(new { message = "PLease enter correct password" });
+            }
+            UserTokens userTokens = await this.iUserTokens.GenerateToken(users);
+            return Ok(userTokens);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<ActionResult<UserTokens>> LoginWithMobile([FromForm] string Mobile)
+        {
+            Users users = await this.iUser.GetUserByMobile(Mobile);
+            if (users == null)
+            {
+                return NotFound(new { message = "User does not find" });
             }
             UserTokens userTokens = await this.iUserTokens.GenerateToken(users);
             return Ok(userTokens);
@@ -113,5 +129,11 @@ namespace EducoreApp.Web.Controllers
             await this.iUserTokens.DeleteUser(userTokens);
             return Ok(new { message = "Logout succesfully" });
         }
+    }
+    public class TimeModel
+    {
+        public DateTimeOffset UTC { get; set; }
+        public DateTimeOffset LocalTime { get; set; }
+        public string TimeZoneDisplayName { get; set; }
     }
 }

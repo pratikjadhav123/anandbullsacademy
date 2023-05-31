@@ -41,7 +41,7 @@ namespace EducoreApp.DAL.Services
                 using (var con = this.connection.connection())
                 {
                     Videos Videos = await con.QueryFirstOrDefaultAsync<Videos>("Select * from Videos where VideoId=@VideoId", new { VideoId });
-                   // Videos.VideoPath = this.uploadFiles.GetVideoPath(Videos.VideoUrl);
+                   Videos.VideoPath = this.uploadFiles.GetVideoPath(Videos.VideoUrl);
                     return Videos;
                 }
             });
@@ -64,7 +64,7 @@ namespace EducoreApp.DAL.Services
                 using (var con = this.connection.connection())
                 {
                     Videos videos = await con.QueryFirstOrDefaultAsync<Videos>(query, Videos);
-                    return videos;
+                    return await this.GetVideo(videos.VideoId);
                 }
             });
         }
@@ -87,7 +87,7 @@ namespace EducoreApp.DAL.Services
                 using (var con = this.connection.connection())
                 {
                     await con.QueryFirstOrDefaultAsync<Videos>(query, Videos);
-                    return Videos;
+                    return await this.GetVideo(Videos.VideoId);
                 }
             });
         }

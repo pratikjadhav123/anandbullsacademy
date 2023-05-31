@@ -16,6 +16,7 @@ using Swashbuckle.AspNetCore.SwaggerUI;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+
 //Hangfire services
 builder.Services.AddHangfire(x =>
 {
@@ -26,12 +27,6 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.PropertyNamingPolicy = null;
 });
-
-//CORS policies enabled
-builder.Services.AddCors(option => option.AddPolicy("pocilyCor", o =>
-{
-    o.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
-}));
 
 //SMTP configuration class connecttion
 builder.Services.Configure<SMTPConfigModel>(builder.Configuration.GetSection("SMTPConfig"));
@@ -51,8 +46,6 @@ builder.Services.AddSingleton<IUserTokens, UserTokenService>();
 
 builder.Services.AddSwaggerGen(option =>
 {
-    option.OperationFilter<AddSwaggerService>();
-
     option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
     {
         Name = "Authorization",
@@ -62,22 +55,15 @@ builder.Services.AddSwaggerGen(option =>
         In = ParameterLocation.Header,
         Description = "JWT Authorization header using the Bearer scheme.",
     });
-    option.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-        new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-        new string[] {}
-        }
-    });
-
+    option.OperationFilter<AuthorizationOperationFilter>();
+    
 });
+
+//services cors
+builder.Services.AddCors(p => p.AddPolicy("MyCorsPolicy", builder =>
+{
+    builder.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
+}));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 .AddJwtBearer(options =>
@@ -95,6 +81,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     };
 });
 
+
 var app = builder.Build();
 
 
@@ -104,10 +91,11 @@ app.UseSwaggerUI(c =>
     c.DocExpansion(DocExpansion.None);
 });
 
+app.UseRouting();
+app.UseCors("MyCorsPolicy");
+
 app.UseStaticFiles();
 app.UseHttpsRedirection();
-app.UseRouting();
-app.UseCors("pocilyCor");
 
 app.UseAuthentication();
 app.UseAuthorization();
