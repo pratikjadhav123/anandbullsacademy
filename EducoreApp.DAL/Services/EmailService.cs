@@ -1,6 +1,7 @@
 ﻿using EducoreApp.DAL.DTO;
 using EducoreApp.DAL.Interface;
 using EducoreApp.DAL.Request;
+using Hangfire;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using System.Net;
@@ -41,11 +42,11 @@ namespace EducoreApp.DAL.Services
                     }
                 };
                 userEmailOptions.Body = GetEmailBody(body, userEmailOptions.PlaceHolders);
-                await this.ConnectEmail(userEmailOptions);
-                /* if (userEmailOptions != null)
+                //await this.ConnectEmail(userEmailOptions);
+                 if (userEmailOptions != null)
                  {
                      BackgroundJob.Enqueue(()=>this.ConnectEmail(userEmailOptions));
-                 }*/
+                 }
             });
         }
 

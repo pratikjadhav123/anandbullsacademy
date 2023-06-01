@@ -15,7 +15,6 @@ namespace EducoreApp.Web.Controllers
             this.iCourse = iCourse;
         }
 
-        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Course>>> GetCourse()
         {
@@ -23,7 +22,6 @@ namespace EducoreApp.Web.Controllers
             return Ok(Course);
         }
 
-        [Authorize]
         [HttpGet("{CourseId}")]
         public async Task<ActionResult<Course>> GetCourse(int CourseId)
         {

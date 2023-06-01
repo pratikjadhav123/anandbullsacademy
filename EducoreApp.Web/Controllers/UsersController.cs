@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EducoreApp.Web.Controllers
@@ -8,10 +8,19 @@ namespace EducoreApp.Web.Controllers
     public class UsersController : ControllerBase
     {
         private IUser iUser;
+        private ICourse iCourse;
+        private IHttpContextAccessor httpContextAccessor;
 
-        public UsersController(IUser iUser)
+        public UsersController(IUser iUser, ICourse iCourse, IHttpContextAccessor httpContextAccessor)
         {
             this.iUser = iUser;
+            this.iCourse = iCourse;
+            this.httpContextAccessor = httpContextAccessor;
+        }
+
+        public int CourseId
+        {
+            get { return Convert.ToInt32(HttpContext.User.FindFirst("CourseId").Value); }
         }
 
         [HttpGet]
@@ -33,14 +42,36 @@ namespace EducoreApp.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Users>> SaveUser([FromForm] UserRequest userRequest)
+        public async Task<ActionResult<Users>> PurchaseCourse([FromForm] PurchaseRequest request)
         {
-            if ((await this.iUser.GetUserByEmail(userRequest.Email)) != null)
+            if (string.IsNullOrEmpty(request.UserId.ToString()))
             {
-                return NotFound(new { message = "Email allready exists" });
+                return NotFound(new { message = "Please sign up for purchase this course!!!!" });
             }
-            Users users = await this.iUser.SaveUser(userRequest);
-            return Ok(users);
+            Users users = await this.iUser.GetUser(request.UserId);
+            if (users == null)
+            {
+                return NotFound(new { message = "Please sign up for purchase this course!!" });
+            }
+            Course Course = await this.iCourse.GetCourse(request.CourseId);
+            if (Course == null)
+            {
+                return NotFound(new { message = "Course not found" });
+            }
+            Users users1 = await this.iUser.UpdateCourseStatus(users, Course);
+            return Ok(users1);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult<Course>> GetCourse()
+        {
+            Course Course = await this.iCourse.GetCourse(this.CourseId);
+            if (Course == null)
+            {
+                return NotFound(new { message = "Course not found" });
+            }
+            return Ok(Course);
         }
 
         [HttpPut("{UserId}")]

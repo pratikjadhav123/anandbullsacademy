@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EducoreApp.Web.Controllers
 {
-   
     [Route("[controller]/[action]")]
     [ApiController]
     public class VideosController : ControllerBase
@@ -17,6 +15,7 @@ namespace EducoreApp.Web.Controllers
             this.iCourse = iCourse;
             this.iVideos = iVideos;
         }
+
         [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Videos>>> GetVideos()
@@ -24,6 +23,7 @@ namespace EducoreApp.Web.Controllers
             IEnumerable<Videos> Videos = await this.iVideos.GetVideos();
             return Ok(Videos);
         }
+
         [Authorize]
         [HttpGet("{VideoId}")]
         public async Task<ActionResult<Videos>> GetVideo(int VideoId)
@@ -35,6 +35,7 @@ namespace EducoreApp.Web.Controllers
             }
             return Ok(Videos);
         }
+
         [Authorize]
         [HttpGet("{CourseId}")]
         public async Task<ActionResult<IEnumerable<Videos>>> GetVideosByCourse(int CourseId)

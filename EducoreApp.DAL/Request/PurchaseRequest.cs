@@ -2,12 +2,11 @@
 
 namespace EducoreApp.DAL.Request
 {
-    public class TopicRequest
+    public class PurchaseRequest
     {
         [Required]
         public int CourseId { get; set; }
 
-        [Required]
-        public string Name { get; set; } = String.Empty;
+        public int UserId { get; set; }
     }
 }

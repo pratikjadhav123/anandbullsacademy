@@ -1,5 +1,14 @@
+Create Table TempUsers(
+FirstName varchar(200),
+LastName varchar(200),
+Email varchar(200),
+Password varchar(200),
+Mobile varchar(200),
+OTP int)
+
 Create Table Users(
 UserId int identity(1,1),
+CourseId int,
 FirstName varchar(200),
 LastName varchar(200),
 Email varchar(200),
@@ -25,15 +34,6 @@ CreatedAt datetime,
 UpdatedAt datetime
 );
 
---Create table Topics(
---TopicId int identity(1,1),
---CourseId int, 
---Name varchar(1000),
---CreatedAt datetime,
---UpdatedAt datetime
---);
-
-drop table Videos
 Create table Videos(
 VideoId int identity(1,1),
 CourseId int,

@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
-using RestSharp;
-using Twilio;
-using Twilio.Rest.Api.V2010.Account;
 
 namespace EducoreApp.Web.Controllers
 {
@@ -22,9 +18,72 @@ namespace EducoreApp.Web.Controllers
             this.iUserTokens = iUserTokens;
             this.iEmailService = iEmailService;
         }
+
         private int UserId
         {
             get { return Convert.ToInt32(HttpContext.User.FindFirst("UserId").Value); }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Users>> Registration([FromForm] UserRequest userRequest)
+        {
+            if ((await this.iUser.GetUserByEmail(userRequest.Email)) != null)
+            {
+                return NotFound(new { message = "Email allready exists" });
+            }
+            if ((await this.iUser.GetUserByMobile(userRequest.Mobile)) != null)
+            {
+                return NotFound(new { message = "Mobile number allready exists" });
+            }
+            TempUsers users = await this.iUser.SaveTempUser(userRequest);
+            return Ok(new { message = "User Created Succesfully", code = users.OTP });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Users>> ConfirmOTP(int OTP)
+        {
+            TempUsers temp = await this.iUser.ConfirmOTP(OTP);
+            if (temp == null)
+            {
+                return NotFound();
+            }
+            await this.iUser.SaveUser(temp);
+            await this.iUser.DeleteTempUser(temp);
+            return Ok(new { message = "User Created Succesfully" });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Users>> ResendOTP(string Mobile)
+        {
+            Users users = await this.iUser.GetUserByMobile(Mobile);
+            if (users == null)
+            {
+                return NotFound(new { message = "User does not find" });
+            }
+            await this.iUserTokens.SaveUserToken(users, "Resend OTP");
+            return Ok(new { message = "OTP Send Succesfully" });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Users>> ReSetOTP(int OTP)
+        {
+            UserTokens userTokens = await this.iUserTokens.GetOTP(OTP, "Resend OTP");
+            if (userTokens == null)
+            {
+                return NotFound(new { message = "Invalid Otp please check OTP!!" });
+            }
+            if (userTokens.ExpiredDate < DateTime.Now)
+            {
+                await this.iUserTokens.DeleteUser(userTokens);
+                return NotFound(new { message = "OTP expired please send OTP agnain!!!" });
+            }
+            Users users = await this.iUser.GetUserByEmail(userTokens.RequestedBy);
+            if (users == null)
+            {
+                return NotFound(new { message = "User does not find" });
+            }
+            Users users1 = await this.iUser.UpdateOTP(users);
+            return Ok(users1);
         }
 
         [AllowAnonymous]
@@ -40,19 +99,30 @@ namespace EducoreApp.Web.Controllers
             {
                 return NotFound(new { message = "PLease enter correct password" });
             }
+            if (users.OTPVerification == null)
+            {
+                return NotFound(new { message = "Please confirm user mobile number" });
+            }
+            await this.iUserTokens.LogoutUser(users.Email);
             UserTokens userTokens = await this.iUserTokens.GenerateToken(users);
+
             return Ok(userTokens);
         }
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<ActionResult<UserTokens>> LoginWithMobile([FromForm] string Mobile)
+        public async Task<ActionResult<UserTokens>> LoginWithMobile(string Mobile)
         {
             Users users = await this.iUser.GetUserByMobile(Mobile);
             if (users == null)
             {
                 return NotFound(new { message = "User does not find" });
             }
+            if (users.OTPVerification == null)
+            {
+                return NotFound(new { message = "Please confirm user mobile number" });
+            }
+            await this.iUserTokens.LogoutUser(users.Email);
             UserTokens userTokens = await this.iUserTokens.GenerateToken(users);
             return Ok(userTokens);
         }
@@ -129,11 +199,5 @@ namespace EducoreApp.Web.Controllers
             await this.iUserTokens.DeleteUser(userTokens);
             return Ok(new { message = "Logout succesfully" });
         }
-    }
-    public class TimeModel
-    {
-        public DateTimeOffset UTC { get; set; }
-        public DateTimeOffset LocalTime { get; set; }
-        public string TimeZoneDisplayName { get; set; }
     }
 }

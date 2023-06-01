@@ -9,16 +9,25 @@ namespace EducoreApp.DAL.Interface
 
         public Task<Users> GetUser(int UserId);
 
-        public Task<Users> SaveUser(UserRequest userRequest);
+        public Task<TempUsers> ConfirmOTP(int OTP);
+
+        public Task<TempUsers> SaveTempUser(UserRequest userRequest);
+
+        public Task<Users> SaveUser(TempUsers tempUsers);
 
         public Task<Users> UpdateUser(Users users, UserRequest userRequest);
 
         public Task<Users> DeleteUser(Users users);
+
+        public Task DeleteTempUser(TempUsers tempUsers);
 
         public Task<Users> GetUserByEmail(string Email);
 
         public Task<Users> GetUserByMobile(string Mobile);
 
         public Task<Users> UpdatePassword(Users users, string Password);
+
+        public Task<Users> UpdateCourseStatus(Users users, Course course);
+        public Task<Users> UpdateOTP(Users users);
     }
 }
