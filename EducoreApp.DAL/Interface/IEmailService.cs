@@ -4,6 +4,7 @@ namespace EducoreApp.DAL.Interface
 {
     public interface IEmailService
     {
-        public Task SendEmail(Users user, string RequestedType);
+        public Task ConfirmEmail(Users user);
+        public Task ForgotEmail(Users user);
     }
 }

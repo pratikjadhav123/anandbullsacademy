@@ -22,18 +22,42 @@ namespace EducoreApp.DAL.Services
             this.configuration = configuration;
         }
 
-        public async Task SendEmail(Users user, string RequestedType)
+        public async Task ConfirmEmail(Users user)
         {
             await Task.Run(async () =>
             {
-                UserTokens userTokens = await this.userTokens.SaveUserToken(user, RequestedType);
-                string token = userTokens.Token;
-                string subject = (RequestedType == "Confirm Email") ? "Confirm Your Account" : "Reset Your Password";
-                string body = (RequestedType == "Confirm Email") ? "EmailConfirm.html" : "ForgotPassword.html";
-                string link = this.configuration["FrontEndUrl"] + ((RequestedType == "Confirm Email") ? $"/confirm-email/{token}" : $"/resetpassword/{token}");
+                UserTokens userTokens = await this.userTokens.SaveUserToken(user, "Confirm Email");
+
                 UserEmailOptions userEmailOptions = new UserEmailOptions()
                 {
-                    Subject = subject,
+                    Subject = "Confirm Your Account",
+                    ToEmails = user.Email,
+                    PlaceHolders = new List<KeyValuePair<string, string>>()
+                    {
+                        new KeyValuePair<string, string>("{{FirstName}}",user.FirstName),
+                        new KeyValuePair<string, string>("{{Email}}",user.Email),
+                        new KeyValuePair<string, string>("{{OTP}}",userTokens.Token)
+                    }
+                };
+                userEmailOptions.Body = GetEmailBody("EmailConfirm1.html", userEmailOptions.PlaceHolders);
+                await this.ConnectEmail(userEmailOptions);
+                 /*if (userEmailOptions != null)
+                 {
+                     BackgroundJob.Enqueue(()=>this.ConnectEmail(userEmailOptions));
+                 }*/
+            });
+        }
+
+        public async Task ForgotEmail(Users user)
+        {
+            await Task.Run(async () =>
+            {
+                UserTokens userTokens = await this.userTokens.SaveUserToken(user, "Reset Password");
+                string token = userTokens.Token;
+                string link = this.configuration["FrontEndUrl"] + $"/resetpassword/{token}";
+                UserEmailOptions userEmailOptions = new UserEmailOptions()
+                {
+                    Subject = "Reset Your Password",
                     ToEmails = user.Email,
                     PlaceHolders = new List<KeyValuePair<string, string>>()
                     {
@@ -41,12 +65,12 @@ namespace EducoreApp.DAL.Services
                         new KeyValuePair<string, string>("{{Link}}",link)
                     }
                 };
-                userEmailOptions.Body = GetEmailBody(body, userEmailOptions.PlaceHolders);
-                //await this.ConnectEmail(userEmailOptions);
-                 if (userEmailOptions != null)
-                 {
-                     BackgroundJob.Enqueue(()=>this.ConnectEmail(userEmailOptions));
-                 }
+                userEmailOptions.Body = GetEmailBody("ForgotPassword.html", userEmailOptions.PlaceHolders);
+                await this.ConnectEmail(userEmailOptions);
+               /* if (userEmailOptions != null)
+                {
+                    BackgroundJob.Enqueue( () => this.ConnectEmail(userEmailOptions));
+                }*/
             });
         }
 

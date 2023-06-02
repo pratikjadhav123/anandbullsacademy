@@ -58,7 +58,8 @@ namespace EducoreApp.Web.Controllers
             {
                 return NotFound(new { message = "Course not found" });
             }
-            Users users1 = await this.iUser.UpdateCourseStatus(users, Course);
+            users.CourseId = Course.CourseId;
+            Users users1 = await this.iUser.UpdateUser(users);
             return Ok(users1);
         }
 
@@ -82,7 +83,13 @@ namespace EducoreApp.Web.Controllers
             {
                 return NotFound(new { message = "User not found" });
             }
-            return Ok(await this.iUser.UpdateUser(users, userRequest));
+            users.FirstName = userRequest.FirstName;
+            users.LastName = userRequest.LastName;
+            users.Email = userRequest.Email;
+            users.Password = BCrypt.Net.BCrypt.HashPassword(userRequest.Password);
+            users.Mobile = userRequest.Mobile;
+
+            return Ok(await this.iUser.UpdateUser(users));
         }
 
         [HttpDelete("{UserId}")]

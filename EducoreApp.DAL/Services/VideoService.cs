@@ -27,7 +27,7 @@ namespace EducoreApp.DAL.Services
                     IEnumerable<Videos> videos = (await con.QueryAsync<Videos>("Select * from Videos")).ToList();
                     foreach(Videos videos1 in videos)
                     {
-                        videos1.VideoPath =  this.uploadFiles.GetVideoPath(videos1.VideoUrl);
+                        videos1.VideoPath =  this.uploadFiles.GetVideoPath(videos1.VideoUrl, "Videos");
                     }
                     return videos;
                 }
@@ -41,7 +41,7 @@ namespace EducoreApp.DAL.Services
                 using (var con = this.connection.connection())
                 {
                     Videos Videos = await con.QueryFirstOrDefaultAsync<Videos>("Select * from Videos where VideoId=@VideoId", new { VideoId });
-                   Videos.VideoPath = this.uploadFiles.GetVideoPath(Videos.VideoUrl);
+                   Videos.VideoPath = this.uploadFiles.GetVideoPath(Videos.VideoUrl, "Videos");
                     return Videos;
                 }
             });
@@ -56,7 +56,7 @@ namespace EducoreApp.DAL.Services
                 Videos.Name = videoRequest.Name;
                 if (videoRequest.Video != null && videoRequest.Video.Length > 0)
                 {
-                    Videos.VideoUrl = await this.uploadFiles.SaveVideo(videoRequest.Video);
+                    Videos.VideoUrl = await this.uploadFiles.SaveVideo(videoRequest.Video, "Videos");
                 }
 
                 string query = "Insert into Videos OUTPUT inserted.* values(@CourseId,@Name,@VideoUrl,@CreatedAt,@UpdatedAt)";
@@ -77,7 +77,7 @@ namespace EducoreApp.DAL.Services
                 Videos.Name = videoRequest.Name;
                 if (videoRequest.Video != null && videoRequest.Video.Length > 0)
                 {
-                    Videos.VideoUrl = await this.uploadFiles.SaveVideo(videoRequest.Video);
+                    Videos.VideoUrl = await this.uploadFiles.SaveVideo(videoRequest.Video, "Videos");
                 }
                 Videos.UpdatedAt = DateTime.Now;
 
@@ -99,7 +99,7 @@ namespace EducoreApp.DAL.Services
                 using (var con = this.connection.connection())
                 {
                     await con.QueryFirstOrDefaultAsync<Videos>("Delete Videos where VideoId=@VideoId", Videos);
-                    this.uploadFiles.DeleteFile(Videos.VideoUrl);
+                    this.uploadFiles.DeleteFile(Videos.VideoUrl, "Videos");
                     return Videos;
                 }
             });
@@ -114,7 +114,7 @@ namespace EducoreApp.DAL.Services
                     IEnumerable<Videos> videos = (await con.QueryAsync<Videos>("Select * from Videos where CourseId=@CourseId", new { CourseId })).ToList();
                     foreach (Videos videos1 in videos)
                     {
-                        videos1.VideoPath = this.uploadFiles.GetVideoPath(videos1.VideoUrl);
+                        videos1.VideoPath = this.uploadFiles.GetVideoPath(videos1.VideoUrl, "Videos");
                     }
                     return videos;
                 }

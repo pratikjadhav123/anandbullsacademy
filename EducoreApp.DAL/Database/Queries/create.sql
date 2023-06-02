@@ -16,6 +16,7 @@ Password varchar(200),
 Mobile varchar(200),
 Active int,
 Role varchar(200),
+Avatar varchar(200),
 EmailVerification Datetime,
 OTPVerification Datetime)
 
@@ -30,6 +31,7 @@ Create table Courses(
 CourseId int identity(1,1),
 Title varchar(1000),
 Description nvarchar(max),
+Price int,
 CreatedAt datetime,
 UpdatedAt datetime
 );

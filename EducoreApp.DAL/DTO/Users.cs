@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace EducoreApp.DAL.DTO
 {
@@ -6,16 +7,20 @@ namespace EducoreApp.DAL.DTO
     {
         public int UserId { get; set; }
         public int CourseId { get; set; } = 0;
-        public string FirstName { get; set; } = String.Empty;
-        public string LastName { get; set; } = String.Empty;
-        public string Email { get; set; } = String.Empty;
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
 
         [JsonIgnore]
-        public string Password { get; set; } = String.Empty;
+        public string Password { get; set; } = string.Empty;
 
-        public string Mobile { get; set; } = String.Empty;
+        public string Mobile { get; set; } = string.Empty;
         public bool Active { get; set; } = true;
         public string Role { get; set; } = "User";
+        public string Avatar { get; set; } = "user.jpg";
+        [NotMapped]
+        public string AvatarPath { get; set; } = string.Empty;
+
         public DateTime? EmailVerification { get; set; }
         public DateTime? OTPVerification { get; set; }
     }

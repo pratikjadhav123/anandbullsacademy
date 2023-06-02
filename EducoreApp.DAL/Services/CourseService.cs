@@ -46,8 +46,9 @@ namespace EducoreApp.DAL.Services
                 Course Course = new Course();
                 Course.Title = courseRequest.Title;
                 Course.Description = courseRequest.Description;
+                Course.Price= courseRequest.Price;
 
-                string query = "Insert into Courses OUTPUT inserted.* values(@Title,@Description,@CreatedAt,@UpdatedAt)";
+                string query = "Insert into Courses OUTPUT inserted.* values(@Title, @Description, @Price, @CreatedAt, @UpdatedAt)";
 
                 using (var con = this.connection.connection())
                 {
@@ -63,9 +64,10 @@ namespace EducoreApp.DAL.Services
             {
                 Course.Title = courseRequest.Title;
                 Course.Description = courseRequest.Description;
+                Course.Price=courseRequest.Price;
                 Course.UpdatedAt = DateTime.Now;
 
-                string query = "Update Courses set Title=@Title,Description=@Description,UpdatedAt=@UpdatedAt" +
+                string query = "Update Courses set Title=@Title,Description=@Description, Price=@Price, UpdatedAt=@UpdatedAt" +
                                " where CourseId=@CourseId";
 
                 using (var con = this.connection.connection())

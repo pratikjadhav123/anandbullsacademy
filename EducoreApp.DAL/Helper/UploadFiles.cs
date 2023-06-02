@@ -15,11 +15,11 @@ namespace EducoreApp.DAL.Helper
             this.configuration = configuration;
         }
 
-        public async Task<string> SaveVideo(IFormFile videoFile)
+        public async Task<string> SaveVideo(IFormFile videoFile, string foldername)
         {
             string fileName = Guid.NewGuid().ToString() + Path.GetExtension(videoFile.FileName);
 
-            string uploadsFolder = Path.Combine(_hostEnvironment.WebRootPath, "uploads");
+            string uploadsFolder = Path.Combine(_hostEnvironment.WebRootPath, foldername);
 
             if (!Directory.Exists(uploadsFolder))
             {
@@ -34,24 +34,38 @@ namespace EducoreApp.DAL.Helper
             return fileName;
         }
 
-        public string GetVideoPath(string filename)
+        public string GetVideoPath(string filename, string foldername)
         {
             var webRootPath = _hostEnvironment.WebRootPath;
-            var imagePath = Path.Combine(webRootPath, "uploads", filename);
+            var imagePath = Path.Combine(webRootPath, foldername , filename);
 
             if (System.IO.File.Exists(imagePath))
             {
-                return this.configuration["BackEndUrl"] + "/uploads/" + filename;
+                return this.configuration["BackEndUrl"] + @"/" + foldername + @"/" + filename;
             }
             else
             {
                 return null;
             }
         }
-        public string DeleteFile(string file)
+        public string GetAvatarPath(string filename, string foldername)
         {
             var webRootPath = _hostEnvironment.WebRootPath;
-            var imagePath = Path.Combine(webRootPath, "uploads", file);
+            var imagePath = Path.Combine(webRootPath, foldername, filename);
+
+            if (System.IO.File.Exists(imagePath))
+            {
+                return this.configuration["BackEndUrl"] + @"/" + foldername + @"/" + filename;
+            }
+            else
+            {
+                return this.configuration["BackEndUrl"] + "/user.jpg";
+            }
+        }
+        public string DeleteFile(string file, string foldername)
+        {
+            var webRootPath = _hostEnvironment.WebRootPath;
+            var imagePath = Path.Combine(webRootPath, foldername, file);
 
             if (!System.IO.File.Exists(imagePath))
             {

@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using EducoreApp.DAL.Database;
 using EducoreApp.DAL.DTO;
+using EducoreApp.DAL.Helper;
 using EducoreApp.DAL.Interface;
 using EducoreApp.DAL.Request;
 
@@ -10,11 +11,13 @@ namespace EducoreApp.DAL.Services
     {
         private DatabaseConnection connection;
         private IEmailService emailService;
+        private UploadFiles uploadFiles;
 
-        public UserService(DatabaseConnection connection, IEmailService emailService)
+        public UserService(DatabaseConnection connection, IEmailService emailService, UploadFiles uploadFiles)
         {
             this.connection = connection;
             this.emailService = emailService;
+            this.uploadFiles = uploadFiles;
         }
 
         public async Task<IEnumerable<Users>> GetUsers()
@@ -24,6 +27,10 @@ namespace EducoreApp.DAL.Services
                 using (var con = this.connection.connection())
                 {
                     IEnumerable<Users> users = (await con.QueryAsync<Users>("Select * from Users")).ToList();
+                    foreach (Users users1 in users)
+                    {
+                        users1.AvatarPath = this.uploadFiles.GetAvatarPath(users1.Avatar, "Users");
+                    }
                     return users;
                 }
             });
@@ -36,6 +43,7 @@ namespace EducoreApp.DAL.Services
                 using (var con = this.connection.connection())
                 {
                     Users users = await con.QueryFirstOrDefaultAsync<Users>("Select * from Users where UserId=@UserId", new { UserId });
+                    users.AvatarPath = this.uploadFiles.GetAvatarPath(users.Avatar, "Users");
                     return users;
                 }
             });
@@ -52,7 +60,6 @@ namespace EducoreApp.DAL.Services
                 }
             });
         }
-
 
         public async Task<TempUsers> SaveTempUser(UserRequest userRequest)
         {
@@ -86,34 +93,28 @@ namespace EducoreApp.DAL.Services
                 users.Mobile = tempUsers.Mobile;
                 users.OTPVerification = DateTime.Now;
 
-                string query = "Insert into Users OUTPUT inserted.* values(@CourseId,@FirstName,@LastName,@Email,@Password,@Mobile,@Active,@Role,@EmailVerification,@OTPVerification)";
+                string query = "Insert into Users OUTPUT inserted.* values(@CourseId,@FirstName,@LastName,@Email,@Password,@Mobile,@Active,@Role,@Avatar,@EmailVerification,@OTPVerification)";
 
                 using (var con = this.connection.connection())
                 {
                     Users user = await con.QueryFirstOrDefaultAsync<Users>(query, users);
-                    await this.emailService.SendEmail(user, "Confirm Email");
-                    return user;
+                    await this.emailService.ConfirmEmail(user);
+                    return await this.GetUser(user.UserId);
                 }
             });
         }
 
-        public async Task<Users> UpdateUser(Users users, UserRequest userRequest)
+        public async Task<Users> UpdateUser(Users users)
         {
             return await Task.Run(async () =>
             {
-                users.FirstName = userRequest.FirstName;
-                users.LastName = userRequest.LastName;
-                users.Email = userRequest.Email;
-                users.Password = BCrypt.Net.BCrypt.HashPassword(userRequest.Password);
-                users.Mobile = userRequest.Mobile;
-
-                string query = "Update Users set FirstName=@FirstName,LastName=@LastName,Email=@Email,Password=@Password," +
-                               "Mobile=@Mobile where UserId=@UserId";
+                string query = "Update Users set CourseId=@CourseId, FirstName=@FirstName,LastName=@LastName,Email=@Email,Password=@Password," +
+                               "Mobile=@Mobile,Avatar=@Avatar, OTPVerification=@OTPVerification, EmailVerification=@EmailVerification  where UserId=@UserId";
 
                 using (var con = this.connection.connection())
                 {
                     await con.QueryFirstOrDefaultAsync<Users>(query, users);
-                    return users;
+                    return await this.GetUser(users.UserId); ;
                 }
             });
         }
@@ -173,7 +174,7 @@ namespace EducoreApp.DAL.Services
                 using (var con = this.connection.connection())
                 {
                     await con.QueryFirstOrDefaultAsync<Users>("Update Users set Password=@Password where UserId=@UserId", users);
-                    return users;
+                    return await this.GetUser(users.UserId); ;
                 }
             });
         }
@@ -189,10 +190,11 @@ namespace EducoreApp.DAL.Services
                 using (var con = this.connection.connection())
                 {
                     await con.QueryFirstOrDefaultAsync<Users>(query, users);
-                    return users;
+                    return await this.GetUser(users.UserId); ;
                 }
             });
         }
+
         public async Task<Users> UpdateOTP(Users users)
         {
             return await Task.Run(async () =>
@@ -201,7 +203,31 @@ namespace EducoreApp.DAL.Services
                 using (var con = this.connection.connection())
                 {
                     await con.QueryFirstOrDefaultAsync<Users>("Update Users set OTPVerification=@OTPVerification where UserId=@UserId", users);
-                    return users;
+                    return await this.GetUser(users.UserId); ;
+                }
+            });
+        }
+
+        public async Task<Users> UpdateProfile(Users users, UpdateProfileRequest updateProfile)
+        {
+            return await Task.Run(async () =>
+            {
+                users.FirstName = updateProfile.FirstName;
+                users.LastName = updateProfile.LastName;
+                users.Email = updateProfile.Email;
+                users.Mobile = updateProfile.Mobile;
+                if (updateProfile.Avatar != null && updateProfile.Avatar.Length > 0)
+                {
+                    users.Avatar = await this.uploadFiles.SaveVideo(updateProfile.Avatar, "Users");
+                }
+
+                string query = "Update Users set FirstName=@FirstName,LastName=@LastName,Email=@Email,Password=@Password," +
+                               "Mobile=@Mobile,Avatar=@Avatar where UserId=@UserId";
+
+                using (var con = this.connection.connection())
+                {
+                    await con.QueryFirstOrDefaultAsync<Users>(query, users);
+                    return await this.GetUser(users.UserId); ;
                 }
             });
         }

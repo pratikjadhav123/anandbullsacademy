@@ -24,7 +24,7 @@ namespace EducoreApp.DAL.Middlewares
             if (!string.IsNullOrEmpty(authorizationHeader))
             {
                 var jwtEncodedString = authorizationHeader[7..];
-                UserTokens user = await _iUserTokenService.GetToken(jwtEncodedString);
+                UserTokens user = await _iUserTokenService.GetToken(jwtEncodedString, "User Token");
                 if (user == null)
                 {
                     context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;

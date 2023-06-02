@@ -69,7 +69,7 @@ namespace EducoreApp.DAL.Services
                 UserTokens UserTokens = new UserTokens();
                 UserTokens.RequestedBy = users.Email;
                 UserTokens.RequestedType = RequestedType;
-                UserTokens.Token = new Random().Next(1000, 9999).ToString();
+                UserTokens.Token = new Random().Next(10000, 99999).ToString();
                 UserTokens.ExpiredDate = DateTime.Now.AddMinutes(5);
 
                 string query = "Insert into UserTokens OUTPUT inserted.* values(@RequestedBy,@RequestedType,@Token,@ExpiredDate)";
@@ -126,11 +126,11 @@ namespace EducoreApp.DAL.Services
            });
         }
 
-        public async Task<UserTokens> GetToken(string token)
+        public async Task<UserTokens> GetToken(string token, string RequestedType)
         {
             using (var db = this.connection.connection())
             {
-                return await db.QueryFirstOrDefaultAsync<UserTokens>("select * from UserTokens where Token=@Token", new { token });
+                return await db.QueryFirstOrDefaultAsync<UserTokens>("select * from UserTokens where Token=@Token and RequestedType=@RequestedType", new { token, RequestedType });
             }
         }
 

@@ -9,5 +9,8 @@ namespace EducoreApp.DAL.Request
 
         [Required]
         public string Description { get; set; } = string.Empty;
+        [Required]
+        public int Price { get; set; }
+
     }
 }
