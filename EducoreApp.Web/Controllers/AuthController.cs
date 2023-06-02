@@ -24,7 +24,7 @@ namespace EducoreApp.Web.Controllers
         {
             get { return Convert.ToInt32(HttpContext.User.FindFirst("UserId").Value); }
         }
-
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<Users>> Registration([FromForm] UserRequest userRequest)
         {
@@ -39,7 +39,7 @@ namespace EducoreApp.Web.Controllers
             TempUsers users = await this.iUser.SaveTempUser(userRequest);
             return Ok(new { message = "User Created Succesfully", code = users.OTP });
         }
-
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<Users>> ConfirmOTP(int OTP)
         {
@@ -53,37 +53,37 @@ namespace EducoreApp.Web.Controllers
             return Ok(new { message = "User Created Succesfully" });
         }
 
+        /* [HttpPost]
+         public async Task<ActionResult<Users>> ConfirmEmail(string OTP)
+         {
+             UserTokens userTokens = await this.iUserTokens.GetToken(OTP, "Confirm Email");
+             if (userTokens == null || userTokens.ExpiredDate < DateTime.Now)
+             {
+                 return NotFound(new { message = "Token is invalid please check the token" });
+             }
+             Users users = await this.iUser.GetUserByEmail(userTokens.RequestedBy);
+             if (users == null)
+             {
+                 return NotFound(new { message = "User does not find" });
+             }
+             users.EmailVerification = DateTime.Now;
+             await this.iUser.UpdateUser(users);
+             await this.iUserTokens.DeleteUser(userTokens);
+             return Ok(users);
+         }*/
+        [AllowAnonymous]
         [HttpPost]
-        public async Task<ActionResult<Users>> ConfirmEmail(string OTP)
-        {
-            UserTokens userTokens = await this.iUserTokens.GetToken(OTP, "Confirm Email");
-            if (userTokens == null || userTokens.ExpiredDate < DateTime.Now)
-            {
-                return NotFound(new { message = "Token is invalid please check the token" });
-            }
-            Users users = await this.iUser.GetUserByEmail(userTokens.RequestedBy);
-            if (users == null)
-            {
-                return NotFound(new { message = "User does not find" });
-            }
-            users.EmailVerification = DateTime.Now;
-            await this.iUser.UpdateUser(users);
-            await this.iUserTokens.DeleteUser(userTokens);
-            return Ok(users);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<Users>> ResendOTP(string Mobile)
+        public async Task<ActionResult<Users>> ResendOTP([Required, RegularExpression(@"^\+91[1-9]\d{9}$", ErrorMessage = "Mobile number should be (+91986543210) in this formate")] string Mobile)
         {
             Users users = await this.iUser.GetUserByMobile(Mobile);
             if (users == null)
             {
                 return NotFound(new { message = "User does not find" });
             }
-            await this.iUserTokens.SaveUserToken(users, "Resend OTP");
-            return Ok(new { message = "OTP Send Succesfully" });
+           UserTokens userTokens= await this.iUserTokens.SaveUserToken(users, "Resend OTP");
+            return Ok(new { message = "OTP Send Succesfully", otp= userTokens.Token});
         }
-
+       /* [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<Users>> ReSetOTP(int OTP)
         {
@@ -104,8 +104,9 @@ namespace EducoreApp.Web.Controllers
             }
             users.OTPVerification = DateTime.Now;
             Users users1 = await this.iUser.UpdateUser(users);
+
             return Ok(users1);
-        }
+        }*/
 
         [AllowAnonymous]
         [HttpPost]
@@ -124,16 +125,12 @@ namespace EducoreApp.Web.Controllers
             {
                 return NotFound(new { message = "Please confirm user mobile number" });
             }
-            if (users.EmailVerification == null)
-            {
-                return NotFound(new { message = "Please confirm your Email" });
-            }
             await this.iUserTokens.LogoutUser(users.Email);
             UserTokens userTokens = await this.iUserTokens.GenerateToken(users);
 
             return Ok(userTokens);
         }
-
+/*
         [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<UserTokens>> LoginWithMobile([Required, RegularExpression(@"^\+91[1-9]\d{9}$", ErrorMessage = "Mobile number should be (+91986543210) in this formate")] string Mobile)
@@ -147,27 +144,49 @@ namespace EducoreApp.Web.Controllers
             {
                 return NotFound(new { message = "Please confirm user mobile number" });
             }
-            if(users.EmailVerification== null)
-            {
-                return NotFound(new { message = "Please confirm your Email" });
-            }
             await this.iUserTokens.LogoutUser(users.Email);
             UserTokens userTokens = await this.iUserTokens.GenerateToken(users);
             return Ok(userTokens);
         }
-
+*/
+        [AllowAnonymous]
         [HttpPost]
-        public async Task<ActionResult<Users>> ResendEmail(string Email)
+        public async Task<ActionResult<UserTokens>> LoginWithOTP(int OTP)
         {
-            Users users = await this.iUser.GetUserByEmail(Email);
+            UserTokens userTokens = await this.iUserTokens.GetOTP(OTP, "Resend OTP");
+            if (userTokens == null)
+            {
+                return NotFound(new { message = "Invalid Otp please check OTP!!" });
+            }
+            if (userTokens.ExpiredDate < DateTime.Now)
+            {
+                await this.iUserTokens.DeleteUser(userTokens);
+                return NotFound(new { message = "OTP expired please send OTP agnain!!!" });
+            }
+            Users users = await this.iUser.GetUserByEmail(userTokens.RequestedBy);
             if (users == null)
             {
                 return NotFound(new { message = "User does not find" });
             }
-            await this.iEmailService.ConfirmEmail(users);
-            return Ok(new { message = $"Resend email send successfully on Email : {Email}" });
+            await this.iUserTokens.LogoutUser(users.Email);
+            UserTokens userTokens1 = await this.iUserTokens.GenerateToken(users);
+            return Ok(userTokens1);
         }
 
+
+        /*
+                [HttpPost]
+                public async Task<ActionResult<Users>> ResendEmail(string Email)
+                {
+                    Users users = await this.iUser.GetUserByEmail(Email);
+                    if (users == null)
+                    {
+                        return NotFound(new { message = "User does not find" });
+                    }
+                    await this.iEmailService.ConfirmEmail(users);
+                    return Ok(new { message = $"Resend email send successfully on Email : {Email}" });
+                }
+        */
         [Authorize]
         [HttpPost]
         public async Task<ActionResult<Users>> UserDetails()

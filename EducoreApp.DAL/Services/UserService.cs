@@ -98,7 +98,7 @@ namespace EducoreApp.DAL.Services
                 using (var con = this.connection.connection())
                 {
                     Users user = await con.QueryFirstOrDefaultAsync<Users>(query, users);
-                    await this.emailService.ConfirmEmail(user);
+                 //   await this.emailService.ConfirmEmail(user);
                     return await this.GetUser(user.UserId);
                 }
             });
