@@ -93,7 +93,7 @@ namespace EducoreApp.DAL.Services
                 users.Mobile = tempUsers.Mobile;
                 users.OTPVerification = DateTime.Now;
 
-                string query = "Insert into Users OUTPUT inserted.* values(@CourseId,@PaymentId,@FirstName,@LastName,@Email,@Password,@Mobile,@Active,@Role,@Avatar,@EmailVerification,@OTPVerification)";
+                string query = "Insert into Users OUTPUT inserted.* values(@FirstName,@LastName,@Email,@Password,@Mobile,@Active,@Role,@Avatar,@EmailVerification,@OTPVerification)";
 
                 using (var con = this.connection.connection())
                 {
@@ -108,7 +108,7 @@ namespace EducoreApp.DAL.Services
         {
             return await Task.Run(async () =>
             {
-                string query = "Update Users set CourseId=@CourseId,PaymentId=@PaymentId, FirstName=@FirstName,LastName=@LastName,Email=@Email,Password=@Password," +
+                string query = "Update Users set  FirstName=@FirstName,LastName=@LastName,Email=@Email,Password=@Password," +
                                "Mobile=@Mobile,Avatar=@Avatar, OTPVerification=@OTPVerification, EmailVerification=@EmailVerification  where UserId=@UserId";
 
                 using (var con = this.connection.connection())
@@ -162,48 +162,6 @@ namespace EducoreApp.DAL.Services
                 {
                     Users users = await con.QueryFirstOrDefaultAsync<Users>("Select * from Users where Mobile=@Mobile", new { Mobile });
                     return users;
-                }
-            });
-        }
-
-        public async Task<Users> UpdatePassword(Users users, string Password)
-        {
-            return await Task.Run(async () =>
-            {
-                users.Password = BCrypt.Net.BCrypt.HashPassword(Password);
-                using (var con = this.connection.connection())
-                {
-                    await con.QueryFirstOrDefaultAsync<Users>("Update Users set Password=@Password where UserId=@UserId", users);
-                    return await this.GetUser(users.UserId); ;
-                }
-            });
-        }
-
-        public async Task<Users> UpdateCourseStatus(Users users, Course course)
-        {
-            return await Task.Run(async () =>
-            {
-                users.CourseId = course.CourseId;
-
-                string query = "Update Users set CourseId=@CourseId where UserId=@UserId";
-
-                using (var con = this.connection.connection())
-                {
-                    await con.QueryFirstOrDefaultAsync<Users>(query, users);
-                    return await this.GetUser(users.UserId); ;
-                }
-            });
-        }
-
-        public async Task<Users> UpdateOTP(Users users)
-        {
-            return await Task.Run(async () =>
-            {
-                users.OTPVerification = DateTime.Now;
-                using (var con = this.connection.connection())
-                {
-                    await con.QueryFirstOrDefaultAsync<Users>("Update Users set OTPVerification=@OTPVerification where UserId=@UserId", users);
-                    return await this.GetUser(users.UserId); ;
                 }
             });
         }

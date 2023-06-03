@@ -8,20 +8,12 @@ namespace EducoreApp.Web.Controllers
     public class UsersController : ControllerBase
     {
         private IUser iUser;
-        private ICourse iCourse;
-        private IHttpContextAccessor httpContextAccessor;
 
-        public UsersController(IUser iUser, ICourse iCourse, IHttpContextAccessor httpContextAccessor)
+        public UsersController(IUser iUser)
         {
             this.iUser = iUser;
-            this.iCourse = iCourse;
-            this.httpContextAccessor = httpContextAccessor;
         }
 
-        public int CourseId
-        {
-            get { return Convert.ToInt32(HttpContext.User.FindFirst("CourseId").Value); }
-        }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Users>>> GetUsers()
@@ -39,41 +31,6 @@ namespace EducoreApp.Web.Controllers
                 return NotFound(new { message = "User not found" });
             }
             return Ok(users);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<Users>> PurchaseCourse([FromForm] PurchaseRequest request)
-        {
-            if (string.IsNullOrEmpty(request.UserId.ToString()))
-            {
-                return NotFound(new { message = "Please sign up for purchase this course!!!!" });
-            }
-            Users users = await this.iUser.GetUser(request.UserId);
-            if (users == null)
-            {
-                return NotFound(new { message = "Please sign up for purchase this course!!" });
-            }
-            Course Course = await this.iCourse.GetCourse(request.CourseId);
-            if (Course == null)
-            {
-                return NotFound(new { message = "Course not found" });
-            }
-            users.CourseId = Course.CourseId;
-            users.PaymentId=request.PaymentId;
-            Users users1 = await this.iUser.UpdateUser(users);
-            return Ok(users1);
-        }
-
-        [Authorize]
-        [HttpGet]
-        public async Task<ActionResult<Course>> GetCourse()
-        {
-            Course Course = await this.iCourse.GetCourse(this.CourseId);
-            if (Course == null)
-            {
-                return NotFound(new { message = "Course not found" });
-            }
-            return Ok(Course);
         }
 
         [HttpPut("{UserId}")]

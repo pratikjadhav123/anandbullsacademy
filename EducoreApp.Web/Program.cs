@@ -42,6 +42,8 @@ builder.Services.AddSingleton<IUser, UserService>();
 builder.Services.AddSingleton<ICourse, CourseService>();
 builder.Services.AddSingleton<IVideos, VideoService>();
 builder.Services.AddSingleton<IUserTokens, UserTokenService>();
+builder.Services.AddSingleton<IPaymentDetails, PaymentDetailsService>();
+
 
 builder.Services.AddSwaggerGen(option =>
 {

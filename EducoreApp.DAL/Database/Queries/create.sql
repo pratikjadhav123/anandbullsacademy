@@ -8,8 +8,6 @@ OTP int)
 
 Create Table Users(
 UserId int identity(1,1),
-CourseId int,
-PaymentId varchar(200),
 FirstName varchar(200),
 LastName varchar(200),
 Email varchar(200),
@@ -44,4 +42,12 @@ Name varchar(1000),
 VideoUrl varchar(1000),
 CreatedAt datetime,
 UpdatedAt datetime);
+
+Create table PaymentDetails(
+Id int identity(1,1),
+PaymentId varchar(200),
+CourseId int,
+UserId int,
+PaymentDate datetime
+);
 

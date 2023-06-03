@@ -31,7 +31,6 @@ namespace EducoreApp.DAL.Services
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
                     new Claim("Date", DateTime.Now.ToString()),
                     new Claim("UserId", user.UserId.ToString()),
-                    new Claim("CourseId", user.CourseId.ToString()),
                     new Claim(ClaimTypes.Role, user.Role),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 };

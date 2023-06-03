@@ -24,11 +24,6 @@ namespace EducoreApp.DAL.Interface
         public Task<Users> GetUserByEmail(string Email);
 
         public Task<Users> GetUserByMobile(string Mobile);
-
-       public Task<Users> UpdatePassword(Users users, string Password);
-
-        public Task<Users> UpdateCourseStatus(Users users, Course course);
-        public Task<Users> UpdateOTP(Users users);
         public Task<Users> UpdateProfile(Users users, UpdateProfileRequest updateProfile);
     }
 }
