@@ -59,6 +59,7 @@ namespace EducoreApp.Web.Controllers
                 return NotFound(new { message = "Course not found" });
             }
             users.CourseId = Course.CourseId;
+            users.PaymentId=request.PaymentId;
             Users users1 = await this.iUser.UpdateUser(users);
             return Ok(users1);
         }

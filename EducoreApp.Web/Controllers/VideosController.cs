@@ -51,6 +51,8 @@ namespace EducoreApp.Web.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
+        [RequestFormLimits(MultipartBodyLengthLimit = 3221225472)]
+
         public async Task<ActionResult<Videos>> SaveVideos([FromForm] VideoRequest videoRequest)
         {
             Course Course = await this.iCourse.GetCourse(videoRequest.CourseId);

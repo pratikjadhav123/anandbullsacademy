@@ -9,6 +9,7 @@ OTP int)
 Create Table Users(
 UserId int identity(1,1),
 CourseId int,
+PaymentId varchar(200),
 FirstName varchar(200),
 LastName varchar(200),
 Email varchar(200),

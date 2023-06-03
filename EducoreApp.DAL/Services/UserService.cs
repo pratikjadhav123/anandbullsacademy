@@ -93,7 +93,7 @@ namespace EducoreApp.DAL.Services
                 users.Mobile = tempUsers.Mobile;
                 users.OTPVerification = DateTime.Now;
 
-                string query = "Insert into Users OUTPUT inserted.* values(@CourseId,@FirstName,@LastName,@Email,@Password,@Mobile,@Active,@Role,@Avatar,@EmailVerification,@OTPVerification)";
+                string query = "Insert into Users OUTPUT inserted.* values(@CourseId,@PaymentId,@FirstName,@LastName,@Email,@Password,@Mobile,@Active,@Role,@Avatar,@EmailVerification,@OTPVerification)";
 
                 using (var con = this.connection.connection())
                 {
@@ -108,7 +108,7 @@ namespace EducoreApp.DAL.Services
         {
             return await Task.Run(async () =>
             {
-                string query = "Update Users set CourseId=@CourseId, FirstName=@FirstName,LastName=@LastName,Email=@Email,Password=@Password," +
+                string query = "Update Users set CourseId=@CourseId,PaymentId=@PaymentId, FirstName=@FirstName,LastName=@LastName,Email=@Email,Password=@Password," +
                                "Mobile=@Mobile,Avatar=@Avatar, OTPVerification=@OTPVerification, EmailVerification=@EmailVerification  where UserId=@UserId";
 
                 using (var con = this.connection.connection())
