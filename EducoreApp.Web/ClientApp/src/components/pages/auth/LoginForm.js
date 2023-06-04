@@ -4,16 +4,21 @@ import auth from "../../../utils/auth";
 import { AppContext } from "../../../plugins/AppContext";
 import { useHistory } from "react-router-dom/cjs/react-router-dom";
 import notice from "../../../plugins/notice";
+import useValidator from "../../../plugins/validator";
 const reset = {
   Email: "",
   Password: ""
 }
-function LoginForm({ setCurrentPage }) {
+function LoginForm() {
   const [login, setLogin] = useState(reset);
   const navigate = useHistory()
-
+  const [validator, showMessage] = useValidator();
   const contextObj = useContext(AppContext);
-
+  const error = {
+    Email: validator.message(('Email'), login.Email, "required|email"),
+    Password: validator.message(('Password'), login.Password, "required|password|max:20|min:5"),
+    // Mobile: validator.message(('Mobile'), register.Mobile, "required|string|max:200"),
+  }
   const handleChange = (e) => {
     const { name, value } = e.target;
     handleSetData(name, value)
@@ -27,14 +32,19 @@ function LoginForm({ setCurrentPage }) {
     })
   }
   const handlelogin = (e) => {
-    auth.login(login).then((data) => {
-      contextObj.getAllData();
-      notice.success("Login Successfully")
-      navigate.push("/myProfile")
+    e.preventDefault()
+    if (validator.allValid()) {
+      auth.login(login).then((data) => {
+        contextObj.getAllData();
+        notice.success("Login Successfully")
+        navigate.push("/myProfile")
 
-    }).catch(error =>
-      console.log("error", error)
-    )
+      }).catch(error =>
+        console.log("error", error)
+      )}
+    else {
+      showMessage(true);
+    }
   }
   return (
     <>
@@ -52,15 +62,19 @@ function LoginForm({ setCurrentPage }) {
             <div className="booking-form-wrapper">
               <div className="custom-input-group">
                 <input type="email" placeholder="Your Email" id="email" name="Email" value={login.Email} onChange={handleChange} />
-              </div>
+                {error?.Email &&
+                  <span className='error' style={{ color: "red" }}> {error?.Email}</span>}
+               </div>
               <div className="custom-input-group">
                 <input type="Password" placeholder="password" id="PassWord" name="Password" value={login.Password} onChange={handleChange} />
-              </div>
+                {error?.Password &&
+                  <span className='error' style={{ color: "red" }}> {error?.Password}</span>}
+               </div>
               <div className="custom-input-group">
                 <div className="submite-btn">
                   <button type="submit" onClick={handlelogin}>Login Now</button>
                   <div className="d-flex justify-content-end p-2">
-                    <p className="d-flex justify-content-end">Don't have an account?<Link to={"#"} type="button" className="px-2" onClick={() => setCurrentPage("Register")}>Sign up</Link></p>
+                    <p className="d-flex justify-content-end">Don't have an account?<Link to={'/auth/Register'} type="button" className="px-2">Sign up</Link></p>
                   </div>
                 </div>
               </div>

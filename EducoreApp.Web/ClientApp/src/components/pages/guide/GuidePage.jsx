@@ -6,7 +6,7 @@ function GuidePage() {
   return (
     <>
       <Breadcrumb name="Tour Guide" />
-      <GuideWrap />
+      {/* <GuideWrap /> */}
     </>
   );
 }

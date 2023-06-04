@@ -1,13 +1,29 @@
-import React, { useState } from "react";
-import ModalVideo from "react-modal-video";
+import React, { useContext, useState } from "react";
 import "react-modal-video/css/modal-video.css";
-import CourseCard from "../courseGrid/CourseCard";
 import MyCourse from "./Video/MyCourse";
 import ChangePasswordPage from "./ChangePasswordPage";
+import { AppContext } from "../../../plugins/AppContext";
+import auth from "../../../utils/auth";
+import notice from "../../../plugins/notice";
 
-function ProfileWrapperArea() {
+function ProfileWrapperArea({ user ,setUser}) {
     const [isOpen, setOpen] = useState(false);
 
+    const [detail, setDetail] = useState(user);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setDetail((prevState) => ({
+            ...prevState,
+            [name]: value,
+        }));
+    }
+    const handleSubmit = () => {
+        auth.profile(detail).then((data) => {
+            setUser(data);
+            notice.success("Profile Updated Successfully")
+        })
+    }
     return (
         <>
             <div className="about-main-wrappper">
@@ -24,7 +40,7 @@ function ProfileWrapperArea() {
                                     >
                                         <li className="nav-item" role="presentation">
                                             <div
-                                                className="nav-link active"
+                                                className="nav-link"
                                                 id="pills-about1"
                                                 data-bs-toggle="pill"
                                                 data-bs-target="#about-pills1"
@@ -37,7 +53,7 @@ function ProfileWrapperArea() {
                                         </li>
                                         <li className="nav-item" role="presentation">
                                             <div
-                                                className="nav-link"
+                                                className="nav-link active"
                                                 id="pills-about2"
                                                 data-bs-toggle="pill"
                                                 data-bs-target="#about-pills2"
@@ -58,7 +74,7 @@ function ProfileWrapperArea() {
                                 id="pills-tabContent"
                             >
                                 <div
-                                    className="tab-pane fade show active"
+                                    className="tab-pane fade "
                                     id="about-pills1"
                                     role="tabpanel"
                                     aria-labelledby="pills-about1"
@@ -97,28 +113,33 @@ function ProfileWrapperArea() {
                                                                     <div className="row">
                                                                         <div className="col-sm-6">
                                                                             <div className="custom-input-group">
-                                                                                <input type="text" placeholder="Your FirstName " id="FirstName" name="FirstName" />
+                                                                                <label htmlFor="FirstName">First Name :</label>
+                                                                                <input type="text" placeholder="Your FirstName " id="FirstName" name="FirstName" value={detail.FirstName} onChange={handleChange} />
                                                                             </div>
                                                                         </div>
                                                                         <div className="col-sm-6">
                                                                             <div className="custom-input-group">
-                                                                                <input type="text" placeholder="Your LastName " id="LastName" name="LastName" />
+                                                                                <label htmlFor="LastName">Last Name :</label>
+                                                                                <input type="text" placeholder="Your LastName " id="LastName" name="LastName" value={detail.LastName} onChange={handleChange} />
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                     <div className="col-sm-6">
                                                                         <div className="custom-input-group">
-                                                                            <input type="email" placeholder="Your Email" id="email" />
+                                                                            <label htmlFor="Email">Email Id:</label>
+
+                                                                            <input type="email" placeholder="Your Email" id="Email" name="Email" value={detail.Email} disabled />
                                                                         </div>
                                                                     </div>
                                                                     <div className="col-sm-6">
                                                                         <div className="custom-input-group">
-                                                                            <input type="tel" placeholder="Phone" id="phone" />
+                                                                            <label htmlFor="Mobile">Mobile No:</label>
+                                                                            <input type="tel" placeholder="Mobile" id="Mobile" name="Mobile" value={detail.Mobile} disabled />
                                                                         </div>
                                                                     </div>
                                                                     <div className="custom-input-group">
                                                                         <div className="submite-btn">
-                                                                            <button type="submit">Update</button>
+                                                                            <button type="submit" onClick={handleSubmit}>Update</button>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -146,7 +167,7 @@ function ProfileWrapperArea() {
                                                         data-bs-parent="#planAccordion"
                                                     >
                                                         <div className="accordion-body plan-info">
-                                                            <ChangePasswordPage/>
+                                                            <ChangePasswordPage />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -171,29 +192,7 @@ function ProfileWrapperArea() {
                                                         data-bs-parent="#planAccordion"
                                                     >
                                                         <div className="accordion-body plan-info">
-                                                            <p>
-                                                                Pellentesque accumsan magna in augue sagittis, non
-                                                                fringilla eros molestie. Sed feugiat mi nec ex vehicula,
-                                                                nec vestibulum orci semper. Class aptent taciti sociosqu
-                                                                ad litora torquent per conubia nostra, per inceptos
-                                                                himenaeos. Donec tristique commodo fringilla.
-                                                            </p>
-                                                            <ul>
-                                                                <li>
-                                                                    <i className="bi bi-check-lg" /> Specilaized Bilingual
-                                                                    Guide
-                                                                </li>
-                                                                <li>
-                                                                    <i className="bi bi-check-lg" /> Private Transport
-                                                                </li>
-                                                                <li>
-                                                                    <i className="bi bi-check-lg" /> Entrance Fees
-                                                                </li>
-                                                                <li>
-                                                                    <i className="bi bi-check-lg" /> Box Lunch,Water,Dinner
-                                                                    and Snacks
-                                                                </li>
-                                                            </ul>
+                                                            Purchase history
                                                         </div>
                                                     </div>
                                                 </div>
@@ -202,7 +201,7 @@ function ProfileWrapperArea() {
                                     </div>
                                 </div>
                                 <div
-                                    className="tab-pane fade"
+                                    className="tab-pane fade show active"
                                     id="about-pills2"
                                     role="tabpanel"
                                     aria-labelledby="pills-about2"

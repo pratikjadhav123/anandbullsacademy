@@ -1,8 +1,6 @@
 import axios from 'axios';
 import { useState, useEffect, useMemo } from 'react';
 import auth from './../utils/auth'
-import notice from './notice';
-// import notistack from './notistack';
 const api = axios.create({
     baseURL: process.env.REACT_APP_URL,
     headers: {
@@ -62,7 +60,6 @@ const ApiService = {
     },
 
     post(resource, params) {
-        console.log(resource, params);
         return api.post(resource, params);
     },
 

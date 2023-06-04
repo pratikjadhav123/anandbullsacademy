@@ -1,22 +1,18 @@
 import React, { createContext, useState } from "react";
 import auth from "./../utils/auth";
-import { useHistory } from "react-router-dom/cjs/react-router-dom";
 
 export const AppContext = createContext();
 
 export const ApplicationDataProvider = ({ children }) => {
-    const navigate = useHistory();
     const [user, setUser] = useState();
     const getAllData = () => {
         getUser();
     };
     const getUser = () => {
-        console.log("getUser");
         if (auth.getToken()) {
             auth
                 .getUser()
                 .then((data) => {
-                    console.log(data);
                     if (data.Active) {
                         setUser(data);
                     } else {
@@ -24,21 +20,21 @@ export const ApplicationDataProvider = ({ children }) => {
                     }
                 })
                 .catch(() => {
-                    console.log("error");
                     setUser();
                 });
         } else {
-            console.log("not token");
             setUser();
         }
     };
 
     const logout = () => {
         console.log("abc");
-        auth.logout().then((data)=>{
+        auth.logout().then((data) => {
             getUser();
-        }).catch((error)=>{
-console.log(error);
+            console.log("xyzzz");
+        }).catch((error) => {
+            console.log("xyz");
+            console.log(error);
         })
     }
 

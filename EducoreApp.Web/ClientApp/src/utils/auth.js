@@ -14,6 +14,8 @@ const auth = {
                     resolve(data);
                 })
                 .catch(({ response }) => {
+                    console.log(response);
+                    notice.error(response.data.message);
                     reject(response);
                 });
         });
@@ -28,6 +30,7 @@ const auth = {
                 })
                 .catch(({ response }) => {
                     this.destroyToken();
+                    notice.error(response.data.message);
                     reject(response);
                 });
         });
@@ -43,6 +46,7 @@ const auth = {
                 })
                 .catch(({ response }) => {
                     this.destroyToken();
+                    notice.error(response.data.message);
                     reject(response);
                 });
         });
@@ -57,6 +61,7 @@ const auth = {
                     resolve(data);
                 })
                 .catch(({ response }) => {
+                    notice.error(response.data.message);
                     reject(response);
                 });
         });
@@ -70,6 +75,7 @@ const auth = {
                     resolve(data);
                 })
                 .catch(({ response }) => {
+                    notice.error(response.data.message);
                     reject(response);
                 });
         });
@@ -85,6 +91,8 @@ const auth = {
                 })
                 .catch(({ response }) => {
                     reject(response);
+                    notice.error(response.data.message);
+
                 });
         });
     },
@@ -98,6 +106,8 @@ const auth = {
                 })
                 .catch(({ response }) => {
                     reject(response);
+                    notice.error(response.data.message);
+
                 });
         });
     },
@@ -109,12 +119,14 @@ const auth = {
         return new Promise((resolve, reject) => {
             axios.setToken();
             axios
-                .post('Auth/UpdateProfile', data)
+                .put('Auth/UpdateProfile', data)
                 .then(({ data }) => {
                     resolve(data);
                 })
                 .catch(({ response }) => {
                     reject(response);
+                    notice.error(response.data.message);
+
                 });
         });
     },
@@ -128,7 +140,36 @@ const auth = {
                 })
                 .catch(({ response }) => {
                     reject(response);
-                    notice.apiError(response)
+                    notice.error(response.data.message);
+
+                });
+        });
+    },
+    register(data) {
+        return new Promise((resolve, reject) => {
+            axios.setToken();
+            axios
+                .post('Auth/Registration', data)
+                .then(({ data }) => {
+                    resolve(data);
+                })
+                .catch(({ response }) => {
+                    reject(response);
+                    notice.error(response.data.message);
+                });
+        });
+    },
+    confirmOTP(data){
+        return new Promise((resolve, reject) => {
+            axios.setToken();
+            axios
+                .post(`Auth/ConfirmOTP?OTP=${data.OTP}`, data)
+                .then(({ data }) => {
+                    resolve(data);
+                })
+                .catch(({ response }) => {
+                    reject(response);
+                    notice.error(response.data.message);
                 });
         });
     },
@@ -139,6 +180,7 @@ const auth = {
         window.localStorage.setItem(ID_TOKEN_KEY, token);
     },
     destroyToken() {
+        alert("Please refresh and login once");
         window.localStorage.removeItem(ID_TOKEN_KEY);
     },
 };

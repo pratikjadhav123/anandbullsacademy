@@ -7,9 +7,9 @@ function App(props) {
   const contextObj = useContext(AppContext);
   const [user, setUser] = useState()
   useEffect(() => {
-    contextObj.user ? setUser(contextObj.user) : contextObj.getAllData();
-  }, [])
-  console.log("layout",contextObj.user);
+    contextObj?.user ? setUser(contextObj.user) : contextObj.getAllData();
+  }, [contextObj?.user])
+
   return (
     <>
       <Header />

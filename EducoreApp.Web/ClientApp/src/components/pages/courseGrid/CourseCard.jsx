@@ -5,7 +5,7 @@ function CourseCard(props) {
   const scrollTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-  
+  console.log(props);
   return (
     <>
       <div className="package-card-alpha">
@@ -33,14 +33,14 @@ function CourseCard(props) {
             <div className="book-btn">
               <Link
                 onClick={scrollTop}
-                to={`${process.env.PUBLIC_URL}/course-details`}
+                to={`${process.env.PUBLIC_URL}/course-details/${props.course?.CourseId}`}
               >
                 Join Now <i className="bx bxs-right-arrow-alt" />
               </Link>
             </div>
             <div className="p-card-info">
               <h6>
-                {props.price} 
+                {"₹" + props.price} 
               </h6>
             </div>
           </div>

@@ -1,15 +1,16 @@
 import React from "react";
 
 
-function PackageHeader() {
+function PackageHeader({courseDetail}) {
+
   return (
     <>
       <div className="pd-header">
         <div className="pd-thumb">
-          <img src={process.env.PUBLIC_URL + "/images/package/pd-thumb.png"} alt="PackageIMG" />
+          <img src={process.env.PUBLIC_URL + "/images/youtubeVideo.png"} alt="PackageIMG" />
         </div>
         <div className="header-bottom">
-          <div className="pd-lavel d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <div className="pd-lavel d-flex justify-content-between align-items-center flex-wrap ">
             
             <ul className="d-flex align-items-center rating">
               <li>
@@ -29,7 +30,7 @@ function PackageHeader() {
               </li>
             </ul>
           </div>
-          <h2 className="pd-title">Market Psychology and Setup.</h2>
+          <h2 className="pd-title">{courseDetail.Title}.</h2>
         </div>
       </div>
     </>

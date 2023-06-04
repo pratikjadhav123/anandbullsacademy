@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import ReactDOM from "react-dom";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
@@ -17,10 +17,13 @@ import "./index.css";
 import CourseDetails from './components/pages/courseDetails/CourseDetails';
 import Profile from './components/pages/profile/Profile';
 import Auth from './components/pages/auth/Auth';
-import { ApplicationDataProvider } from './plugins/AppContext';
+import { AppContext, ApplicationDataProvider } from './plugins/AppContext';
 import CourseVideo from './components/pages/profile/Video/CourseVideo';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import HomePageTwo from './components/pages/homeTwo/HomePageTwo';
+import AdminLayout from './components/layout/AdminLayout';
+// import "./assets/scss/style.scss";
 /*
  * Version :Tourx-pro 0.1
  * Event : Rendering all content to web.
@@ -32,6 +35,12 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 function Root() {
+  const contextObj = useContext(AppContext);
+  const [user, setUser] = useState()
+  useEffect(() => {
+    contextObj.user ? setUser(contextObj.user) : contextObj.getAllData();
+  }, [contextObj.user])
+  console.log("root",contextObj.user);
   return (
     <>
       <BrowserRouter basename="/">
@@ -39,7 +48,7 @@ function Root() {
           {/*main layout*/}
           <Route exact path="/" component={HomePageTwoLayout} />
           {/* secound layout */}
-
+          <Route path="/Admin" component={AdminLayout} />
           {/* all inner page load layout component */}
           <Layout>
             <Route
@@ -56,7 +65,7 @@ function Root() {
             />
             <Route
               exact
-              path={`${process.env.PUBLIC_URL}/course-details`}
+              path={`${process.env.PUBLIC_URL}/course-details/:id`}
               component={CourseDetails}
             />
 
@@ -76,19 +85,20 @@ function Root() {
               path={`${process.env.PUBLIC_URL}/contact`}
               component={Contact}
             />
+
             <Route
               exact
               path={`${process.env.PUBLIC_URL}/myProfile`}
-              component={Profile}
+              component={user ? Profile : HomePageTwo}
             />
             <Route
               exact
               path={`${process.env.PUBLIC_URL}/video/:id`}
-              component={CourseVideo}
+              component={user ? CourseVideo : HomePageTwo}
             />
             <Route
               exact
-              path={`${process.env.PUBLIC_URL}/auth`}
+              path={`${process.env.PUBLIC_URL}/auth/:path`}
               component={Auth}
             />
             <Route

@@ -50,34 +50,93 @@ function Header() {
   }
 
   const logout = () => {
-    auth.logout().then((data)=>{
+    auth.logout().then((data) => {
       navigate.push("/")
       notice.warning("Login Again to Continue learning ")
       contextObj.getUser();
     })
   }
-  console.log(contextObj?.user);
 
   const scrollTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
   return (
     <>
+      <div className={`${"category-sidebar-wrapper"} ${isCatagoryActive === 1 ? "category-active" : ''} `} >
+        <div className="category-sidebar">
+          <div className="category-header d-flex justify-content-between align-items-center">
+            <h4>Category</h4>
+            <div onClick={handleCatagorybtn} className="category-toggle">
+              <i className="bi bi-x-lg" />
+            </div>
+          </div>
+          <div className="row row-cols-lg-3 row-cols-2 gy-5 mt-3">
+            <div className="col">
+              <Link
+                className="category-box"
+                onClick={scrollTop}
+                to={`${process.env.PUBLIC_URL}/Admin/CourseSetting`}
+              >
+                <div className="cate-icon mx-auto">
+                  <img src={process.env.PUBLIC_URL + "/images/icons/counter-icon1.svg"} alt="images" />
+                </div>
+                <h5>Course Setting</h5>
+              </Link>
+            </div>
+            <div className="col">
+              <Link
+                className="category-box"
+                onClick={scrollTop}
+                to={`${process.env.PUBLIC_URL}/Admin/UserSetting`}
+              >
+                <div className="cate-icon mx-auto">
+                  <img src={process.env.PUBLIC_URL + "/images/icons/cate2.svg"} alt="images" />
+                </div>
+                <h5>User Setting</h5>
+              </Link>
+            </div>
+            <div className="col">
+              <Link
+                className="category-box"
+                onClick={scrollTop}
+                to={`${process.env.PUBLIC_URL}/Admin/VideoSetting`}
+              >
+                <div className="cate-icon mx-auto">
+                  <img src={process.env.PUBLIC_URL + "/images/icons/video-icon.svg"} alt="images" />
+                </div>
+                <h5>Video Setting</h5>
+              </Link>
+            </div>
+            <div className="col">
+              <Link
+                className="category-box"
+                onClick={scrollTop}
+                to={`${process.env.PUBLIC_URL}/Admin/PayementSetting`}
+              >
+                <div className="cate-icon mx-auto">
+                  <img src={process.env.PUBLIC_URL + "/images/icons/payment-icon.svg"} alt="images" />
+                </div>
+                <h5>Payment Setting</h5>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
       <header>
         <div className={`${"header-area header-style-two"} ${isSticky && 'sticky'}`} >
           <div className="container-fluid">
             <div className="row">
-              <div className="col-xl-7 col-lg-8 col-md-8 col-sm-6 col-xs-6">
+              <div className="col-xl-6 col-lg-8 col-md-8 col-sm-6 col-xs-6 d-flex justify-content-center">
                 <nav className={mobileSideberMenu === 1 ? "main-nav slidenav" : "main-nav"}>
                   <div className="inner-logo d-xl-none text-center">
                     <Link
                       onClick={scrollTop}
                       to={`${process.env.PUBLIC_URL}/`}
                     >
-                      <img src={process.env.PUBLIC_URL + "/images/anandbullsweblogo310.png"} alt="Logo" />
+                      <img src={process.env.PUBLIC_URL + "/images/logo.png"} alt="Logo" />
                     </Link>
                   </div>
-                  <ul>
+                  <ul >
                     <li >
                       <Link to={`${process.env.PUBLIC_URL}/`}>Home</Link>
                     </li>
@@ -115,7 +174,7 @@ function Header() {
                   </div>
                 </nav>
               </div>
-              <div className="col-xl-2 col-lg-12 col-md-12 col-sm-12 col-xs-12 align-items-center d-xl-flex d-lg-block">
+              <div className="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-xs-12 align-items-center d-xl-flex d-lg-block">
                 <div className="nav-logo d-flex justify-content-between align-items-center mr-2">
                   <Link
                     onClick={scrollTop}
@@ -129,7 +188,7 @@ function Header() {
                         <div className="user-dropdown">
                           <i onClick={handleUserDropDown} className="bx bx-user-circle" />
                           <ul className={`${"user-drop-list"} ${isUserDropdown === 1 ? "account-drop-active" : ""}`}>
-                            {contextObj.user ?
+                            {contextObj?.user ?
                               (<> <li>
                                 <NavLink to={`${process.env.PUBLIC_URL}/myProfile`}>My Account</NavLink>
                               </li>
@@ -138,7 +197,7 @@ function Header() {
                                 </li>
                               </>) :
                               <li>
-                                <NavLink to={`${process.env.PUBLIC_URL}/auth`}>Login</NavLink>
+                                <NavLink to={`${process.env.PUBLIC_URL}/auth/Login`}>Login</NavLink>
                               </li>}
                             {/* <li>
                               <NavLink to={"#"}>Registration</NavLink>
@@ -169,13 +228,16 @@ function Header() {
                   </div>
                 </div>
               </div>
+              {/* big screen */}
               <div className="col-xl-3">
                 <div className="nav-right d-xl-flex d-none">
                   <div className="nav-right-icons">
                     <div className="user-dropdown">
                       <i onClick={handleUserDropDown} className="bx bx-user-circle" />
                       <ul className={`${"user-drop-list"} ${isUserDropdown === 1 ? "account-drop-active" : ""}`}>
-                        {contextObj.user ? (<> <li>
+                        {contextObj?.user ? (
+                          <>
+                           <li>
                           <NavLink to={`${process.env.PUBLIC_URL}/myProfile`}>My Account</NavLink>
                         </li>
                           <li>
@@ -183,13 +245,16 @@ function Header() {
                           </li>
                         </>) :
                           <li>
-                            <Link to={`${process.env.PUBLIC_URL}/auth`}>Login</Link>
+                            <Link to={`${process.env.PUBLIC_URL}/auth/Login`}>Login</Link>
                           </li>}
                         {/* <li>
                           <Link to={"#"}>Setting</Link>
                         </li> */}
                       </ul>
                     </div>
+                    {contextObj?.user?.Role === "Admin" && <div onClick={handleCatagorybtn} className="category-toggle">
+                      <i className="bx bx-category" />
+                    </div>}
                   </div>
                   <div className="nav-right-hotline">
                     <div className="hotline-icon">

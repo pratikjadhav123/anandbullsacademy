@@ -11,18 +11,18 @@ function LetesBlogArea() {
     <>
 
       <div className="col-lg-12 py-3">
-        <div className="hero-image-group">
+        <div className="hero-image-group ">
           <img
-            src={process.env.PUBLIC_URL + "/images/anandcourse.png"}
+            src={process.env.PUBLIC_URL + "/images/coursebenifite.jpg"}
             alt="HeroIMG"
-            className="img-fluid"
+            className="img-fluid p-5"
           />
         </div>
       </div>
       <div className="col-lg-12 py-3">
         <div className="hero-image-group">
           <img
-            src={process.env.PUBLIC_URL + "/images/option buying strategy-1.png"}
+            src={process.env.PUBLIC_URL + "/images/optionbuying.png"}
             alt="HeroIMG"
             className="img-fluid"
           />

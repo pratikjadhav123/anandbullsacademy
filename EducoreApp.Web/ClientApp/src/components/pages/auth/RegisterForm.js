@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import users from "../../../utils/users";
 import notice from "../../../plugins/notice";
+import auth from "../../../utils/auth";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import useValidator from "../../../plugins/validator";
 const reset = {
   FirstName: "",
   LastName: "",
@@ -10,29 +13,76 @@ const reset = {
   ConfirmPassword: "",
   Mobile: ""
 }
-function RegisterForm({ setCurrentPage }) {
-  const [register, setregister] = useState(reset);
+function RegisterForm() {
+  const [register, setRegister] = useState(reset);
+  const [validator, showMessage] = useValidator();
+  const [validator2, showMessage2] = useValidator();
+  const [fakeOtp, setFakeOtp] = useState();
+  const navigate = useHistory()
+  const [otp, setOtp] = useState({ OTP: "" })
+
+  const error = {
+    FirstName: validator.message(('FirstName'), register.FirstName, "required|alpha|max:100"),
+    LastName: validator.message(('LastName'), register.LastName, "required|alpha|max:100"),
+    Email: validator.message(('Email'), register.Email, "required|email"),
+    Mobile: validator.message(('Mobile'), register.Mobile, "required|string|max:200"),
+    Password: validator.message(('Password'), register.Password, "required|password|max:20|min:5"),
+    ConfirmPassword: validator.message(('ConfirmPassword'), register.ConfirmPassword, `required|password|in:${register.Password}`),
+    OTP: validator2.message(('OTP'), otp.OTP, `required|string|max:6`),
+  }
+
   const handleChange = (e) => {
     const { name, value } = e.target;
+    
     handleSetData(name, value)
   }
-  const handleSetData = (name, value) => {
-    setregister((prevalue) => {
+  const handleOtp = (e) => {
+    const { name, value } = e.target;
+    setOtp((prevalue) => {
       return {
-        ...prevalue,   // Spread Operator              
+        ...prevalue,
+        [name]: value
+      }
+    })
+  }
+  const handleSetData = (name, value) => {
+    setRegister((prevalue) => {
+      return {
+        ...prevalue,
         [name]: value
       }
     })
   }
   const handleRegister = (e) => {
-    console.log(register);
     e.preventDefault()
-    users.create(register).then((data) => {
-      notice.success("Successfully register Please Login to continue")
-      setCurrentPage("Login")
-    }).catch(error =>
-      console.log("error", error)
-    )
+    if (validator.allValid()) {
+      register.Mobile = "+91"+ register.Mobile
+      auth.register(register).then((data) => {
+        notice.success("Please check message to confirm OTP")
+        setFakeOtp(data.code)
+      }).catch(error =>
+        console.log("error", error)
+      )
+    }
+    else {
+      showMessage(true);
+    }
+  }
+  const handleOtpSubmit = (e) => {
+    e.preventDefault()
+    if (validator2.allValid()) {
+      auth.confirmOTP(otp).then((data) => {
+        notice.success("Successfully register Please Login to continue")
+        setRegister(reset);
+        setFakeOtp({ OTP: "" })
+        navigate.push("/auth/Login")
+      }).catch(error =>
+        console.log("error", error)
+      )
+    }
+    else {
+      showMessage2(true);
+    }
   }
   return (
     <>
@@ -41,7 +91,7 @@ function RegisterForm({ setCurrentPage }) {
           <h4>Registration Form</h4>
         </div>
         <div className="widget-body">
-          <form
+          {!fakeOtp ? <form
             onSubmit={(e) => e.preventDefault()}
             action="#"
             method="post"
@@ -50,32 +100,67 @@ function RegisterForm({ setCurrentPage }) {
             <div className="booking-form-wrapper">
               <div className="custom-input-group">
                 <input type="text" placeholder="First Name" id="FirstName" name="FirstName" value={register.FirstName} onChange={handleChange} />
+                {error?.FirstName &&
+                  <span className='error' style={{ color: "red" }}> {error?.FirstName}</span>}
               </div>
               <div className="custom-input-group">
                 <input type="text" placeholder="Last Name" id="LastName" name="LastName" value={register.LastName} onChange={handleChange} />
+                {error?.LastName &&
+                  <span className='error' style={{ color: "red" }}> {error?.LastName}</span>}
               </div>
               <div className="custom-input-group">
                 <input type="email" placeholder="Your Email" id="Email" name="Email" value={register.Email} onChange={handleChange} />
+                {error?.Email &&
+                  <span className='error' style={{ color: "red" }}> {error?.Email}</span>}
               </div>
               <div className="custom-input-group">
                 <input type="tel" placeholder="Mobile" id="Mobile" name="Mobile" value={register.Mobile} onChange={handleChange} />
+                {error?.Mobile &&
+                  <span className='error' style={{ color: "red" }}> {error?.Mobile}</span>}
               </div>
               <div className="custom-input-group">
                 <input type="password" placeholder="Set Your Password" id="Password" name="Password" value={register.Password} onChange={handleChange} />
+                {error?.Password &&
+                  <span className='error' style={{ color: "red" }}> {error?.Password}</span>}
               </div>
               <div className="custom-input-group">
                 <input type="password" placeholder="Confirm Your Password" id="ConfirmPassword" name="ConfirmPassword" value={register.ConfirmPassword} onChange={handleChange} />
+                {error?.ConfirmPassword &&
+                  <span className='error' style={{ color: "red" }}> {error?.ConfirmPassword}</span>}
               </div>
               <div className="custom-input-group">
                 <div className="submite-btn">
                   <button type="submit" onClick={handleRegister}>Sign up</button>
                   <div className="d-flex justify-content-end p-2">
-                    <p className="d-flex justify-content-end">Already have an account?<Link to={"#"} type="button" className="px-2" onClick={() => setCurrentPage("Login")}>Back to Login</Link></p>
+                    <p className="d-flex justify-content-end">Already have an account?<Link to={'/auth/Login'} type="button" className="px-2">Back to Login</Link></p>
                   </div>
                 </div>
               </div>
             </div>
-          </form>
+          </form> :
+            <form
+              onSubmit={(e) => e.preventDefault()}
+              action="#"
+              method="post"
+              id="booking-form"
+            >
+              <div className="booking-form-wrapper">
+                <div className="custom-input-group">
+                  <input type="text" placeholder="OTP" id="OTP" name="OTP" value={otp.OTP} onChange={handleOtp} />
+                  {error?.OTP &&
+                  <span className='error' style={{ color: "red" }}> {error?.OTP}</span>}
+              </div>
+                <div className="custom-input-group">
+                  <div className="submite-btn">
+                    <button type="submit" onClick={handleOtpSubmit}>Submit</button>
+                    <div className="d-flex justify-content-evenly p-2">
+                      <p className="d-flex justify-content-start"><Link to={"#"} type="button" className="px-2" onClick={() => setFakeOtp()}>Back to RegisterForm</Link></p>
+                      <p className="d-flex justify-content-end">Already have an account?<Link to={'/auth/Login'} type="button" className="px-2">Back to Login</Link></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>}
         </div>
       </aside>
     </>

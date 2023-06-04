@@ -1,48 +1,52 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import OpenPlayerJS from 'openplayerjs';
+import 'openplayerjs/dist/openplayer.css';
 
-const VideoPlayer = () => {
-  let player;
-
+const VideoPlayer = ({ video }) => {
+  const [videoOpen, setVideoOpen] = useState(false);
+  const handleVideoOpen = () => setVideoOpen(!videoOpen)
   useEffect(() => {
-    const initializePlayer = async () => {
-      try {
-        player = await OpenPlayerJS.create('video', {
-          controls: {
-            layers: {
-              right: ['settings', 'levels', 'fullscreen']
-            }
-          },
-          hls: {
-            startLevel: -1,
-            enableWorker: true,
-            widevineLicenseUrl: 'https://cwip-shaka-proxy.appspot.com/no_auth',
-            emeEnabled: true,
-          }
-        });
-        player.init();
-        player.getElement().addEventListener('hlsLevelLoaded', (e, data) => {
-          console.log(e, data);
-        });
-      } catch (error) {
-        console.error('Error initializing video player:', error);
+    const player = new OpenPlayerJS('video', {
+      controls: {
+        layers: {
+          left: ['play', 'time', 'volume'],
+          middle: ['progress'],
+          right: ['captions', 'settings', 'fullscreen'],
+        }
+      },
+      hls: {
+        startLevel: -1,
+        enableWorker: true,
+        widevineLicenseUrl: 'https://cwip-shaka-proxy.appspot.com/no_auth',
+        emeEnabled: true,
       }
-    };
-
-    initializePlayer();
+    });
+    player.init();
+    videoOpen && player.getElement().addEventListener('hlsLevelLoaded', (e, data) => {
+      console.log(e, data);
+    });
 
     return () => {
-      // Cleanup when the component unmounts
-      if (player) {
-        player.destroy();
-      }
+      videoOpen && player.destroy(); // Cleanup when the component unmounts
     };
   }, []);
+  document.addEventListener('contextmenu', event => event.preventDefault());
 
   return (
-      <video className="op-player__media" id="video" controls playsInline>
-        <source src="https://vod-progressive.akamaized.net/exp=1685237845~acl=%2Fvimeo-prod-skyfire-std-us%2F01%2F4465%2F14%2F372327760%2F1547056591.mp4~hmac=a2f822856c8d1ad0a1b256ea65bc7e077b5e8ed98a3e8508b83e74321c9dbfaf/vimeo-prod-skyfire-std-us/01/4465/14/372327760/1547056591.mp4" />
-      </video>
+    <div>
+      <div className="package-card-alpha d-flex p-4 align-items-center" style={{ fontSize: "25px", cursor: "pointer" }} onClick={handleVideoOpen}>
+        {/* <div className="hotline-icon"> */}
+        <i class="bi bi-play-btn"></i>
+        {/* </div> */}
+        <h3 className="px-3">
+          {video.Name}
+        </h3>
+        <i className="bx bxs-right-arrow-alt" />
+      </div>
+      {videoOpen && <video className="op-player__media" id="video" controls playsInline>
+        <source src={video.VideoPath} />
+      </video>}
+    </div>
   );
 };
 

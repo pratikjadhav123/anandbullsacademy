@@ -23,6 +23,7 @@
     "simple-react-lightbox": "^3.6.9-0",
     "simple-react-validator": "^1.6.2",
     "slick-carousel": "^1.8.1",
+    "sweetalert2": "^11.7.10",
     "swiper": "^7.4.1",
     "web-vitals": "^2.1.3"
   },

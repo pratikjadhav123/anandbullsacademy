@@ -26,3 +26,4 @@ const useValidator = (customMessage = {}, customValidator = {}) => {
 
     return [validator, setShow];
 };
+export default useValidator;
