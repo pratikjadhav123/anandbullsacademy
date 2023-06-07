@@ -58,10 +58,7 @@ namespace EducoreApp.DAL.Services
                 using (var con = this.connection.connection())
                 {
                     IEnumerable<Videos> courses = (await con.QueryAsync<Videos>(query, new { UserId, CourseId })).ToList();
-                    foreach (Videos videos1 in courses)
-                    {
-                        videos1.VideoPath = this.uploadFiles.GetVideoPath(videos1.VideoUrl, "Videos");
-                    }
+                   
                     return courses;
                 }
             });

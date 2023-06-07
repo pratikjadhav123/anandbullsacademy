@@ -9,11 +9,13 @@ namespace EducoreApp.Web.Controllers
     {
         private ICourse iCourse;
         private IVideos iVideos;
+        private ApiCurls ApiCurls;
 
-        public VideosController(ICourse iCourse, IVideos iVideos)
+        public VideosController(ICourse iCourse, IVideos iVideos,ApiCurls apiCurls)
         {
             this.iCourse = iCourse;
             this.iVideos = iVideos;
+            this.ApiCurls = apiCurls;
         }
 
         [Authorize]
@@ -23,6 +25,7 @@ namespace EducoreApp.Web.Controllers
             IEnumerable<Videos> Videos = await this.iVideos.GetVideos();
             return Ok(Videos);
         }
+
 
         [Authorize]
         [HttpGet("{VideoId}")]
@@ -37,48 +40,24 @@ namespace EducoreApp.Web.Controllers
         }
 
         [Authorize]
-        [HttpGet("{CourseId}")]
-        public async Task<ActionResult<IEnumerable<Videos>>> GetVideosByCourse(int CourseId)
+        [HttpGet("{VideoUrl}")]
+        public async Task<ActionResult<Videos>> GetLink(string VideoUrl)
         {
-            Course Course = await this.iCourse.GetCourse(CourseId);
-            if (Course == null)
-            {
-                return NotFound(new { message = "Course not found" });
-            }
-            IEnumerable<Videos> videos = await this.iVideos.GetVideosByTopic(CourseId);
-            return Ok(videos);
-        }
-
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
-        [RequestFormLimits(MultipartBodyLengthLimit = 3221225472)]
-
-        public async Task<ActionResult<Videos>> SaveVideos([FromForm] VideoRequest videoRequest)
-        {
-            Course Course = await this.iCourse.GetCourse(videoRequest.CourseId);
-            if (Course == null)
-            {
-                return NotFound(new { message = "Course not found" });
-            }
-            Videos Videos = await this.iVideos.SaveVideos(videoRequest);
-            return Ok(Videos);
-        }
-
-        [Authorize(Roles = "Admin")]
-        [HttpPut("{VideoId}")]
-        public async Task<ActionResult<Course>> UpdateVideos(int VideoId, [FromForm] VideoRequest videoRequest)
-        {
-            Videos Videos = await this.iVideos.GetVideo(VideoId);
+            Videos Videos = await this.iVideos.GetVideoById(VideoUrl);
             if (Videos == null)
             {
                 return NotFound(new { message = "Videos not found" });
             }
-            Course Course = await this.iCourse.GetCourse(videoRequest.CourseId);
-            if (Course == null)
-            {
-                return NotFound(new { message = "Course not found" });
-            }
-            return Ok(await this.iVideos.UpdateVideos(Videos, videoRequest));
+            Videos.VideoUrl= await this.iVideos.GetLink(VideoUrl);
+            return Ok(Videos);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<ActionResult<Videos>> SaveVideos()
+        {
+            await this.iVideos.SaveVideos();
+            return Ok("Video saved succesfully");
         }
 
         [Authorize(Roles = "Admin")]

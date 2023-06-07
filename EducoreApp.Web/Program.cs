@@ -38,6 +38,8 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, AuthorizationMiddlewareService>();
 builder.Services.AddSingleton<IEmailService, EmailService>();
 builder.Services.AddSingleton<DatabaseConnection>();
+builder.Services.AddSingleton<ApiCurls>();
+
 builder.Services.AddSingleton<IUser, UserService>();
 builder.Services.AddSingleton<ICourse, CourseService>();
 builder.Services.AddSingleton<IVideos, VideoService>();

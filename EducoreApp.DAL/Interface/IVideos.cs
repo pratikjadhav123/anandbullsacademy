@@ -9,12 +9,14 @@ namespace EducoreApp.DAL.Interface
 
         public Task<Videos> GetVideo(int VideoId);
 
-        public Task<Videos> SaveVideos(VideoRequest videoRequest);
+        public Task SaveVideos();
 
         public Task<Videos> UpdateVideos(Videos Videos, VideoRequest videoRequest);
 
         public Task<Videos> DeleteVideos(Videos Videos);
 
         public Task<IEnumerable<Videos>> GetVideosByTopic(int CourseId);
+        public Task<Videos> GetVideoById(string VideoUrl);
+        public Task<string> GetLink(string VideoUrl);
     }
 }
