@@ -69,7 +69,7 @@ namespace EducoreApp.DAL.Services
                 UserTokens.RequestedBy = users.Email;
                 UserTokens.RequestedType = RequestedType;
                 UserTokens.Token = new Random().Next(10000, 99999).ToString();
-                UserTokens.ExpiredDate = DateTime.Now.AddMinutes(5);
+                UserTokens.ExpiredDate = DateTime.Now.AddHours(48);
 
                 string query = "Insert into UserTokens OUTPUT inserted.* values(@RequestedBy,@RequestedType,@Token,@ExpiredDate)";
 
