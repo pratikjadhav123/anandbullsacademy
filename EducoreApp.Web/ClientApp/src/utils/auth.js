@@ -180,7 +180,6 @@ const auth = {
         window.localStorage.setItem(ID_TOKEN_KEY, token);
     },
     destroyToken() {
-        alert("Please refresh and login once");
         window.localStorage.removeItem(ID_TOKEN_KEY);
     },
 };

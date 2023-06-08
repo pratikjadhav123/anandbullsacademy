@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import Footer from "../common/Footer";
 import Header from "../common/Header";
-import HomePage from "../pages/Home/HomePage";
 import Loading from "../common/Loading";
 import { Route, Switch } from "react-router-dom/cjs/react-router-dom";
 import GuidePage from "../pages/guide/GuidePage";

@@ -1,36 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import OpenPlayerJS from 'openplayerjs';
 import 'openplayerjs/dist/openplayer.css';
+import videos from '../../../../utils/videos';
 
 const VideoPlayer = ({ video }) => {
   const [videoOpen, setVideoOpen] = useState(false);
+  const [vdolink, setVideoLink] = useState()
   const handleVideoOpen = () => setVideoOpen(!videoOpen)
   useEffect(() => {
-    const player = new OpenPlayerJS('video', {
-      controls: {
-        layers: {
-          left: ['play', 'time', 'volume'],
-          middle: ['progress'],
-          right: ['captions', 'settings', 'fullscreen'],
-        }
-      },
-      hls: {
-        startLevel: -1,
-        enableWorker: true,
-        widevineLicenseUrl: 'https://cwip-shaka-proxy.appspot.com/no_auth',
-        emeEnabled: true,
-      }
-    });
-    player.init();
-    videoOpen && player.getElement().addEventListener('hlsLevelLoaded', (e, data) => {
-      console.log(e, data);
-    });
-
-    return () => {
-      videoOpen && player.destroy(); // Cleanup when the component unmounts
-    };
+    getLink()
   }, []);
-  document.addEventListener('contextmenu', event => event.preventDefault());
+  const getLink = () => {
+    videos.getLink(video.VideoUrl).then((data) => {
+      setVideoLink(data.VideoUrl);
+    })
+  }
+  // document.addEventListener('contextmenu', event => event.preventDefault());
 
   return (
     <div>
@@ -43,9 +28,20 @@ const VideoPlayer = ({ video }) => {
         </h3>
         <i className="bx bxs-right-arrow-alt" />
       </div>
-      {videoOpen && <video className="op-player__media" id="video" controls playsInline>
-        <source src={video.VideoPath} />
-      </video>}
+      {videoOpen &&
+        <>
+          <div style={{ paddingTop: "55%", position: "relative" }}>
+            <iframe
+              src={vdolink}
+              style={{ border: "0", maxWidth: "100%", position: "absolute", top: "0", left: "0", height: "100%", width: "100%" }}
+              allowFullScreen={true}  
+              allow="encrypted-media"></iframe>
+          </div>
+        </>
+        //  <video className="op-player__media" id="video" controls playsInline>
+        //   <source src={"https://player.vdocipher.com/v2/?otp=20160313versASE323sDOWWnMxlfdq72d2Rpx1SDeWYy18QRCwMqQzrFkSeiAziY&playbackInfo=eyJ2aWRlb0lkIjoiYzhlZDI2MTc2NTYzNDViOWJjODFjZGMzYzI1ODFkYzIifQ=="} />
+        // </video>
+      }
     </div>
   );
 };

@@ -207,9 +207,9 @@ function Header() {
                             </li> */}
                           </ul>
                         </div>
-                        <div onClick={handleCatagorybtn} className="category-toggle">
+                        {contextObj?.user?.Role === "Admin" && <div onClick={handleCatagorybtn} className="category-toggle">
                           <i className="bx bx-category" />
-                        </div>
+                        </div>}
                       </div>
                       <Link
                         to={"#"}
@@ -237,13 +237,13 @@ function Header() {
                       <ul className={`${"user-drop-list"} ${isUserDropdown === 1 ? "account-drop-active" : ""}`}>
                         {contextObj?.user ? (
                           <>
-                           <li>
-                          <NavLink to={`${process.env.PUBLIC_URL}/myProfile`}>My Account</NavLink>
-                        </li>
-                          <li>
-                            <NavLink to={`#`} onClick={logout}>logout</NavLink>
-                          </li>
-                        </>) :
+                            <li>
+                              <NavLink to={`${process.env.PUBLIC_URL}/myProfile`}>My Account</NavLink>
+                            </li>
+                            <li>
+                              <NavLink to={`#`} onClick={logout}>logout</NavLink>
+                            </li>
+                          </>) :
                           <li>
                             <Link to={`${process.env.PUBLIC_URL}/auth/Login`}>Login</Link>
                           </li>}

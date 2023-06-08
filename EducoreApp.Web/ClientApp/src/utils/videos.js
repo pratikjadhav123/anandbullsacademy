@@ -16,6 +16,19 @@ const videos = {
                 });
         });
     },
+    getLink(id) {
+        return new Promise((resolve, reject) => {
+            axios.setToken();
+            axios
+                .get(`Videos/GetLink/${id}`)
+                .then(({ data }) => {
+                    resolve(data);
+                })
+                .catch(({ response }) => {
+                    reject(response);
+                });
+        });
+    },
     get(id) {
         return new Promise((resolve, reject) => {
             axios.setToken();
@@ -29,10 +42,11 @@ const videos = {
                 });
         });
     },
-    create(data) {
+    create() {
+        let formData = new FormData();
         return new Promise((resolve, reject) => {
             axios
-                .post('Videos/SaveVideos', data)
+                .post('Videos/SaveVideos', formData)
                 .then(({ data }) => {
                     resolve(data);
                 })

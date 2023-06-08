@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Footer from "../common/Footer";
 import Header from "../common/Header";
-import HomePage from "../pages/Home/HomePage";
 import Loading from "../common/Loading";
+import HomePageTwo from "../pages/homeTwo/HomePageTwo";
 function MainLayout() {
   const [load, setLoad] = useState(false);
 
@@ -13,7 +13,7 @@ function MainLayout() {
       ) : (
         <>
           <Header />
-          <HomePage />
+          <HomePageTwo />
           <Footer className="footer-area mt-110" />
         </>
       )}

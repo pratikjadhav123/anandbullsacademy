@@ -9,7 +9,7 @@ function CourseVideo() {
         getVideos()
     }, []);
     const getVideos = () => {
-        videos.get(id).then((data) => {
+        videos.list().then((data) => {
             setVideosList(data);
         })
     }

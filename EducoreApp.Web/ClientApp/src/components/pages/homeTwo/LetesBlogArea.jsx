@@ -15,7 +15,7 @@ function LetesBlogArea() {
           <img
             src={process.env.PUBLIC_URL + "/images/coursebenifite.jpg"}
             alt="HeroIMG"
-            className="img-fluid p-5"
+            className="img-fluid"
           />
         </div>
       </div>

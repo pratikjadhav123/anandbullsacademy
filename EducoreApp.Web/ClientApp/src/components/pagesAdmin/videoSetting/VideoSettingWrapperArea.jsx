@@ -37,31 +37,31 @@ function VideoSettingWrapperArea({ videoList, getVideoList, courseList }) {
     }
 
     const handleSubmit = () => {
-        if (validator.allValid()) {
-            if (data.VideoId) {
-                videos.update(data.VideoId, data).then((data) => {
-                    setData(resete)
-                    setOpen(false)
-                    getVideoList()
-                    notice.success("Course Updated SuccessFully")
-                })
-            } else {
+        // if (validator.allValid()) {
+            // if (data.VideoId) {
+            //     videos.update(data.VideoId, data).then((data) => {
+            //         setData(resete)
+            //         setOpen(false)
+            //         getVideoList()
+            //         notice.success("Course Updated SuccessFully")
+            //     })
+            // } else {
                 videos.create(data).then((data) => {
                     setData(resete)
                     setOpen(false)
                     getVideoList()
-                    notice.success("New Course Created SuccessFully")
+                    notice.success("Video Synk SuccessFully")
                 })
-            }
-        } else {
-            showMessage(true)
-        }
+            // }
+        // } else {
+        //     showMessage(true)
+        // }
     }
     const getTitle = (id) => {
         let courseName = courseList?.find((item) => {
             return item.CourseId === id;
         })
-        return courseName.Title;
+        return courseName?.Title;
     }
     const alertConfirm = (VideoId) => {
         Swal.fire({
@@ -88,7 +88,8 @@ function VideoSettingWrapperArea({ videoList, getVideoList, courseList }) {
                     <div className="row">
                         <div className="col-lg-12 p-5">
                             <div className="tour-package-details">
-                                {!open ? <Card>
+                                {/* {!open ?  */}
+                                <Card>
                                     <Card.Body>
                                         <Card.Title>All Video List </Card.Title>
                                         <Table responsive striped className="small">
@@ -98,7 +99,6 @@ function VideoSettingWrapperArea({ videoList, getVideoList, courseList }) {
                                                     <th>Video Name</th>
                                                     <th>Course</th>
                                                     <th>VideoUrl</th>
-                                                    <th>Update</th>
                                                     <th>Delete</th>
                                                 </tr>
                                             </thead>
@@ -108,15 +108,15 @@ function VideoSettingWrapperArea({ videoList, getVideoList, courseList }) {
                                                     <td>{data.Name}</td>
                                                     <td>{getTitle(data.CourseId)}</td>
                                                     <td>{data.VideoUrl}</td>
-                                                    <td><Button variant="light" onClick={() => { setOpen(true); setData(data) }}>Edit Video</Button></td>
+                                                    {/* <td><Button variant="light" onClick={() => { setOpen(true); setData(data) }}>Edit Video</Button></td> */}
                                                     <td><Button variant="light" onClick={() => { alertConfirm(data.VideoId) }}>Delete Video</Button></td>
                                                 </tr>) : <h2> Add new Video</h2>}
                                             </tbody>
                                         </Table>
-                                        <Button variant="primary" onClick={() => { setOpen(true); setData(resete) }}>Add New Video</Button>
+                                        <Button variant="primary" onClick={handleSubmit}>Synk Videos from Vdocipher</Button>
                                     </Card.Body>
                                 </Card>
-                                    : <form
+                                    {/* : <form
                                         onSubmit={(e) => e.preventDefault()}
                                         id="comment_form"
                                         method="post"
@@ -168,7 +168,7 @@ function VideoSettingWrapperArea({ videoList, getVideoList, courseList }) {
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>}
+                                    </form>} */}
 
 
                             </div>
