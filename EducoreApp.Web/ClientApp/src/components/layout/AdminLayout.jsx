@@ -9,6 +9,7 @@ import { AppContext } from "../../plugins/AppContext";
 import auth from "../../utils/auth";
 import CourseSetting from "../pagesAdmin/courseSetting/CourseSetting";
 import VideoSetting from "../pagesAdmin/videoSetting/VideoSetting";
+import UserSetting from "../pagesAdmin/userSetting/UserSetting";
 function AdminLayout() {
   const [load, setLoad] = useState(false);
   const contextObj = useContext(AppContext);
@@ -21,7 +22,6 @@ function AdminLayout() {
       navigate.push("/");
     }
   }, [contextObj.user])
-  console.log("Admin");
 
   return (
     <>
@@ -39,7 +39,7 @@ function AdminLayout() {
             <Route
               exact
               path={`${process.env.PUBLIC_URL}/Admin/UserSetting`}
-              component={GuidePage}
+              component={UserSetting}
             />
             <Route
               exact

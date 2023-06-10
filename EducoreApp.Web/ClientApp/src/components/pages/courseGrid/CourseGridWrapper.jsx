@@ -22,7 +22,7 @@ function CourseGridWrapper() {
         <div className="container">
           <div className="row g-4">
 
-            {courseList?.map((item) => <div className="col-lg-4 col-md-6">
+            {courseList?.map((item, index) => <div className="col-lg-4 col-md-6" key={index}>
               <CourseCard
                 image={process.env.PUBLIC_URL + "/images/youtubeVideo.png"}
                 hours=""

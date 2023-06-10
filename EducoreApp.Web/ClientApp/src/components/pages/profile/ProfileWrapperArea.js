@@ -1,16 +1,20 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "react-modal-video/css/modal-video.css";
 import MyCourse from "./Video/MyCourse";
 import ChangePasswordPage from "./ChangePasswordPage";
 import { AppContext } from "../../../plugins/AppContext";
 import auth from "../../../utils/auth";
 import notice from "../../../plugins/notice";
-
-function ProfileWrapperArea({ user ,setUser}) {
+import { Table } from 'react-bootstrap';
+import payment from "../../../utils/payment";
+function ProfileWrapperArea({ user, setUser }) {
     const [isOpen, setOpen] = useState(false);
-
+    const [courseData, setCourseData] = useState([]);
     const [detail, setDetail] = useState(user);
 
+    useEffect(() => {
+        getCourse()
+    }, []);
     const handleChange = (e) => {
         const { name, value } = e.target;
         setDetail((prevState) => ({
@@ -24,6 +28,15 @@ function ProfileWrapperArea({ user ,setUser}) {
             notice.success("Profile Updated Successfully")
         })
     }
+
+    const getCourse = () => {
+        payment.getCourse().then((data) => {
+            setCourseData(data);
+        }).catch((error) => {
+            console.error("course", error);
+        })
+    }
+
     return (
         <>
             <div className="about-main-wrappper">
@@ -192,7 +205,23 @@ function ProfileWrapperArea({ user ,setUser}) {
                                                         data-bs-parent="#planAccordion"
                                                     >
                                                         <div className="accordion-body plan-info">
-                                                            Purchase history
+                                                            {courseData.length ? <Table responsive striped className="small">
+                                                                <thead>
+                                                                    <tr style={{ textAlign: "center" }}>
+                                                                        <th>Course Name</th>
+                                                                        <th>Price</th>
+                                                                        <th>Purchase Date</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    {courseData.map((item, index) =>
+                                                                        <tr style={{ textAlign: "center" }} >
+                                                                            <td>{item.Title}</td>
+                                                                            <td>{item.Price}</td>
+                                                                            <td>{item.CreatedAt}</td>
+                                                                        </tr>)}
+                                                                </tbody>
+                                                            </Table> : <h6>No Purchase Record..!</h6>}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -206,7 +235,7 @@ function ProfileWrapperArea({ user ,setUser}) {
                                     role="tabpanel"
                                     aria-labelledby="pills-about2"
                                 >
-                                    <MyCourse />
+                                    <MyCourse courseData={courseData} />
                                 </div>
                             </div>
                         </div>

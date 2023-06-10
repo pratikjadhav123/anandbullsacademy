@@ -1,28 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import MyCourseCard from "./MyCourseCard";
 import { Link } from "react-router-dom/cjs/react-router-dom";
-import payment from "../../../../utils/payment";
 
-function MyCourse() {
-    const [courseData, setCourseData] = useState([]);
-    useEffect(() => {
-        getCourse()
-    }, []);
-    const getCourse = () => {
-        payment.getCourse().then((data) => {
-            setCourseData(data);
-        }).catch((error) => {
-            console.error("course", error);
-        })
-    }
-
+function MyCourse({courseData}) {
     return (
         <>
             {/* ===============  Package gird area start =============== */}
             <div className="package-wrapper pt-110">
                 <div className="container">
                     <div className="row g-4">
-                        {courseData.length ? (courseData.map((item) =>  <div className="col-lg-4 col-md-6">
+                        {courseData.length ? (courseData.map((item,index) =>  <div className="col-lg-4 col-md-6" key={index}>
                                 <MyCourseCard
                                     image={process.env.PUBLIC_URL + "/images/package/p-alpha1.png"}
                                     hours="16h:00m"

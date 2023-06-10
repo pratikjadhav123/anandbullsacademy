@@ -40,7 +40,6 @@ function Root() {
   useEffect(() => {
     contextObj.user ? setUser(contextObj.user) : contextObj.getAllData();
   }, [contextObj.user])
-  console.log("root",contextObj.user);
   return (
     <>
       <BrowserRouter basename="/">

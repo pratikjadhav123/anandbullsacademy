@@ -56,7 +56,8 @@ function Header() {
       contextObj.getUser();
     })
   }
-
+  console.log("header",contextObj?.user);
+  
   const scrollTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
