@@ -16,6 +16,8 @@ namespace EducoreApp.DAL.DTO
         public string Mobile { get; set; } = string.Empty;
         public bool Active { get; set; } = true;
         public string Role { get; set; } = "User";
+        public int Discounut { get; set; } = 0;
+
         public string Avatar { get; set; } = "user.jpg";
         [NotMapped]
         public string AvatarPath { get; set; } = string.Empty;

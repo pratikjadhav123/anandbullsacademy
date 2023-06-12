@@ -15,6 +15,7 @@ Password varchar(200),
 Mobile varchar(200),
 Active int,
 Role varchar(200),
+Discounut int,
 Avatar varchar(200),
 EmailVerification Datetime,
 OTPVerification Datetime)

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Razorpay.Api;
 
 namespace EducoreApp.Web.Controllers
 {
@@ -10,11 +12,20 @@ namespace EducoreApp.Web.Controllers
     {
         private IPaymentDetails paymentDetails;
         private ICourse iCourse;
+        private IConfiguration configuration;
+        private IUser iUser;
 
-        public PaymentController(IPaymentDetails paymentDetails, ICourse iCourse)
+        public PaymentController(IPaymentDetails paymentDetails, ICourse iCourse, IConfiguration configuration, IUser iUser)
         {
             this.paymentDetails = paymentDetails;
             this.iCourse = iCourse;
+            this.configuration = configuration;
+            this.iUser = iUser;
+        }
+
+        private int UserId
+        {
+            get { return Convert.ToInt32(HttpContext.User.FindFirst("UserId").Value); }
         }
 
         [HttpGet]
@@ -23,6 +34,7 @@ namespace EducoreApp.Web.Controllers
             IEnumerable<Course> courses = await this.paymentDetails.GetPurchasedCourses();
             return Ok(courses);
         }
+
         [HttpGet]
         public async Task<IActionResult> GetCourseVideos(int CourseId)
         {
@@ -35,6 +47,42 @@ namespace EducoreApp.Web.Controllers
             return Ok(await this.paymentDetails.GetCourseVideos(CourseId));
         }
 
+        [HttpGet]
+        public async Task<ActionResult<Course>> SelectCourse(int CourseId)
+        {
+            Course course = await this.iCourse.GetCourse(CourseId);
+            if (course == null)
+            {
+                return NotFound("Course not found");
+            }
+            Users users = await this.iUser.GetUser(UserId);
+            if (users == null)
+            {
+                return NotFound(new { message = "User does not find" });
+            }
+            course.Price = course.Price - users.Discounut;
+            return Ok(course);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<ActionResult<Course>> ApplyDiscount(int Discounut, string Users)
+        {
+            int[]? users = JsonConvert.DeserializeObject<int[]>(Users);
+
+            foreach (int UserId in users)
+            {
+                Users users1 = await this.iUser.GetUser(UserId);
+                if (users1 == null)
+                {
+                    return NotFound(new { message = $"User does not find of UserId {UserId}" });
+                }
+                users1.Discounut = Discounut;
+                await this.iUser.UpdateUser(users1);
+            }
+            return Ok("Apply discount done");
+        }
+
         [HttpPost]
         public async Task<ActionResult<PaymentDetails>> PurchaseCourse([FromForm] PurchaseRequest request)
         {
@@ -45,6 +93,22 @@ namespace EducoreApp.Web.Controllers
             }
             await this.paymentDetails.SavePaymentDetails(request);
             return Ok("Payment done succesfully");
+        }
+
+        [HttpPost]
+        public ActionResult<string> GetPaymentDetails(string paymentId)
+        {
+            RazorpayClient _razorpayClient = new RazorpayClient(this.configuration["RayzorPay:Key"], this.configuration["RayzorPay:Secrete"]);
+            try
+            {
+                var payment = _razorpayClient.Payment.Fetch(paymentId);
+                string ss = JsonConvert.SerializeObject(payment.Attributes);
+                return Ok(ss);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
