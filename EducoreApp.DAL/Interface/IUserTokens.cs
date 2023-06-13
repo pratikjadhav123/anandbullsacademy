@@ -8,7 +8,7 @@ namespace EducoreApp.DAL.Interface
 
         public Task<UserTokens> GetUserToken(string RequestedBy, string RequestedType);
 
-        public Task<UserTokens> SaveUserToken(Users users, string RequestedType);
+        public Task<UserTokens> SaveUserToken(string Email, string otp, string RequestedType);
 
         public Task<UserTokens> SaveAuthToken(Users users, string Token);
 

@@ -6,44 +6,74 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
         }
 
         .container {
-            width: 500px;
+            width: 600px;
             margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .header {
-            background-color: #f5f5f5;
-            padding: 20px;
             text-align: center;
         }
 
+            .header h1 {
+                color: #333333;
+                font-size: 24px;
+                margin-top: 0;
+            }
+
         .content {
+            margin-top: 30px;
             padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
         }
 
-        .button {
+        .text {
+            color: #333333;
+            font-size: 16px;
+            line-height: 24px;
+            margin-bottom: 20px;
+        }
+
+        .otp {
             display: inline-block;
             background-color: #4caf50;
             color: #ffffff;
-            text-decoration: none;
             padding: 10px 20px;
-            margin-top: 20px;
+            font-size: 18px;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #777777;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>Email Confirmation</h1>
+            <h1>Active your Account {{Email}}</h1>
         </div>
         <div class="content">
-            <p>Dear User,</p>
-            <p>Thank you for signing up. Please click the button below to confirm your email:</p>
-            <a class="button" href="https://www.example.com/confirm-email">Confirm Email</a>
+            <p class="text">Dear {{FirstName}},</p>
+            <p class="text">Thank you for signing up. Please use the OTP below to confirm your email: <b>{{Email}}</b> </p>
+            <h2 class="otp">{{OTP}}</h2>
+            <p class="text">Please enter this OTP in the verification form to complete the confirmation process.</p>
+        </div>
+        <div class="footer">
             <p>If you did not sign up for this account, you can safely ignore this email.</p>
-            <p>Regards,<br>Your App Team</p>
+            <p>Regards,<br>Anand Bull Academy</p>
         </div>
     </div>
 </body>

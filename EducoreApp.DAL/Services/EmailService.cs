@@ -1,32 +1,61 @@
-﻿using EducoreApp.DAL.DTO;
+﻿using Dapper;
+using EASendMail;
+using EducoreApp.DAL.Database;
+using EducoreApp.DAL.DTO;
+using EducoreApp.DAL.Helper;
 using EducoreApp.DAL.Interface;
 using EducoreApp.DAL.Request;
-using Hangfire;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
-using System.Net;
-using System.Net.Mail;
+using Newtonsoft.Json;
 
 namespace EducoreApp.DAL.Services
 {
     public class EmailService : IEmailService
     {
-        private readonly SMTPConfigModel _smtpConfig;
+        private readonly EmailCredentials _credentials;
         private IUserTokens userTokens;
         private IConfiguration configuration;
+        private DatabaseConnection connection;
+        private ApiCurls apiCurls;
 
-        public EmailService(IOptions<SMTPConfigModel> smtpConfig, IUserTokens userTokens, IConfiguration configuration)
+        public EmailService(IOptions<EmailCredentials> credentials, IUserTokens userTokens, IConfiguration configuration, DatabaseConnection connection, ApiCurls apiCurls)
         {
-            _smtpConfig = smtpConfig.Value;
+            _credentials = credentials.Value;
             this.userTokens = userTokens;
             this.configuration = configuration;
+            this.connection = connection;
+            this.apiCurls = apiCurls;
+        }
+
+        public async Task ActiveEmail(TempUsers tempUsers)
+        {
+            await Task.Run(async () =>
+            {
+                UserTokens userTokens = await this.userTokens.SaveUserToken(tempUsers.Email, Convert.ToString(tempUsers.OTP), "Confirm Email");
+
+                UserEmailOptions userEmailOptions = new UserEmailOptions()
+                {
+                    Subject = "Active Your Account",
+                    ToEmails = tempUsers.Email,
+                    PlaceHolders = new List<KeyValuePair<string, string>>()
+                    {
+                        new KeyValuePair<string, string>("{{FirstName}}",tempUsers.FirstName),
+                        new KeyValuePair<string, string>("{{Email}}",tempUsers.Email),
+                        new KeyValuePair<string, string>("{{OTP}}",userTokens.Token)
+                    }
+                };
+                userEmailOptions.Body = GetEmailBody("EmailConfirm.html", userEmailOptions.PlaceHolders);
+                await this.SendEmail(userEmailOptions);
+            });
         }
 
         public async Task ConfirmEmail(Users user)
         {
             await Task.Run(async () =>
             {
-                UserTokens userTokens = await this.userTokens.SaveUserToken(user, "Confirm Email");
+                string otp = new Random().Next(10000, 99999).ToString();
+                UserTokens userTokens = await this.userTokens.SaveUserToken(user.Email, otp, "Confirm Email");
 
                 UserEmailOptions userEmailOptions = new UserEmailOptions()
                 {
@@ -40,11 +69,7 @@ namespace EducoreApp.DAL.Services
                     }
                 };
                 userEmailOptions.Body = GetEmailBody("EmailConfirm1.html", userEmailOptions.PlaceHolders);
-                await this.ConnectEmail(userEmailOptions);
-                 /*if (userEmailOptions != null)
-                 {
-                     BackgroundJob.Enqueue(()=>this.ConnectEmail(userEmailOptions));
-                 }*/
+                await this.SendEmail(userEmailOptions);
             });
         }
 
@@ -52,7 +77,8 @@ namespace EducoreApp.DAL.Services
         {
             await Task.Run(async () =>
             {
-                UserTokens userTokens = await this.userTokens.SaveUserToken(user, "Reset Password");
+                string otp = new Random().Next(10000, 99999).ToString();
+                UserTokens userTokens = await this.userTokens.SaveUserToken(user.Email, otp, "Reset Password");
                 string token = userTokens.Token;
                 string link = this.configuration["FrontEndUrl"] + $"/resetpassword/{token}";
                 UserEmailOptions userEmailOptions = new UserEmailOptions()
@@ -65,32 +91,49 @@ namespace EducoreApp.DAL.Services
                         new KeyValuePair<string, string>("{{Link}}",link)
                     }
                 };
-                userEmailOptions.Body = GetEmailBody("ForgotPassword.html", userEmailOptions.PlaceHolders);
-                await this.ConnectEmail(userEmailOptions);
-               /* if (userEmailOptions != null)
-                {
-                    BackgroundJob.Enqueue( () => this.ConnectEmail(userEmailOptions));
-                }*/
+                userEmailOptions.Body = GetEmailBody("ResetPassword.html", userEmailOptions.PlaceHolders);
+                await this.SendEmail(userEmailOptions);
             });
         }
 
-        public async Task ConnectEmail(UserEmailOptions userEmailOptions)
+        public async Task<SmtpClient> SendEmail(UserEmailOptions userEmailOptions)
         {
-            MailMessage mail = new MailMessage
-            {
-                Subject = userEmailOptions.Subject,
-                Body = userEmailOptions.Body,
-                From = new MailAddress(_smtpConfig.SenderAddress, _smtpConfig.SenderDisplayName),
-                IsBodyHtml = _smtpConfig.IsBodyHTML
-            };
-            mail.To.Add(userEmailOptions.ToEmails);
-            using (SmtpClient smtp = new SmtpClient(_smtpConfig.Host, _smtpConfig.Port))
-            {
-                smtp.EnableSsl = _smtpConfig.EnableSSL;
-                smtp.Credentials = new NetworkCredential(_smtpConfig.UserName, _smtpConfig.Password);
-                await smtp.SendMailAsync(mail);
-            }
+            EmailConfig? emailConfig = await this.GetEmailConfig();
+            SmtpServer oServer = new SmtpServer("smtp.gmail.com");
+            oServer.ConnectType = SmtpConnectType.ConnectSSLAuto;
+            oServer.Port = 587;
+            oServer.AuthType = SmtpAuthType.XOAUTH2;
+            oServer.User = emailConfig.Email;
+            oServer.Password = emailConfig.AccessToken;
+
+            SmtpMail oMail = new SmtpMail("TryIt");
+            oMail.From = emailConfig.Email;
+            oMail.To = userEmailOptions.ToEmails;
+            oMail.Subject = userEmailOptions.Subject;
+            oMail.HtmlBody = userEmailOptions.Body;
+            
+            SmtpClient oSmtp = new SmtpClient();
+            oSmtp.SendMail(oServer, oMail);
+            return oSmtp;
         }
+
+        /* public async Task ConnectEmail(UserEmailOptions userEmailOptions)
+         {
+             MailMessage mail = new MailMessage
+             {
+                 Subject = userEmailOptions.Subject,
+                 Body = userEmailOptions.Body,
+                 From = new MailAddress(_smtpConfig.SenderAddress, _smtpConfig.SenderDisplayName),
+                 IsBodyHtml = _smtpConfig.IsBodyHTML
+             };
+             mail.To.Add(userEmailOptions.ToEmails);
+             using (SmtpClient smtp = new SmtpClient(_smtpConfig.Host, _smtpConfig.Port))
+             {
+                 smtp.EnableSsl = _smtpConfig.EnableSSL;
+                 smtp.Credentials = new NetworkCredential(_smtpConfig.UserName, _smtpConfig.Password);
+                 await smtp.SendMailAsync(mail);
+             }
+         }*/
 
         public string GetEmailBody(string templateName, List<KeyValuePair<string, string>> keyValuePairs)
         {
@@ -108,6 +151,69 @@ namespace EducoreApp.DAL.Services
             }
 
             return body;
+        }
+
+        public async Task<EmailConfig> GetEmailConfig()
+        {
+            return await Task.Run(async () =>
+            {
+                string query = $"Select * from EmailConfig where Id=1";
+
+                using (var con = this.connection.connection())
+                {
+                    EmailConfig emailConfig = await con.QueryFirstOrDefaultAsync<EmailConfig>(query);
+                    if (emailConfig.ExpiredTime < DateTime.Now)
+                    {
+                        var request = $"{_credentials.tokenUri}?refresh_token={emailConfig.RefreshToken}&redirect_uri={_credentials.redirectUri}&client_id={_credentials.clientID}&client_secret={_credentials.clientSecret}&grant_type=refresh_token";
+                        string token = await this.apiCurls.GetTokens(request);
+                        Responces? responces = JsonConvert.DeserializeObject<Responces>(token);
+
+                        emailConfig.AccessToken = responces.access_token;
+                        emailConfig.ExpiredTime = DateTime.Now.AddMinutes(30);
+                        await this.UpdateEmailConfig(emailConfig);
+                    }
+                    return emailConfig;
+                }
+            });
+        }
+
+        public async Task<EmailConfig> SaveEmailConfig(EmailConfig emailConfig)
+        {
+            return await Task.Run(async () =>
+            {
+                string query = $"Insert into emailConfig OUTPUT inserted.* values(@Email,@AccessToken,@RefreshToken,@ExpiredTime)";
+
+                using (var con = this.connection.connection())
+                {
+                    return await con.QueryFirstOrDefaultAsync<EmailConfig>(query, emailConfig);
+                }
+            });
+        }
+
+        public async Task<EmailConfig> UpdateEmailConfig(EmailConfig EmailConfig)
+        {
+            return await Task.Run(async () =>
+            {
+                string query = $"update EmailConfig set AccessToken=@AccessToken,ExpiredTime=@ExpiredTime where RefreshToken=@RefreshToken and Id=@Id";
+
+                using (var con = this.connection.connection())
+                {
+                    return await con.QueryFirstOrDefaultAsync<EmailConfig>(query, EmailConfig);
+                }
+            });
+        }
+
+        public async Task DeleteEmailConfig()
+        {
+            await Task.Run(async () =>
+           {
+               string query = $"Truncate table EmailConfig";
+
+               using (var con = this.connection.connection())
+               {
+                   await con.ExecuteAsync(query);
+               }
+           });
         }
     }
 }

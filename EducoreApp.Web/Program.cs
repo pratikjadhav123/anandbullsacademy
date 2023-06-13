@@ -1,17 +1,17 @@
 global using EducoreApp.DAL.Database;
 global using EducoreApp.DAL.DTO;
+global using EducoreApp.DAL.Helper;
 global using EducoreApp.DAL.Interface;
+global using EducoreApp.DAL.Middlewares;
 global using EducoreApp.DAL.Request;
 global using EducoreApp.DAL.Services;
-global using EducoreApp.DAL.Helper;
-global using EducoreApp.DAL.Middlewares;
 using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Text;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +30,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 
 //SMTP configuration class connecttion
 builder.Services.Configure<SMTPConfigModel>(builder.Configuration.GetSection("SMTPConfig"));
-
+builder.Services.Configure<EmailCredentials>(builder.Configuration.GetSection("EmailCredentials"));
 //References
 builder.Services.AddSingleton<UploadFiles>();
 
@@ -46,7 +46,6 @@ builder.Services.AddSingleton<IVideos, VideoService>();
 builder.Services.AddSingleton<IUserTokens, UserTokenService>();
 builder.Services.AddSingleton<IPaymentDetails, PaymentDetailsService>();
 
-
 builder.Services.AddSwaggerGen(option =>
 {
     option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
@@ -59,7 +58,6 @@ builder.Services.AddSwaggerGen(option =>
         Description = "JWT Authorization header using the Bearer scheme.",
     });
     option.OperationFilter<AuthorizationOperationFilter>();
-    
 });
 
 //services cors
@@ -89,7 +87,6 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
     serverOptions.Limits.MaxRequestBodySize = 3221225472;
 });
 var app = builder.Build();
-
 
 app.UseSwagger();
 app.UseSwaggerUI(c =>

@@ -61,14 +61,14 @@ namespace EducoreApp.DAL.Services
             });
         }
 
-        public async Task<UserTokens> SaveUserToken(Users users, string RequestedType)
+        public async Task<UserTokens> SaveUserToken(string Email, string otp, string RequestedType)
         {
             return await Task.Run(async () =>
             {
                 UserTokens UserTokens = new UserTokens();
-                UserTokens.RequestedBy = users.Email;
+                UserTokens.RequestedBy = Email;
                 UserTokens.RequestedType = RequestedType;
-                UserTokens.Token = new Random().Next(10000, 99999).ToString();
+                UserTokens.Token = otp;
                 UserTokens.ExpiredDate = DateTime.Now.AddHours(48);
 
                 string query = "Insert into UserTokens OUTPUT inserted.* values(@RequestedBy,@RequestedType,@Token,@ExpiredDate)";

@@ -52,3 +52,9 @@ UserId int,
 PaymentDate datetime
 );
 
+Create table EmailConfig(
+Id int identity(1,1),
+Email varchar(200),
+AccessToken nvarchar(max),
+RefreshToken nvarchar(max),
+ExpiredTime Datetime)

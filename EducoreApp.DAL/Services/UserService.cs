@@ -71,12 +71,14 @@ namespace EducoreApp.DAL.Services
                 users.Email = userRequest.Email;
                 users.Password = BCrypt.Net.BCrypt.HashPassword(userRequest.ConfirmPassword);
                 users.Mobile = userRequest.Mobile;
-                users.OTP = new Random().Next(1000, 9999);
+                users.OTP = new Random().Next(10000, 99999);
                 string query = $"Insert into TempUsers OUTPUT inserted.* values(@FirstName,@LastName,@Email,@Password,@Mobile,@OTP)";
 
                 using (var con = this.connection.connection())
                 {
-                    return await con.QueryFirstOrDefaultAsync<TempUsers>(query, users);
+                    TempUsers tempUsers= await con.QueryFirstOrDefaultAsync<TempUsers>(query, users);
+                    await this.emailService.ActiveEmail(tempUsers);
+                    return tempUsers;
                 }
             });
         }
@@ -98,7 +100,6 @@ namespace EducoreApp.DAL.Services
                 using (var con = this.connection.connection())
                 {
                     Users user = await con.QueryFirstOrDefaultAsync<Users>(query, users);
-                 //   await this.emailService.ConfirmEmail(user);
                     return await this.GetUser(user.UserId);
                 }
             });
