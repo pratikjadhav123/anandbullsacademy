@@ -17,6 +17,6 @@ namespace EducoreApp.DAL.Interface
 
         public Task<IEnumerable<Videos>> GetVideosByTopic(int CourseId);
         public Task<Videos> GetVideoById(string VideoUrl);
-        public Task<string> GetLink(string VideoUrl);
+        public Task<string> GetLink(string VideoUrl, Users users);
     }
 }

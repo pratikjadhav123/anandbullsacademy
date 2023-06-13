@@ -111,11 +111,11 @@ namespace EducoreApp.DAL.Services
                 }
             });
         }
-        public async Task<string> GetLink(string VideoUrl)
+        public async Task<string> GetLink(string VideoUrl, Users users)
         {
             return await Task.Run(async () =>
             {
-                string json = await this.apiCurls.GetResponce($"https://dev.vdocipher.com/api/videos/{VideoUrl}/otp");
+                string json = await this.apiCurls.GetVideoResponce($"https://dev.vdocipher.com/api/videos/{VideoUrl}/otp", users);
                 var obj = JsonConvert.DeserializeObject<result>(json);
                 return $"https://player.vdocipher.com/v2/?otp={obj.otp}&playbackInfo={obj.playbackInfo}";
             });

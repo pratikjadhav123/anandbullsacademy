@@ -87,11 +87,11 @@ namespace EducoreApp.Web.Controllers
             {
                 return NotFound(new { message = "Please confirm user mobile number" });
             }
-            if (users.Role == "User")
+           /* if (users.Role == "User")
             {
                 await this.iEmailService.ConfirmEmail(users);
                 return Ok(new { message = $"login OTP send on your {users.Email} email. Please check email." });
-            }
+            }*/
             UserTokens userTokens1 = await this.iUserTokens.GenerateToken(users);
             return Ok(userTokens1);
         }

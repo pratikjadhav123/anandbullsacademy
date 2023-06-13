@@ -10,12 +10,19 @@ namespace EducoreApp.Web.Controllers
         private ICourse iCourse;
         private IVideos iVideos;
         private ApiCurls ApiCurls;
+        private IUser iUser;
 
-        public VideosController(ICourse iCourse, IVideos iVideos,ApiCurls apiCurls)
+        public VideosController(ICourse iCourse, IVideos iVideos, ApiCurls apiCurls, IUser iUser)
         {
             this.iCourse = iCourse;
             this.iVideos = iVideos;
             this.ApiCurls = apiCurls;
+            this.iUser = iUser;
+        }
+
+        private int UserId
+        {
+            get { return Convert.ToInt32(HttpContext.User.FindFirst("UserId").Value); }
         }
 
         [Authorize]
@@ -25,7 +32,6 @@ namespace EducoreApp.Web.Controllers
             IEnumerable<Videos> Videos = await this.iVideos.GetVideos();
             return Ok(Videos);
         }
-
 
         [Authorize]
         [HttpGet("{VideoId}")]
@@ -48,7 +54,12 @@ namespace EducoreApp.Web.Controllers
             {
                 return NotFound(new { message = "Videos not found" });
             }
-            Videos.VideoUrl= await this.iVideos.GetLink(VideoUrl);
+            Users users = await this.iUser.GetUser(UserId);
+            if (users == null)
+            {
+                return NotFound(new { message = "User does not find" });
+            }
+            Videos.VideoUrl = await this.iVideos.GetLink(VideoUrl, users);
             return Ok(Videos);
         }
 

@@ -91,6 +91,13 @@ namespace EducoreApp.Web.Controllers
             {
                 return NotFound("Course not found");
             }
+            Users users = await this.iUser.GetUser(UserId);
+            if (users == null)
+            {
+                return NotFound(new { message = "User does not find" });
+            }
+            users.Discounut = 0;
+            await this.iUser.UpdateUser(users);
             await this.paymentDetails.SavePaymentDetails(request);
             return Ok("Payment done succesfully");
         }

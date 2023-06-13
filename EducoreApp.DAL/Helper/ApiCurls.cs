@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using EducoreApp.DAL.DTO;
+using Microsoft.Extensions.Configuration;
 using RestSharp;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -7,6 +8,7 @@ namespace EducoreApp.DAL.Helper
     public class ApiCurls
     {
         private IConfiguration configuration;
+
         public ApiCurls(IConfiguration configuration)
         {
             this.configuration = configuration;
@@ -22,6 +24,21 @@ namespace EducoreApp.DAL.Helper
                 return response.Content;
             }
         }
+
+        public async Task<string> GetVideoResponce(string URL, Users users)
+        {
+            using (var client = new HttpClient())
+            {
+                var request = new HttpRequestMessage(HttpMethod.Post, URL);
+                request.Headers.Add("Authorization", "Apisecret " + this.configuration["APIKey"]);
+                var content = new StringContent("{\"annotate\":\"[{'type':'rtext', 'text':' " + users.FirstName + ", " + users.Email + "', 'alpha':'0.60', 'color':'0xFF0000','size':'15','interval':'5000'}]\"}", null, "text/plain");
+                request.Content = content;
+                var response = await client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+                return await response.Content.ReadAsStringAsync();
+            }
+        }
+
         public async Task<string> GetTokens(string URL)
         {
             using (var client = new HttpClient())
@@ -33,6 +50,7 @@ namespace EducoreApp.DAL.Helper
                 return token;
             }
         }
+
         public string GetEmail(string? token)
         {
             var jwtHandler = new JwtSecurityTokenHandler();
