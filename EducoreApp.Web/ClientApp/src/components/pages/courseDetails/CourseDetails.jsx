@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import Breadcrumb from "../../common/Breadcrumb";
 import CourseDetailsWrap from "./CourseDetailsWrap";
-import course from "../../../utils/course";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import Loading from "../../common/Loading";
 import { AppContext } from "../../../plugins/AppContext";
@@ -20,7 +19,7 @@ function CourseDetails() {
     }
   }, [])
   const getCourseDetail = () => {
-    course.get(id).then((data) => {
+    payment.get(id).then((data) => {
       setCourseDetail(data);
     })
   }

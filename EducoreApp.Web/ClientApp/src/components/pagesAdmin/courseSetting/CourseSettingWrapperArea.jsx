@@ -61,7 +61,7 @@ function CourseSettingWrapperArea({ courseList, getCourseList }) {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.value) {
-        course.delete(CourseId).then(()=>{
+        course.delete(CourseId).then(() => {
           getCourseList();
           Swal.fire('Deleted', 'Course has been deleted.', 'success')
         });
@@ -77,9 +77,10 @@ function CourseSettingWrapperArea({ courseList, getCourseList }) {
           <div className="row">
             <div className="col-lg-12 p-5">
               <div className="tour-package-details">
-                {!open ? <Card>
+
+                {!open ? <div className="comment-form">
                   <Card.Body>
-                    <Card.Title>All Course List </Card.Title>
+                    <Card.Title><h4>All Course List </h4></Card.Title>
                     <Table responsive striped className="small">
                       <thead>
                         <tr style={{ textAlign: "center" }}>
@@ -96,16 +97,17 @@ function CourseSettingWrapperArea({ courseList, getCourseList }) {
                           <td>{index + 1}</td>
                           <td>{data.Title}</td>
                           <td>{data.Description}</td>
-                          <td>₹ {data.Price }</td>
+                          <td>₹ {data.Price}</td>
                           <td><Button variant="light" onClick={() => { setOpen(true); setData(data) }}>Edit Course</Button></td>
-                          <td><Button variant="light" onClick={()=>{alertConfirm(data.CourseId)}}>Delete Course</Button></td>
+                          <td><Button variant="light" onClick={() => { alertConfirm(data.CourseId) }}>Delete Course</Button></td>
                         </tr>) : <h2> Add new Course</h2>}
                       </tbody>
                     </Table>
                     <Button variant="primary" onClick={() => { setOpen(true); setData(resete) }}>Add New Course</Button>
                   </Card.Body>
-                </Card>
-                  : <form
+                </div>
+                  :
+                  <form
                     onSubmit={(e) => e.preventDefault()}
                     id="comment_form"
                     method="post"
@@ -158,19 +160,13 @@ function CourseSettingWrapperArea({ courseList, getCourseList }) {
                           </button>
                         </div>
                         <div className="submite-btn">
-                          <button type="submit" onClick={handleSubmit}> {!data.CourseId ? "Create new Course" : "Update Course"}
+                          <button type="submit" onClick={handleSubmit}> {!data.CourseId ? "Save" : "Update"}
                           </button>
                         </div>
                       </div>
                     </div>
-                  </form>}
-
-
-              </div>
-            </div>
-            <div className="col-lg-4">
-              <div className="package-sidebar">
-
+                  </form>
+                }
               </div>
             </div>
           </div>

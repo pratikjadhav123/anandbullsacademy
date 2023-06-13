@@ -43,7 +43,7 @@ function WidgetForm({ courseDetail, user, MyCourse }) {
     }
 
     var options = {
-      key: "rzp_test_0qzOXXMLzWBQyn",
+      key: "rzp_test_n9RwaKTC23Vqz2",
       currency: "INR",
       // key_secret: "AV6utSKOogRsoOMncWVq7T1r",
       amount: courseDetail.Price * 100,

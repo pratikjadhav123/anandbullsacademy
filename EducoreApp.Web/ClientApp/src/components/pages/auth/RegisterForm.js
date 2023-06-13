@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import users from "../../../utils/users";
 import notice from "../../../plugins/notice";
 import auth from "../../../utils/auth";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import useValidator from "../../../plugins/validator";
+import { AppContext } from "../../../plugins/AppContext";
 const reset = {
   FirstName: "",
   LastName: "",
@@ -17,7 +18,8 @@ function RegisterForm() {
   const [register, setRegister] = useState(reset);
   const [validator, showMessage] = useValidator();
   const [validator2, showMessage2] = useValidator();
-  const [fakeOtp, setFakeOtp] = useState();
+  const contextObj = useContext(AppContext);
+  const [fakeOtp, setFakeOtp] = useState(false);
   const navigate = useHistory()
   const [otp, setOtp] = useState({ OTP: "" })
 
@@ -58,8 +60,8 @@ function RegisterForm() {
     if (validator.allValid()) {
       register.Mobile = "+91"+ register.Mobile
       auth.register(register).then((data) => {
-        notice.success("Please check message to confirm OTP")
-        setFakeOtp(data.code)
+        notice.success(data.message)
+        setFakeOtp(true);
       }).catch(error =>
         console.log("error", error)
       )
@@ -72,10 +74,11 @@ function RegisterForm() {
     e.preventDefault()
     if (validator2.allValid()) {
       auth.confirmOTP(otp).then((data) => {
-        notice.success("Successfully register Please Login to continue")
+        notice.success("Successfully Register")
         setRegister(reset);
-        setFakeOtp({ OTP: "" })
-        navigate.push("/auth/Login")
+        setFakeOtp(false);
+        contextObj.getAllData();
+        navigate.push("/myProfile");
       }).catch(error =>
         console.log("error", error)
       )
@@ -154,7 +157,7 @@ function RegisterForm() {
                   <div className="submite-btn">
                     <button type="submit" onClick={handleOtpSubmit}>Submit</button>
                     <div className="d-flex justify-content-evenly p-2">
-                      <p className="d-flex justify-content-start"><Link to={"#"} type="button" className="px-2" onClick={() => setFakeOtp()}>Back to RegisterForm</Link></p>
+                      <p className="d-flex justify-content-start"><Link to={"#"} type="button" className="px-2" onClick={() => setFakeOtp(false)}>Back to RegisterForm</Link></p>
                       <p className="d-flex justify-content-end">Already have an account?<Link to={'/auth/Login'} type="button" className="px-2">Back to Login</Link></p>
                     </div>
                   </div>

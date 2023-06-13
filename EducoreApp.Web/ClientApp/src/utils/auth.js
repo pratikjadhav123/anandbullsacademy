@@ -14,9 +14,37 @@ const auth = {
                     resolve(data);
                 })
                 .catch(({ response }) => {
-                    console.log(response);
                     notice.error(response.data.message);
                     reject(response);
+                });
+        });
+    },
+    register(data) {
+        return new Promise((resolve, reject) => {
+            axios.setToken();
+            axios
+                .post('Auth/Registration', data)
+                .then(({ data }) => {
+                    resolve(data);
+                })
+                .catch(({ response }) => {
+                    reject(response);
+                    notice.error(response.data.message);
+                });
+        });
+    },
+    confirmOTP(data){
+        return new Promise((resolve, reject) => {
+            axios.setToken();
+            axios
+                .post(`Auth/ConfirmOTP?OTP=${data.OTP}`, data)
+                .then(({ data }) => {
+                    this.saveToken(data.Token);
+                    resolve(data);
+                })
+                .catch(({ response }) => {
+                    reject(response);
+                    notice.error(response.data.message);
                 });
         });
     },
@@ -101,7 +129,7 @@ const auth = {
             axios
                 .post('Auth/ConfirmEmail', data)
                 .then(({ data }) => {
-                    // notistack.success(data.message);
+                    // notistack.success(data.message);    
                     resolve(data);
                 })
                 .catch(({ response }) => {
@@ -142,34 +170,6 @@ const auth = {
                     reject(response);
                     notice.error(response.data.message);
 
-                });
-        });
-    },
-    register(data) {
-        return new Promise((resolve, reject) => {
-            axios.setToken();
-            axios
-                .post('Auth/Registration', data)
-                .then(({ data }) => {
-                    resolve(data);
-                })
-                .catch(({ response }) => {
-                    reject(response);
-                    notice.error(response.data.message);
-                });
-        });
-    },
-    confirmOTP(data){
-        return new Promise((resolve, reject) => {
-            axios.setToken();
-            axios
-                .post(`Auth/ConfirmOTP?OTP=${data.OTP}`, data)
-                .then(({ data }) => {
-                    resolve(data);
-                })
-                .catch(({ response }) => {
-                    reject(response);
-                    notice.error(response.data.message);
                 });
         });
     },

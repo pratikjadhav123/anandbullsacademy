@@ -20,7 +20,7 @@ function UserSetting() {
     return (
         <>
             {loading ? <Loading /> :
-                <UserSettingWrapper usersList={usersList} getUsersList={getUserList} />}
+                <UserSettingWrapper usersList={usersList} getUserList={getUserList} />}
         </>
     );
 }
