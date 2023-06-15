@@ -65,7 +65,7 @@ function Hero2() {
                     <div className="col-lg-6">
                       <div className="hero-image-group">
                         <img
-                          src={process.env.PUBLIC_URL + "/images/slide-2.png"}
+                          src={process.env.PUBLIC_URL + "/images/AB Web Banner.png"}
                           alt="HeroIMG"
                           className="img-fluid"
                         />

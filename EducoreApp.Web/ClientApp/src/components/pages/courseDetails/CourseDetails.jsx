@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import Loading from "../../common/Loading";
 import { AppContext } from "../../../plugins/AppContext";
 import payment from "../../../utils/payment";
+import course from "../../../utils/course";
 
 
 function CourseDetails() {
@@ -17,12 +18,20 @@ function CourseDetails() {
     if (contextObj?.user) {
       getCourse()
     }
-  }, [])
+    // eslint-disable-next-line
+  }, [contextObj?.user])
   const getCourseDetail = () => {
-    payment.get(id).then((data) => {
-      setCourseDetail(data);
-    })
+    if (contextObj?.user) {
+      payment.get(id).then((data) => {
+        setCourseDetail(data);
+      })
+    } else {
+      course.get(id).then((data) => {
+        setCourseDetail(data);
+      })
+    }
   }
+
   const getCourse = () => {
     payment.getCourse().then((data) => {
       setMyCourseData(data);

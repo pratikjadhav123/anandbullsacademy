@@ -1,13 +1,9 @@
-import React, { useContext, useState } from "react";
+import React from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import notice from "../../../plugins/notice";
-import users from "../../../utils/users";
-import { AppContext } from "../../../plugins/AppContext";
 import payment from "../../../utils/payment";
 
 function WidgetForm({ courseDetail, user, MyCourse }) {
-  const [paymentPage, setPaymentPage] = useState(false)
-  const contextObj = useContext(AppContext);
   const navigate = useHistory()
   const loadScript = (src) => {
     return new Promise((resolve) => {
@@ -46,8 +42,8 @@ function WidgetForm({ courseDetail, user, MyCourse }) {
       key: "rzp_test_n9RwaKTC23Vqz2",
       currency: "INR",
       // key_secret: "AV6utSKOogRsoOMncWVq7T1r",
-      amount: courseDetail.Price * 100,
-      name: "anand bulls trading acadamy",
+      amount: (courseDetail.Price + (0.02 * courseDetail.Price)) * 100,
+      name: "Anand bulls trading acadamy",
       description: "for testing purpose",
       image: "",
       handler: async (response) => {
@@ -82,27 +78,14 @@ function WidgetForm({ courseDetail, user, MyCourse }) {
   return (
     <>
       {!MyCourse ? <aside className="package-widget-style-2 widget-form mt-5">
-        <div className="widget-title text-center d-flex justify-content-between">
-          <h4>Join This Course</h4>
-          <h3 className="widget-lavel">
-            ₹{courseDetail.Price}
-          </h3>
+        <div className="widget-title text-center ">
+
+          {/* <h4>Join This Course</h4> */}
+
+          <span className="widget-lavel">
+            Payment Structure <h4>₹{courseDetail.Price}</h4> is Course Fees and <h4>2% i.e. ₹{0.02 * courseDetail.Price}</h4> is Payment Gateway Charge
+          </span>
         </div>
-        <div className="widget-body p-0 m-0">
-          <form
-            onSubmit={(e) => e.preventDefault()}
-          >
-            <div className="booking-form-wrapper">
-              <div className="custom-input-group">
-                <div className="submite-btn">
-                  <button style={{ borderRadius: "0px" }} type="submit" onClick={checkout}>Check Out</button>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-      </aside> : 
-      <aside className="package-widget-style-2 widget-form mt-5">
 
         <div className="widget-body p-0 m-0">
           <form
@@ -111,13 +94,29 @@ function WidgetForm({ courseDetail, user, MyCourse }) {
             <div className="booking-form-wrapper">
               <div className="custom-input-group">
                 <div className="submite-btn">
-                  <button style={{ borderRadius: "0px" }} type="submit" onClick={()=>{navigate.push(`/video/${MyCourse.CourseId}`)}}>start Learning</button>
+                  <button style={{ borderRadius: "0px" }} type="submit" onClick={checkout}> <h4>₹{courseDetail.Price + (0.02 * courseDetail.Price)}</h4>Check Out</button>
                 </div>
               </div>
             </div>
           </form>
         </div>
-      </aside>}
+      </aside> :
+        <aside className="package-widget-style-2 widget-form mt-5">
+
+          <div className="widget-body p-0 m-0">
+            <form
+              onSubmit={(e) => e.preventDefault()}
+            >
+              <div className="booking-form-wrapper">
+                <div className="custom-input-group">
+                  <div className="submite-btn">
+                    <button style={{ borderRadius: "0px" }} type="submit" onClick={() => { navigate.push(`/video/${MyCourse.CourseId}`) }}>start Learning</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </aside>}
     </>
   );
 }

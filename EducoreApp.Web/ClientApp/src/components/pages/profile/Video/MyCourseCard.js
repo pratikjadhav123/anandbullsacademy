@@ -17,7 +17,7 @@ function MyCourseCard(props) {
             <img src={props.image} alt="images" />
           </Link>
           <p className="card-lavel">
-            <i className="bi bi-clock" /> <span>{props.hours}</span>
+            <i className="bi bi-clock" /> 
           </p>
         </div>
         <div className="package-card-body">

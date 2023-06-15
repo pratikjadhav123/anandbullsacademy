@@ -39,7 +39,9 @@ const VideoPlayer = ({ video }) => {
         </h3>
         <i className="bx bxs-right-arrow-alt" />
       </div>
-      {videoOpen && (system === "Windows" ?
+      {videoOpen && (
+        // system === "Windows"
+        true ?
         <>
           <div style={{ paddingTop: "55%", position: "relative" }}>
             <iframe

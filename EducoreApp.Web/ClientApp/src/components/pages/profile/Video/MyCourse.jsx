@@ -12,7 +12,6 @@ function MyCourse({courseData}) {
                         {courseData.length ? (courseData.map((item,index) =>  <div className="col-lg-4 col-md-6" key={index}>
                                 <MyCourseCard
                                     image={process.env.PUBLIC_URL + "/images/package/p-alpha1.png"}
-                                    hours="16h:00m"
                                     title={item.Title}
                                     id={item.CourseId}
                                 />

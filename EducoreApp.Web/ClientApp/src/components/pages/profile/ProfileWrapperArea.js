@@ -1,17 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "react-modal-video/css/modal-video.css";
 import MyCourse from "./Video/MyCourse";
 import ChangePasswordPage from "./ChangePasswordPage";
-import { AppContext } from "../../../plugins/AppContext";
 import auth from "../../../utils/auth";
 import notice from "../../../plugins/notice";
 import { Table } from 'react-bootstrap';
 import payment from "../../../utils/payment";
 function ProfileWrapperArea({ user, setUser }) {
-    const [isOpen, setOpen] = useState(false);
     const [courseData, setCourseData] = useState([]);
     const [detail, setDetail] = useState(user);
-
     useEffect(() => {
         getCourse()
     }, []);
@@ -28,7 +25,6 @@ function ProfileWrapperArea({ user, setUser }) {
             notice.success("Profile Updated Successfully")
         })
     }
-
     const getCourse = () => {
         payment.getCourse().then((data) => {
             setCourseData(data);
