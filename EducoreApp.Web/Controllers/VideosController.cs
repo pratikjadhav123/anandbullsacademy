@@ -65,10 +65,15 @@ namespace EducoreApp.Web.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<Videos>> SaveVideos()
+        public async Task<ActionResult<Videos>> SaveVideos(int CourseId, string folderId)
         {
-            await this.iVideos.SaveVideos();
-            return Ok("Video saved succesfully");
+            Course Course = await this.iCourse.GetCourse(CourseId);
+            if (Course == null)
+            {
+                return NotFound(new { message = "Course not found" });
+            }
+            await this.iVideos.SaveVideos(Course.CourseId, folderId);
+            return Ok(new { message = "Video saved succesfully" });
         }
 
         [Authorize(Roles = "Admin")]

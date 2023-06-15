@@ -49,6 +49,7 @@ Id int identity(1,1),
 PaymentId varchar(200),
 CourseId int,
 UserId int,
+Details nvarchar(max),
 PaymentDate datetime
 );
 

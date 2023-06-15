@@ -44,14 +44,14 @@ namespace EducoreApp.DAL.Services
             });
         }
 
-        public async Task SaveVideos()
+        public async Task SaveVideos(int CourseId, string folderId)
         {
             await Task.Run(async () =>
            {
-               string json = await this.apiCurls.GetResponce("https://dev.vdocipher.com/api/videos?");
+               string json = await this.apiCurls.GetResponce($"https://dev.vdocipher.com/api/videos?folderId={folderId}");
                using (var con = this.connection.connection())
                {
-                   await con.ExecuteAsync("SP_SaveVideos", new { json }, commandType: System.Data.CommandType.StoredProcedure);
+                   await con.ExecuteAsync("SP_SaveVideos", new { json, CourseId }, commandType: System.Data.CommandType.StoredProcedure);
                }
            });
         }

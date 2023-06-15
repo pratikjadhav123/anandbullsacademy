@@ -31,7 +31,7 @@ namespace EducoreApp.DAL.Helper
             {
                 var request = new HttpRequestMessage(HttpMethod.Post, URL);
                 request.Headers.Add("Authorization", "Apisecret " + this.configuration["APIKey"]);
-                var content = new StringContent("{\"annotate\":\"[{'type':'rtext', 'text':' " + users.FirstName + ", " + users.Email + "', 'alpha':'0.60', 'color':'0xFF0000','size':'15','interval':'5000'}]\"}", null, "text/plain");
+                var content = new StringContent("{\"annotate\":\"[{'type':'rtext', 'text':' " + users.FirstName + ", " + users.Email + "', 'alpha':'0.60', 'color':'0xFF0000','size':'25','interval':'5000'}]\"}", null, "text/plain");
                 request.Content = content;
                 var response = await client.SendAsync(request);
                 response.EnsureSuccessStatusCode();

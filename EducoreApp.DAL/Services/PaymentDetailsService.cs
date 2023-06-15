@@ -26,14 +26,29 @@ namespace EducoreApp.DAL.Services
             get { return Convert.ToInt32(this.httpContextAccessor.HttpContext.User.FindFirst("UserId").Value); }
         }
 
-        public async Task<IEnumerable<PaymentDetails>> GetPaymentDetails()
+        public async Task<IEnumerable<PaymentHistory>> GetPaymentHistories()
         {
             return await Task.Run(async () =>
             {
                 using (var con = this.connection.connection())
                 {
-                    IEnumerable<PaymentDetails> PaymentDetails = (await con.QueryAsync<PaymentDetails>("Select * from PaymentDetails")).ToList();
-                    return PaymentDetails;
+                    string query = "SELECT Id, c.Title as CourseName, PaymentId,JSON_VALUE(Details,'$.order_id') as OrderId,JSON_VALUE(Details,'$.amount') as Amount,JSON_VALUE(Details,'$.email') as Email,JSON_VALUE(Details,'$.contact') as Contact," +
+                    "JSON_VALUE(Details,'$.status') as Status,JSON_VALUE(Details,'$.captured') as Captured FROM PaymentDetails p left join Courses c on p.CourseId=c.CourseId";
+                    IEnumerable<PaymentHistory> paymentHistories = (await con.QueryAsync<PaymentHistory>(query)).ToList();
+                    return paymentHistories;
+                }
+            });
+        }
+        public async Task<PaymentHistory> GetPaymentHistory(string PaymentId)
+        {
+            return await Task.Run(async () =>
+            {
+                using (var con = this.connection.connection())
+                {
+                    string query = "SELECT Id, c.Title as CourseName, PaymentId,JSON_VALUE(Details,'$.order_id') as OrderId,JSON_VALUE(Details,'$.amount') as Amount,JSON_VALUE(Details,'$.email') as Email,JSON_VALUE(Details,'$.contact') as Contact," +
+                    "JSON_VALUE(Details,'$.status') as Status,JSON_VALUE(Details,'$.captured') as Captured FROM PaymentDetails p left join Courses c on p.CourseId=c.CourseId where p.PaymentId=@PaymentId";
+                    PaymentHistory paymentHistories = await con.QueryFirstOrDefaultAsync<PaymentHistory>(query, new { PaymentId });
+                    return paymentHistories;
                 }
             });
         }
@@ -44,7 +59,7 @@ namespace EducoreApp.DAL.Services
             {
                 using (var con = this.connection.connection())
                 {
-                    IEnumerable<Course> courses = (await con.QueryAsync<Course>("select c.CourseId, c.Title, c.Description, c.Price from PaymentDetails p left join Courses c on p.CourseId=c.CourseId where p.UserId=@UserId", new { UserId })).ToList();
+                    IEnumerable<Course> courses = (await con.QueryAsync<Course>("select c.CourseId, c.Title, c.Description, c.Price from PaymentDetails p left join Courses c on p.CourseId=c.CourseId where p.UserId=@UserId and JSON_VALUE(p.Details,'$.status')='Captured'", new { UserId })).ToList();
                     return courses;
                 }
             });
@@ -54,7 +69,7 @@ namespace EducoreApp.DAL.Services
         {
             return await Task.Run(async () =>
             {
-                string query = "select v.VideoId, v.CourseId,v.Name, v.VideoUrl from PaymentDetails p left join Videos v on p.CourseId=v.CourseId where p.UserId=@UserId and p.CourseId=@CourseId";
+                string query = "select v.VideoId, v.CourseId,v.Name, v.VideoUrl from PaymentDetails p left join Videos v on p.CourseId=v.CourseId where p.UserId=@UserId and p.CourseId=@CourseId  and JSON_VALUE(p.Details,'$.status')='Captured'";
                 using (var con = this.connection.connection())
                 {
                     IEnumerable<Videos> courses = (await con.QueryAsync<Videos>(query, new { UserId, CourseId })).ToList();
@@ -64,7 +79,7 @@ namespace EducoreApp.DAL.Services
             });
         }
 
-        public async Task<PaymentDetails> SavePaymentDetails(PurchaseRequest request)
+        public async Task<PaymentDetails> SavePaymentDetails(PurchaseRequest request, string Details)
         {
             return await Task.Run(async () =>
             {
@@ -72,9 +87,10 @@ namespace EducoreApp.DAL.Services
                 PaymentDetails.PaymentId = request.PaymentId;
                 PaymentDetails.CourseId = request.CourseId;
                 PaymentDetails.UserId = UserId;
+                PaymentDetails.Details = Details;
                 PaymentDetails.PaymentDate = DateTime.Now;
 
-                string query = "Insert into PaymentDetails OUTPUT inserted.* values(@PaymentId,@CourseId,@UserId,@PaymentDate)";
+                string query = "Insert into PaymentDetails OUTPUT inserted.* values(@PaymentId,@CourseId,@UserId,@Details,@PaymentDate)";
 
                 using (var con = this.connection.connection())
                 {

@@ -19,7 +19,7 @@ namespace EducoreApp.DAL.Request
         [Required, EmailAddress]
         public string Email { get; set; } = String.Empty;
 
-        [Required, RegularExpression(@"^\+91[1-9]\d{9}$", ErrorMessage = "Mobile number should be (+91986543210) in this formate")]
+        [Required, RegularExpression(@"^\d{10}$", ErrorMessage = "Mobile number should be (+91986543210) in this formate")]
         public string Mobile { get; set; } = String.Empty;
 
         public IFormFile? Avatar { get; set; }

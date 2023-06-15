@@ -8,7 +8,9 @@ DROP PROCEDURE [dbo].[SP_SaveVideos]
 GO
 
 CREATE PROCEDURE [dbo].[SP_SaveVideos] 
-		 @json nvarchar(max)
+		 @json nvarchar(max),
+		 @CourseId int
+
 AS
 BEGIN
 		BEGIN TRANSACTION Trans1
@@ -25,7 +27,7 @@ BEGIN
 			--INSERT NEW Owner
 			WHEN NOT MATCHED BY target THEN
 			INSERT ([CourseId], [Name], [VideoUrl],[CreatedAt],[UpdatedAt]) 
-			VALUES (1, source.title, source.id, GETUTCDATE(),GETUTCDATE())
+			VALUES (@CourseId, source.title, source.id, GETUTCDATE(),GETUTCDATE())
 	
 			--UPDATE EXISTING Owner
 			WHEN MATCHED THEN  

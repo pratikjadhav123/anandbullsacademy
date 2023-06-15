@@ -96,9 +96,14 @@ namespace EducoreApp.Web.Controllers
             {
                 return NotFound(new { message = "User does not find" });
             }
+            RazorpayClient _razorpayClient = new RazorpayClient(this.configuration["RayzorPay:Key"], this.configuration["RayzorPay:Secrete"]);
+
+            var payment = _razorpayClient.Payment.Fetch(request.PaymentId);
+            string ss = JsonConvert.SerializeObject(payment.Attributes);
+
             users.Discounut = 0;
             await this.iUser.UpdateUser(users);
-            await this.paymentDetails.SavePaymentDetails(request);
+            await this.paymentDetails.SavePaymentDetails(request, ss);
             return Ok("Payment done succesfully");
         }
 
@@ -117,5 +122,10 @@ namespace EducoreApp.Web.Controllers
                 return BadRequest(ex.Message);
             }
         }
+    }
+
+    public class PaymentStatus
+    {
+        public string status { get; set; }
     }
 }
