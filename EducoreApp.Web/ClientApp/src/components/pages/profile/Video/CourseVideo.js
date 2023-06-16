@@ -20,7 +20,7 @@ function CourseVideo() {
                     <h1>Video List</h1>
                     <div className="row pt-3">
                         {videosList?.map((video, index) => (
-                            <div className="col-md-10" key={index}>
+                            <div className="col-md-12" key={index}>
                                 <VideoPlayer video={video} />
                             </div>
                         ))}

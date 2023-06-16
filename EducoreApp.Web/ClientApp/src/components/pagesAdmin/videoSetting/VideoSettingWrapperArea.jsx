@@ -5,8 +5,7 @@ import notice from "../../../plugins/notice";
 import Swal from 'sweetalert2';
 import videos from "../../../utils/videos";
 const resete = {
-    Name: "",
-    Video: "",
+    folderId: "",
     CourseId: ""
 }
 function VideoSettingWrapperArea({ videoList, getVideoList, courseList }) {
@@ -15,16 +14,12 @@ function VideoSettingWrapperArea({ videoList, getVideoList, courseList }) {
     const [data, setData] = useState(resete);
     const [validator, showMessage] = useValidator();
     const error = {
-        Name: validator.message(('Name'), data.Name, "required|string"),
-        Video: validator.message(('Video'), data.Video, "required"),
+        folderId: validator.message(('folderId'), data.folderId, "folderId|string"),
         CourseId: validator.message(('Course'), data.CourseId, "required|integer"),
     }
     const handleChange = (e) => {
         const { name, value } = e.target;
         handleSetData(name, value)
-    }
-    const handleVideo = (e) => {
-        handleSetData("Video", e.target.files[0])
     }
 
     const handleSetData = (name, value) => {
@@ -37,25 +32,16 @@ function VideoSettingWrapperArea({ videoList, getVideoList, courseList }) {
     }
 
     const handleSubmit = () => {
-        // if (validator.allValid()) {
-            // if (data.VideoId) {
-            //     videos.update(data.VideoId, data).then((data) => {
-            //         setData(resete)
-            //         setOpen(false)
-            //         getVideoList()
-            //         notice.success("Course Updated SuccessFully")
-            //     })
-            // } else {
-                videos.create(data).then((data) => {
+        if (validator.allValid()) {
+                videos.create(data).then((e) => {
                     setData(resete)
                     setOpen(false)
                     getVideoList()
                     notice.success("Video Synk SuccessFully")
                 })
-            // }
-        // } else {
-        //     showMessage(true)
-        // }
+        } else {
+            showMessage(true)
+        }
     }
     const getTitle = (id) => {
         let courseName = courseList?.find((item) => {
@@ -88,7 +74,7 @@ function VideoSettingWrapperArea({ videoList, getVideoList, courseList }) {
                     <div className="row">
                         <div className="col-lg-12 p-5">
                             <div className="tour-package-details">
-                                {/* {!open ?  */}
+                                {!open ? 
                                 <Card>
                                     <Card.Body>
                                         <Card.Title>All Video List </Card.Title>
@@ -113,38 +99,31 @@ function VideoSettingWrapperArea({ videoList, getVideoList, courseList }) {
                                                 </tr>) : <h2> Add new Video</h2>}
                                             </tbody>
                                         </Table>
-                                        <Button variant="primary" onClick={handleSubmit}>Synk Videos from Vdocipher</Button>
+                                        <Button variant="primary" onClick={()=>setOpen(true)}>Synk Videos from Vdocipher</Button>
                                     </Card.Body>
                                 </Card>
-                                    {/* : <form
+                                  : <form
                                         onSubmit={(e) => e.preventDefault()}
                                         id="comment_form"
                                         method="post"
                                     >
                                         <div className="comment-form">
-                                            {!data.VideoId ? <h4>Add new Video</h4> : <h4>Update Video</h4>}
+                                            <h4>Add new Video</h4> 
                                             <div className="row">
                                                 <div className="col-lg-6">
                                                     <div className="custom-input-group">
                                                         <input
                                                             type="text"
-                                                            placeholder="Your Course Tile "
-                                                            id="Name"
-                                                            name="Name"
-                                                            value={data.Name}
+                                                            placeholder="folderId"
+                                                            id="folderId"
+                                                            name="folderId"
+                                                            value={data.folderId}
                                                             onChange={handleChange}
                                                         />
-                                                        {error?.Name &&
-                                                            <span className='error' style={{ color: "red" }}> {error?.Name}</span>}
+                                                        {error?.folderId &&
+                                                            <span className='error' style={{ color: "red" }}> {error?.folderId}</span>}
 
                                                     </div>
-                                                </div>
-                                                <div className="col-lg-6">
-                                                    <div className="custom-input-group">
-                                                        <input type="file" name="Video" onChange={handleVideo} />
-                                                    </div>
-                                                    {error?.Video &&
-                                                        <span className='error' style={{ color: "red" }}> {error?.Video}</span>}
                                                 </div>
                                                 <div className="col-lg-6">
                                                     <div className="custom-input-group">
@@ -163,12 +142,12 @@ function VideoSettingWrapperArea({ videoList, getVideoList, courseList }) {
                                                     </button>
                                                 </div>
                                                 <div className="submite-btn">
-                                                    <button type="submit" onClick={handleSubmit}> {!data.VideoId ? "Add new Video" : "Update Video"}
+                                                    <button type="submit" onClick={handleSubmit}> Synk new Videos
                                                     </button>
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>} */}
+                                    </form>} 
 
 
                             </div>

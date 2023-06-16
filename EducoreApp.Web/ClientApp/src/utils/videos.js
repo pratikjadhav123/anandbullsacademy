@@ -42,11 +42,11 @@ const videos = {
                 });
         });
     },
-    create() {
+    create(data) {
         let formData = new FormData();
         return new Promise((resolve, reject) => {
             axios
-                .post('Videos/SaveVideos', formData)
+                .post(`Videos/SaveVideos?CourseId=${data.CourseId}&folderId=${data.folderId}`, formData)
                 .then(({ data }) => {
                     resolve(data);
                 })
