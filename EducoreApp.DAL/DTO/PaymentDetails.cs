@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ namespace EducoreApp.DAL.DTO
 {
     public class PaymentDetails
     {
+        [Key]
         public int Id { get; set; }
         public string? PaymentId { get; set; }
         public int CourseId { get; set; }

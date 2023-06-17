@@ -8,5 +8,7 @@ namespace EducoreApp.DAL.Request
         public int CourseId { get; set; }
         [Required]
         public string? PaymentId { get; set; }
+        public string? Coupon { get; set; }
+
     }
 }

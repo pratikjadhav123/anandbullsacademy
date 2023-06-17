@@ -45,6 +45,9 @@ builder.Services.AddSingleton<ICourse, CourseService>();
 builder.Services.AddSingleton<IVideos, VideoService>();
 builder.Services.AddSingleton<IUserTokens, UserTokenService>();
 builder.Services.AddSingleton<IPaymentDetails, PaymentDetailsService>();
+builder.Services.AddSingleton<ICoupon, CouponServeice>();
+builder.Services.AddSingleton<ICoupenVerification, CouponVerificationService>();
+
 
 builder.Services.AddSwaggerGen(option =>
 {

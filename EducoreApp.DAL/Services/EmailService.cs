@@ -18,14 +18,16 @@ namespace EducoreApp.DAL.Services
         private IConfiguration configuration;
         private DatabaseConnection connection;
         private ApiCurls apiCurls;
+        private ICoupenVerification verification;
 
-        public EmailService(IOptions<EmailCredentials> credentials, IUserTokens userTokens, IConfiguration configuration, DatabaseConnection connection, ApiCurls apiCurls)
+        public EmailService(IOptions<EmailCredentials> credentials, IUserTokens userTokens, IConfiguration configuration, DatabaseConnection connection, ApiCurls apiCurls, ICoupenVerification verification)
         {
             _credentials = credentials.Value;
             this.userTokens = userTokens;
             this.configuration = configuration;
             this.connection = connection;
             this.apiCurls = apiCurls;
+            this.verification = verification;
         }
 
         public async Task ActiveEmail(TempUsers tempUsers)
@@ -46,30 +48,44 @@ namespace EducoreApp.DAL.Services
                     }
                 };
                 userEmailOptions.Body = GetEmailBody("EmailConfirm.html", userEmailOptions.PlaceHolders);
-                await this.SendEmail(userEmailOptions);
+                if (this.configuration["LiveEmail"] == "false")
+                {
+                    await this.ConnectEmail(userEmailOptions);
+                }
+                else
+                {
+                    await this.SendEmail(userEmailOptions);
+                }
             });
         }
 
-        public async Task ConfirmEmail(Users user)
+        public async Task CouponEmail(Users user)
         {
             await Task.Run(async () =>
             {
-                string otp = new Random().Next(10000, 99999).ToString();
-                UserTokens userTokens = await this.userTokens.SaveUserToken(user.Email, otp, "Confirm Email");
+                CouponVerification verification1 = await this.verification.SaveVerification(1);
+                CouponVerification verification2 = await this.verification.SaveVerification(2);
 
                 UserEmailOptions userEmailOptions = new UserEmailOptions()
                 {
-                    Subject = "Confirm Your Account",
+                    Subject = "Coupon Email",
                     ToEmails = user.Email,
                     PlaceHolders = new List<KeyValuePair<string, string>>()
                     {
-                        new KeyValuePair<string, string>("{{FirstName}}",user.FirstName),
-                        new KeyValuePair<string, string>("{{Email}}",user.Email),
-                        new KeyValuePair<string, string>("{{OTP}}",userTokens.Token)
+                        new KeyValuePair<string, string>("{{FullName}}",user.FirstName),
+                        new KeyValuePair<string, string>("{{c1}}",verification1.Coupon),
+                        new KeyValuePair<string, string>("{{c2}}",verification2.Coupon)
                     }
                 };
-                userEmailOptions.Body = GetEmailBody("EmailConfirm1.html", userEmailOptions.PlaceHolders);
-                await this.SendEmail(userEmailOptions);
+                userEmailOptions.Body = GetEmailBody("Coupon.html", userEmailOptions.PlaceHolders);
+                if (this.configuration["LiveEmail"] == "false")
+                {
+                    await this.ConnectEmail(userEmailOptions);
+                }
+                else
+                {
+                    await this.SendEmail(userEmailOptions);
+                }
             });
         }
 
@@ -92,9 +108,18 @@ namespace EducoreApp.DAL.Services
                     }
                 };
                 userEmailOptions.Body = GetEmailBody("ResetPassword.html", userEmailOptions.PlaceHolders);
-                await this.SendEmail(userEmailOptions);
+                if (this.configuration["LiveEmail"] == "false")
+                {
+                    await this.ConnectEmail(userEmailOptions);
+                }
+                else
+                {
+                    await this.SendEmail(userEmailOptions);
+                }
             });
         }
+
+
 
         public async Task<SmtpClient> SendEmail(UserEmailOptions userEmailOptions)
         {
@@ -117,23 +142,23 @@ namespace EducoreApp.DAL.Services
             return oSmtp;
         }
 
-        /* public async Task ConnectEmail(UserEmailOptions userEmailOptions)
+         public async Task ConnectEmail(UserEmailOptions userEmailOptions)
          {
-             MailMessage mail = new MailMessage
+            System.Net.Mail.MailMessage mail = new System.Net.Mail.MailMessage
              {
                  Subject = userEmailOptions.Subject,
                  Body = userEmailOptions.Body,
-                 From = new MailAddress(_smtpConfig.SenderAddress, _smtpConfig.SenderDisplayName),
-                 IsBodyHtml = _smtpConfig.IsBodyHTML
+                 From = new System.Net.Mail.MailAddress(this.configuration["SMTPConfig:SenderAddress"]),
+                 IsBodyHtml = true
              };
              mail.To.Add(userEmailOptions.ToEmails);
-             using (SmtpClient smtp = new SmtpClient(_smtpConfig.Host, _smtpConfig.Port))
-             {
-                 smtp.EnableSsl = _smtpConfig.EnableSSL;
-                 smtp.Credentials = new NetworkCredential(_smtpConfig.UserName, _smtpConfig.Password);
-                 await smtp.SendMailAsync(mail);
-             }
-         }*/
+            using (System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient(this.configuration["SMTPConfig:Host"], 587))
+            {
+                smtp.EnableSsl = true;
+                 smtp.Credentials = new System.Net.NetworkCredential(this.configuration["SMTPConfig:UserName"], this.configuration["SMTPConfig:Password"]);
+                await smtp.SendMailAsync(mail);
+            }
+         }
 
         public string GetEmailBody(string templateName, List<KeyValuePair<string, string>> keyValuePairs)
         {

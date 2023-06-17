@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -9,6 +10,7 @@ namespace EducoreApp.DAL.DTO
 {
     public class TempUsers
     {
+        [Key]
         public int UserId { get; set; }
         public string FirstName { get; set; } = String.Empty;
         public string LastName { get; set; } = String.Empty;

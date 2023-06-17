@@ -14,13 +14,17 @@ namespace EducoreApp.Web.Controllers
         private ICourse iCourse;
         private IConfiguration configuration;
         private IUser iUser;
+        private IEmailService emailService;
+        private ICoupenVerification coupenVerification;
 
-        public PaymentController(IPaymentDetails paymentDetails, ICourse iCourse, IConfiguration configuration, IUser iUser)
+        public PaymentController(IPaymentDetails paymentDetails, ICourse iCourse, IConfiguration configuration, IUser iUser, IEmailService emailService, ICoupenVerification coupenVerification)
         {
             this.paymentDetails = paymentDetails;
             this.iCourse = iCourse;
             this.configuration = configuration;
             this.iUser = iUser;
+            this.emailService = emailService;
+            this.coupenVerification = coupenVerification;
         }
 
         private int UserId
@@ -47,26 +51,30 @@ namespace EducoreApp.Web.Controllers
             return Ok(await this.paymentDetails.GetCourseVideos(CourseId));
         }
 
-        [HttpGet]
-        public async Task<ActionResult<Course>> SelectCourse(int CourseId)
+        [HttpPost]
+        public async Task<ActionResult<Course>> SelectCourse([FromForm]SelectCourse selectCourse)
         {
-            Course course = await this.iCourse.GetCourse(CourseId);
+            Course course = await this.iCourse.GetCourse(selectCourse.CourseId);
             if (course == null)
             {
                 return NotFound("Course not found");
             }
-            Users users = await this.iUser.GetUser(UserId);
-            if (users == null)
+            if (string.IsNullOrEmpty(selectCourse.Coupon))
             {
-                return NotFound(new { message = "User does not find" });
+                return Ok(course);
             }
-            course.Price = course.Price - users.Discounut;
+            int coupon = await this.coupenVerification.GetAmountByCoupon(selectCourse.Coupon, course.CourseId);
+            if (coupon == null)
+            {
+                return NotFound(new { message = "Coupon not found" });
+            }
+            course.Price = course.Price - coupon;
             return Ok(course);
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<Course>> ApplyDiscount(int Discounut, string Users)
+        public async Task<ActionResult<Course>> ApplyDiscount(string Users)
         {
             int[]? users = JsonConvert.DeserializeObject<int[]>(Users);
 
@@ -77,8 +85,7 @@ namespace EducoreApp.Web.Controllers
                 {
                     return NotFound(new { message = $"User does not find of UserId {UserId}" });
                 }
-                users1.Discounut = Discounut;
-                await this.iUser.UpdateUser(users1);
+                await this.emailService.CouponEmail(users1);
             }
             return Ok("Apply discount done");
         }
@@ -91,18 +98,18 @@ namespace EducoreApp.Web.Controllers
             {
                 return NotFound("Course not found");
             }
-            Users users = await this.iUser.GetUser(UserId);
-            if (users == null)
-            {
-                return NotFound(new { message = "User does not find" });
-            }
             RazorpayClient _razorpayClient = new RazorpayClient(this.configuration["RayzorPay:Key"], this.configuration["RayzorPay:Secrete"]);
 
             var payment = _razorpayClient.Payment.Fetch(request.PaymentId);
-            string ss = JsonConvert.SerializeObject(payment.Attributes);
 
-            users.Discounut = 0;
-            await this.iUser.UpdateUser(users);
+            string ss = JsonConvert.SerializeObject(payment.Attributes);
+            PaymentStatus status = JsonConvert.DeserializeObject<PaymentStatus>(ss);
+
+            if (status.status == "captured")
+            {
+                await this.coupenVerification.DeleteVerification(request.Coupon);
+            }
+
             await this.paymentDetails.SavePaymentDetails(request, ss);
             return Ok("Payment done succesfully");
         }

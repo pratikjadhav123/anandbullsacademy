@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using System.Text;
 
 namespace EducoreApp.DAL.Helper
 {
@@ -73,6 +74,25 @@ namespace EducoreApp.DAL.Helper
             }
             System.IO.File.Delete(imagePath);
             return "deleted";
+        }
+       
+    }
+    public static class RandomStringGenerator
+    {
+        private static Random random = new Random();
+
+        public static string GenerateRandomString()
+        {
+            int length = 7;
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            StringBuilder stringBuilder = new StringBuilder(length);
+
+            while (stringBuilder.Length < length)
+            {
+                stringBuilder.Append(chars[random.Next(chars.Length)]);
+            }
+
+            return stringBuilder.ToString();
         }
     }
 }
