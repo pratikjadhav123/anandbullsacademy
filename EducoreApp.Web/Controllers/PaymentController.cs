@@ -52,7 +52,7 @@ namespace EducoreApp.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Course>> SelectCourse([FromForm]SelectCourse selectCourse)
+        public async Task<ActionResult<Course>> SelectCourse([FromForm] SelectCourse selectCourse)
         {
             Course course = await this.iCourse.GetCourse(selectCourse.CourseId);
             if (course == null)
@@ -63,12 +63,16 @@ namespace EducoreApp.Web.Controllers
             {
                 return Ok(course);
             }
-            int coupon = await this.coupenVerification.GetAmountByCoupon(selectCourse.Coupon, course.CourseId);
+            CouponVerification coupon = await this.coupenVerification.GetVerificationByCoupon(selectCourse.Coupon);
             if (coupon == null)
             {
-                return NotFound(new { message = "Coupon not found" });
+                return NotFound(new { message = "Coupon is invalid please check the coupon!!" });
             }
-            course.Price = course.Price - coupon;
+            if (coupon.CourseId != course.CourseId)
+            {
+                return NotFound(new { message = "This coupon is not valid for the selected course, Please check the course and coupon!!" });
+            }
+            course.Price = course.Price - (await this.coupenVerification.GetAmountByCoupon(coupon.Coupon, course.CourseId));
             return Ok(course);
         }
 
@@ -85,9 +89,10 @@ namespace EducoreApp.Web.Controllers
                 {
                     return NotFound(new { message = $"User does not find of UserId {UserId}" });
                 }
+                await this.coupenVerification.DeleteVerificationOfUsers(users1);
                 await this.emailService.CouponEmail(users1);
             }
-            return Ok("Apply discount done");
+            return Ok(new { message = "Apply discount done" });
         }
 
         [HttpPost]
@@ -105,13 +110,24 @@ namespace EducoreApp.Web.Controllers
             string ss = JsonConvert.SerializeObject(payment.Attributes);
             PaymentStatus status = JsonConvert.DeserializeObject<PaymentStatus>(ss);
 
-            if (status.status == "captured")
+            if (!string.IsNullOrEmpty(request.Coupon))
             {
-                await this.coupenVerification.DeleteVerification(request.Coupon);
+                CouponVerification coupon = await this.coupenVerification.GetVerificationByCoupon(request.Coupon);
+                if (coupon == null)
+                {
+                    return NotFound(new { message = "Coupon is invalid please check the coupon!!" });
+                }
+                if (coupon.CourseId != course.CourseId)
+                {
+                    return NotFound(new { message = "This coupon is not valid for the selected course, Please check the course and coupon!!" });
+                }
+                if (status.status == "captured")
+                {
+                    await this.coupenVerification.DeleteVerification(request.Coupon);
+                }
             }
-
-            await this.paymentDetails.SavePaymentDetails(request, ss);
-            return Ok("Payment done succesfully");
+           PaymentDetails paymentDetails= await this.paymentDetails.SavePaymentDetails(request, ss);
+            return Ok(paymentDetails);
         }
 
         [HttpPost]

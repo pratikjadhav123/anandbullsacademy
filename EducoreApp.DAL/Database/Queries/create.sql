@@ -64,8 +64,8 @@ CouponId int Identity(1,1) Primary Key,
 CourseId int, 
 Amount int);
 
-drop table CouponVerification
 Create table CouponVerification(
 Id int Identity(1,1) Primary Key,
 CourseId int,
+UserId int,
 Coupon varchar(100))

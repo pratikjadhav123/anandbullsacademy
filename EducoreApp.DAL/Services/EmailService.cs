@@ -5,6 +5,7 @@ using EducoreApp.DAL.DTO;
 using EducoreApp.DAL.Helper;
 using EducoreApp.DAL.Interface;
 using EducoreApp.DAL.Request;
+using Hangfire;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -50,11 +51,11 @@ namespace EducoreApp.DAL.Services
                 userEmailOptions.Body = GetEmailBody("EmailConfirm.html", userEmailOptions.PlaceHolders);
                 if (this.configuration["LiveEmail"] == "false")
                 {
-                    await this.ConnectEmail(userEmailOptions);
+                    BackgroundJob.Enqueue(() => this.ConnectEmail(userEmailOptions));
                 }
                 else
                 {
-                    await this.SendEmail(userEmailOptions);
+                    BackgroundJob.Enqueue(() =>  this.SendEmail(userEmailOptions));
                 }
             });
         }
@@ -63,8 +64,8 @@ namespace EducoreApp.DAL.Services
         {
             await Task.Run(async () =>
             {
-                CouponVerification verification1 = await this.verification.SaveVerification(1);
-                CouponVerification verification2 = await this.verification.SaveVerification(2);
+                CouponVerification verification1 = await this.verification.SaveVerification(user,1);
+                CouponVerification verification2 = await this.verification.SaveVerification(user,2);
 
                 UserEmailOptions userEmailOptions = new UserEmailOptions()
                 {
@@ -80,11 +81,11 @@ namespace EducoreApp.DAL.Services
                 userEmailOptions.Body = GetEmailBody("Coupon.html", userEmailOptions.PlaceHolders);
                 if (this.configuration["LiveEmail"] == "false")
                 {
-                    await this.ConnectEmail(userEmailOptions);
+                    BackgroundJob.Enqueue(() => this.ConnectEmail(userEmailOptions));
                 }
                 else
                 {
-                    await this.SendEmail(userEmailOptions);
+                    BackgroundJob.Enqueue(() => this.SendEmail(userEmailOptions));
                 }
             });
         }
@@ -119,8 +120,6 @@ namespace EducoreApp.DAL.Services
             });
         }
 
-
-
         public async Task<SmtpClient> SendEmail(UserEmailOptions userEmailOptions)
         {
             EmailConfig? emailConfig = await this.GetEmailConfig();
@@ -136,29 +135,29 @@ namespace EducoreApp.DAL.Services
             oMail.To = userEmailOptions.ToEmails;
             oMail.Subject = userEmailOptions.Subject;
             oMail.HtmlBody = userEmailOptions.Body;
-            
+
             SmtpClient oSmtp = new SmtpClient();
             oSmtp.SendMail(oServer, oMail);
             return oSmtp;
         }
 
-         public async Task ConnectEmail(UserEmailOptions userEmailOptions)
-         {
+        public async Task ConnectEmail(UserEmailOptions userEmailOptions)
+        {
             System.Net.Mail.MailMessage mail = new System.Net.Mail.MailMessage
-             {
-                 Subject = userEmailOptions.Subject,
-                 Body = userEmailOptions.Body,
-                 From = new System.Net.Mail.MailAddress(this.configuration["SMTPConfig:SenderAddress"]),
-                 IsBodyHtml = true
-             };
-             mail.To.Add(userEmailOptions.ToEmails);
+            {
+                Subject = userEmailOptions.Subject,
+                Body = userEmailOptions.Body,
+                From = new System.Net.Mail.MailAddress(this.configuration["SMTPConfig:SenderAddress"]),
+                IsBodyHtml = true
+            };
+            mail.To.Add(userEmailOptions.ToEmails);
             using (System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient(this.configuration["SMTPConfig:Host"], 587))
             {
                 smtp.EnableSsl = true;
-                 smtp.Credentials = new System.Net.NetworkCredential(this.configuration["SMTPConfig:UserName"], this.configuration["SMTPConfig:Password"]);
+                smtp.Credentials = new System.Net.NetworkCredential(this.configuration["SMTPConfig:UserName"], this.configuration["SMTPConfig:Password"]);
                 await smtp.SendMailAsync(mail);
             }
-         }
+        }
 
         public string GetEmailBody(string templateName, List<KeyValuePair<string, string>> keyValuePairs)
         {
