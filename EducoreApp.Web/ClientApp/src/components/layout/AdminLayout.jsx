@@ -10,6 +10,7 @@ import auth from "../../utils/auth";
 import CourseSetting from "../pagesAdmin/courseSetting/CourseSetting";
 import VideoSetting from "../pagesAdmin/videoSetting/VideoSetting";
 import UserSetting from "../pagesAdmin/userSetting/UserSetting";
+import CouponSetting from "../pagesAdmin/couponSetting/CouponSetting";
 function AdminLayout() {
   const [load, setLoad] = useState(false);
   const contextObj = useContext(AppContext);
@@ -48,8 +49,8 @@ function AdminLayout() {
             />
             <Route
               exact
-              path={`${process.env.PUBLIC_URL}/Admin/PayementSetting`}
-              component={GuidePage}
+              path={`${process.env.PUBLIC_URL}/Admin/CouponSetting`}
+              component={CouponSetting}
             />
           </Switch>
           <Footer className="footer-area mt-110" />

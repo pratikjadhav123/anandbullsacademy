@@ -54,6 +54,9 @@ function Header() {
       navigate.push("/")
       notice.warning("Login Again to Continue learning ")
       contextObj.getUser();
+    }).catch((error)=>{
+      navigate.push("/")
+      contextObj.getUser();
     })
   }
   console.log("header",contextObj?.user);
@@ -112,12 +115,12 @@ function Header() {
               <Link
                 className="category-box"
                 onClick={scrollTop}
-                to={`${process.env.PUBLIC_URL}/Admin/PayementSetting`}
+                to={`${process.env.PUBLIC_URL}/Admin/CouponSetting`}
               >
                 <div className="cate-icon mx-auto">
                   <img src={process.env.PUBLIC_URL + "/images/icons/payment-icon.svg"} alt="images" />
                 </div>
-                <h5>Payment Setting</h5>
+                <h5>Coupon Setting</h5>
               </Link>
             </div>
           </div>

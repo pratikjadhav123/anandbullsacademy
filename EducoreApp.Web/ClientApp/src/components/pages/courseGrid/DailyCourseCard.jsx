@@ -12,7 +12,7 @@ function DailyCourseCard(props) {
         <div className="package-thumb">
           <Link
             onClick={scrollTop}
-            to={`${process.env.PUBLIC_URL}/course-details`}
+            to={`${process.env.PUBLIC_URL}/dailyCourse`}
           >
             <img src={props.image} alt="images" />
           </Link>
@@ -24,7 +24,7 @@ function DailyCourseCard(props) {
           <h3 className="p-card-title">
             <Link
               onClick={scrollTop}
-              to={`${process.env.PUBLIC_URL}/course-details`}
+              to={`${process.env.PUBLIC_URL}/dailyCourse`}
             >
               {props.title}
             </Link>
@@ -33,7 +33,7 @@ function DailyCourseCard(props) {
             <div className="book-btn">
               <Link
                 onClick={scrollTop}
-                to={`${process.env.PUBLIC_URL}/course-details/dailyCourse`}
+                to={`${process.env.PUBLIC_URL}/dailyCourse`}
               >
                 Join Now <i className="bx bxs-right-arrow-alt" />
               </Link>

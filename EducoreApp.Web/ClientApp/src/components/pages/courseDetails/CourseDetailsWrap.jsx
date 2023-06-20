@@ -3,8 +3,8 @@ import WidgetForm from "./WidgetForm";
 import PackageHeader from "./PackageHeader";
 import PackageDetailsTab from "./PackageDetailsTab";
 
-function CourseDetailsWrap({ courseDetail, user, myCourseData }) {
-  let MyCourse =  myCourseData?.find((item)=> item.CourseId === courseDetail.CourseId );
+function CourseDetailsWrap({ courseDetail, user, myCourseData, getCourseDetail, coupon, setCoupon }) {
+  let MyCourse = myCourseData?.find((item) => item.CourseId === courseDetail.CourseId);
   return (
     <>
       <div className="package-details-wrapper pt-90">
@@ -18,7 +18,14 @@ function CourseDetailsWrap({ courseDetail, user, myCourseData }) {
             </div>
             <div className="col-lg-4">
               <div className="package-sidebar">
-                <WidgetForm courseDetail={courseDetail} user={user} MyCourse={MyCourse} />
+                <WidgetForm
+                  courseDetail={courseDetail}
+                  user={user}
+                  MyCourse={MyCourse}
+                  getCourseDetail={getCourseDetail}
+                  coupon={coupon}
+                  setCoupon={setCoupon}
+                />
               </div>
             </div>
           </div>
