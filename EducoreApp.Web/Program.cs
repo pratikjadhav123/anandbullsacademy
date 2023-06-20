@@ -97,6 +97,7 @@ app.UseSwaggerUI(c =>
     c.DocExpansion(DocExpansion.None);
 });
 
+app.UseHangfireServer();
 app.UseRouting();
 app.UseCors("MyCorsPolicy");
 
@@ -105,7 +106,6 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseHangfireDashboard();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
