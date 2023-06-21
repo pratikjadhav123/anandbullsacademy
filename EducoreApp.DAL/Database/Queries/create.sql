@@ -26,8 +26,10 @@ RequestedType varchar(200),
 Token varchar(max),
 ExpiredDate Datetime)
 
+
 Create table Courses(
 CourseId int Identity(1,1) Primary Key,
+MainCourseId int,
 Title varchar(1000),
 Description nvarchar(max),
 Price int,
