@@ -29,7 +29,7 @@ namespace EducoreApp.DAL.Services
                 {
                     new Claim(JwtRegisteredClaimNames.Sub, user.FirstName),
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                    new Claim("Date", DateTime.Now.ToString()),
+                    new Claim("Date", DateTime.UtcNow.ToString()),
                     new Claim("UserId", user.UserId.ToString()),
                     new Claim(ClaimTypes.Role, user.Role),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
@@ -40,7 +40,7 @@ namespace EducoreApp.DAL.Services
                 var token = new JwtSecurityToken(this.configuration["JwtAuth:Issuer"],
                 this.configuration["JwtAuth:Issuer"],
                 claims,
-                expires: DateTime.Now.AddHours(48),
+                expires: DateTime.UtcNow.AddHours(48),
                 signingCredentials: credentials);
 
                 string tokens = new JwtSecurityTokenHandler().WriteToken(token);
@@ -69,7 +69,7 @@ namespace EducoreApp.DAL.Services
                 UserTokens.RequestedBy = Email;
                 UserTokens.RequestedType = RequestedType;
                 UserTokens.Token = otp;
-                UserTokens.ExpiredDate = DateTime.Now.AddHours(48);
+                UserTokens.ExpiredDate = DateTime.UtcNow.AddHours(48);
 
                 string query = "Insert into UserTokens OUTPUT inserted.* values(@RequestedBy,@RequestedType,@Token,@ExpiredDate)";
 
@@ -89,7 +89,7 @@ namespace EducoreApp.DAL.Services
                 UserTokens.RequestedBy = users.Email;
                 UserTokens.RequestedType = "User Token";
                 UserTokens.Token = Token;
-                UserTokens.ExpiredDate = DateTime.Now.AddDays(1);
+                UserTokens.ExpiredDate = DateTime.UtcNow.AddDays(1);
 
                 string query = "Insert into UserTokens OUTPUT inserted.* values(@RequestedBy,@RequestedType,@Token,@ExpiredDate)";
 

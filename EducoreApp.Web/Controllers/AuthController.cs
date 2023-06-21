@@ -55,7 +55,7 @@ namespace EducoreApp.Web.Controllers
             {
                 return NotFound(new { message = "Invalid Otp please check OTP!!" });
             }
-            if (userTokens.ExpiredDate < DateTime.Now)
+            if (userTokens.ExpiredDate < DateTime.UtcNow)
             {
                 await this.iUserTokens.DeleteUser(userTokens);
                 return NotFound(new { message = "OTP expired please send OTP agnain!!!" });
@@ -139,7 +139,7 @@ namespace EducoreApp.Web.Controllers
         public async Task<ActionResult<Users>> ResetPassword([FromForm] ResetPasswordRequest passwordRequest)
         {
             UserTokens userTokens = await this.iUserTokens.GetToken(passwordRequest.Token, "Reset Password");
-            if (userTokens == null || userTokens.ExpiredDate < DateTime.Now)
+            if (userTokens == null || userTokens.ExpiredDate < DateTime.UtcNow)
             {
                 return NotFound(new { message = "Token is invalid please check the token" });
             }

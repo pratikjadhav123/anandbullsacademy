@@ -4,6 +4,7 @@ namespace EducoreApp.DAL.Request
 {
     public class CourseRequest
     {
+        public int MainCourseId { get; set; } = 0;
         [Required]
         public string Title { get; set; } = string.Empty;
 

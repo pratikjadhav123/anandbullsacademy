@@ -44,7 +44,7 @@ namespace EducoreApp.Web.Controllers
                 Email = email,
                 AccessToken = responces.access_token,
                 RefreshToken = responces.refresh_token,
-                ExpiredTime = DateTime.Now.AddMinutes(30)
+                ExpiredTime = DateTime.UtcNow.AddMinutes(30)
             };
             await this.emailService.DeleteEmailConfig();
             EmailConfig emailConfig1 = await this.emailService.SaveEmailConfig(emailConfig);

@@ -9,6 +9,8 @@ namespace EducoreApp.DAL.Interface
 
         public Task<Course> GetCourse(int CourseId);
 
+        public Task<Course> GetCourseByMainCourseId(int MainCourseId);
+
         public Task<Course> SaveCourse(CourseRequest courseRequest);
 
         public Task<Course> UpdateCourse(Course Course, CourseRequest courseRequest);

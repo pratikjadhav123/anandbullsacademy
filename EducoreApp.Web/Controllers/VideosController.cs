@@ -26,26 +26,6 @@ namespace EducoreApp.Web.Controllers
         }
 
         [Authorize]
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Videos>>> GetVideos()
-        {
-            IEnumerable<Videos> Videos = await this.iVideos.GetVideos();
-            return Ok(Videos);
-        }
-
-        [Authorize]
-        [HttpGet("{VideoId}")]
-        public async Task<ActionResult<Videos>> GetVideo(int VideoId)
-        {
-            Videos Videos = await this.iVideos.GetVideo(VideoId);
-            if (Videos == null)
-            {
-                return NotFound(new { message = "Videos not found" });
-            }
-            return Ok(Videos);
-        }
-
-        [Authorize]
         [HttpGet("{VideoUrl}")]
         public async Task<ActionResult<Videos>> GetLink(string VideoUrl)
         {

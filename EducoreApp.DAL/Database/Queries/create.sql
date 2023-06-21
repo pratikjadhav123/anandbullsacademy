@@ -49,7 +49,9 @@ PaymentId varchar(200),
 CourseId int,
 UserId int,
 Details nvarchar(max),
-PaymentDate datetime
+PaymentDate datetime,
+ExpiredDate datetime,
+Status varchar(100)
 );
 
 Create table EmailConfig(

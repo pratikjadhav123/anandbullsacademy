@@ -32,7 +32,7 @@ namespace EducoreApp.Web.Controllers
             get { return Convert.ToInt32(HttpContext.User.FindFirst("UserId").Value); }
         }
 
-        [HttpGet]
+       /* [HttpGet]
         public async Task<ActionResult<IEnumerable<Course>>> GetPurchasedCourses()
         {
             IEnumerable<Course> courses = await this.paymentDetails.GetPurchasedCourses();
@@ -47,9 +47,18 @@ namespace EducoreApp.Web.Controllers
             {
                 return NotFound(new { message = "Course not found" });
             }
-
             return Ok(await this.paymentDetails.GetCourseVideos(CourseId));
-        }
+        }*/
+       /* [HttpGet]
+        public async Task<IActionResult> GetCourseRecording(int CourseId)
+        {
+            Course Course = await this.iCourse.GetCourse(CourseId);
+            if (Course == null)
+            {
+                return NotFound(new { message = "Course not found" });
+            }
+            return Ok(await this.paymentDetails.GetCourseRecording(CourseId));
+        }*/
 
         [HttpPost]
         public async Task<ActionResult<Course>> SelectCourse([FromForm] SelectCourse selectCourse)
@@ -121,16 +130,25 @@ namespace EducoreApp.Web.Controllers
                 {
                     return NotFound(new { message = "This coupon is not valid for the selected course, Please check the course and coupon!!" });
                 }
-                if (status.status == "captured")
+                if (status.status == "authorized")
                 {
                     await this.coupenVerification.DeleteVerification(request.Coupon);
                 }
             }
-           PaymentDetails paymentDetails= await this.paymentDetails.SavePaymentDetails(request, ss);
+            DateTime dateTime;
+            if (course.MainCourseId == 0)
+            {
+                dateTime = DateTime.UtcNow.AddMinutes(Convert.ToInt32(this.configuration["ExpiredTimeInMinutes"]));
+            }
+            else
+            {
+                dateTime = DateTime.UtcNow.AddDays(30);
+            }
+           PaymentDetails paymentDetails= await this.paymentDetails.SavePaymentDetails(request, ss, dateTime);
             return Ok(paymentDetails);
         }
 
-        [HttpPost]
+       /* [HttpPost]
         public ActionResult<string> GetPaymentDetails(string paymentId)
         {
             RazorpayClient _razorpayClient = new RazorpayClient(this.configuration["RayzorPay:Key"], this.configuration["RayzorPay:Secrete"]);
@@ -144,7 +162,7 @@ namespace EducoreApp.Web.Controllers
             {
                 return BadRequest(ex.Message);
             }
-        }
+        }*/
     }
 
     public class PaymentStatus

@@ -31,7 +31,7 @@ namespace EducoreApp.DAL.Middlewares
                     await context.Response.WriteAsJsonAsync(new { message = "Please login again" });
                     return;
                 }
-                if (user.ExpiredDate <= DateTime.Now)
+                if (user.ExpiredDate <= DateTime.UtcNow)
                 {
                     await _iUserTokenService.DeleteToken(jwtEncodedString);
                     context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;

@@ -16,6 +16,9 @@ namespace EducoreApp.DAL.DTO
         public int UserId { get; set; }
         public string? Details { get; set; }
         public DateTime PaymentDate { get; set; }
+        public DateTime ExpiredDate { get; set; }
+        public string? Status { get; set; }
+
     }
     public class PaymentHistory
     {

@@ -93,7 +93,7 @@ namespace EducoreApp.DAL.Services
                 users.Email = tempUsers.Email;
                 users.Password = tempUsers.Password;
                 users.Mobile = tempUsers.Mobile;
-                users.OTPVerification = DateTime.Now;
+                users.OTPVerification = DateTime.UtcNow;
 
                 string query = "Insert into Users OUTPUT inserted.* values(@FirstName,@LastName,@Email,@Password,@Mobile,@Active,@Role,@Avatar,@EmailVerification,@OTPVerification);";
 

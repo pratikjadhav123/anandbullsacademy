@@ -192,14 +192,14 @@ namespace EducoreApp.DAL.Services
                 using (var con = this.connection.connection())
                 {
                     EmailConfig emailConfig = await con.QueryFirstOrDefaultAsync<EmailConfig>(query);
-                    if (emailConfig.ExpiredTime < DateTime.Now)
+                    if (emailConfig.ExpiredTime < DateTime.UtcNow)
                     {
                         var request = $"{_credentials.tokenUri}?refresh_token={emailConfig.RefreshToken}&redirect_uri={_credentials.redirectUri}&client_id={_credentials.clientID}&client_secret={_credentials.clientSecret}&grant_type=refresh_token";
                         string token = await this.apiCurls.GetTokens(request);
                         Responces? responces = JsonConvert.DeserializeObject<Responces>(token);
 
                         emailConfig.AccessToken = responces.access_token;
-                        emailConfig.ExpiredTime = DateTime.Now.AddMinutes(30);
+                        emailConfig.ExpiredTime = DateTime.UtcNow.AddMinutes(30);
                         await this.UpdateEmailConfig(emailConfig);
                     }
                     return emailConfig;
