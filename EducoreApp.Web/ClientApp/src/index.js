@@ -23,6 +23,8 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import HomePageTwo from './components/pages/homeTwo/HomePageTwo';
 import AdminLayout from './components/layout/AdminLayout';
+import ResetPassword from './components/pages/auth/ResetPassword';
+import DailyCourseDetail from './components/pages/courseDetails/DailyCourse/DailyCourseDetail';
 // import "./assets/scss/style.scss";
 /*
  * Version :Tourx-pro 0.1
@@ -44,19 +46,14 @@ function Root() {
     <>
       <BrowserRouter basename="/">
         <Switch>
-          {/*main layout*/}
           <Route exact path="/" component={HomePageTwoLayout} />
-          {/* secound layout */}
           <Route path="/Admin" component={AdminLayout} />
-          {/* all inner page load layout component */}
           <Layout>
             <Route
               exact
               path={`${process.env.PUBLIC_URL}/about`}
               component={About}
             />
-
-            {/* all package pages component */}
             <Route
               exact
               path={`${process.env.PUBLIC_URL}/courses`}
@@ -67,8 +64,11 @@ function Root() {
               path={`${process.env.PUBLIC_URL}/course-details/:id`}
               component={CourseDetails}
             />
-
-            {/* all blog pages */}
+            <Route
+              exact
+              path={`${process.env.PUBLIC_URL}/dailyCourse`}
+              component={DailyCourseDetail}
+            />
             <Route
               exact
               path={`${process.env.PUBLIC_URL}/guide`}
@@ -99,6 +99,11 @@ function Root() {
               exact
               path={`${process.env.PUBLIC_URL}/auth/:path`}
               component={Auth}
+            />
+            <Route
+              exact
+              path={`${process.env.PUBLIC_URL}/resetpassword/:token`}
+              component={ResetPassword}
             />
             <Route
               exact

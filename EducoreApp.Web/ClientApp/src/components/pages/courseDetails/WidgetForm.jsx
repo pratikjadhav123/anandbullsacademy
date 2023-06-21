@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import notice from "../../../plugins/notice";
 import payment from "../../../utils/payment";
 
-function WidgetForm({ courseDetail, user, MyCourse }) {
-  const navigate = useHistory()
+function WidgetForm({ courseDetail, user, MyCourse, getCourseDetail, coupon, setCoupon }) {
+  const navigate = useHistory();
+  const [applycoupon, setApplycoupon] = useState()
   const loadScript = (src) => {
     return new Promise((resolve) => {
       const script = document.createElement('script')
@@ -20,13 +21,15 @@ function WidgetForm({ courseDetail, user, MyCourse }) {
       document.body.appendChild(script)
     })
   }
-
   const assignProject = (paymentId) => {
     const formData = new FormData();
     formData.append("CourseId", courseDetail.CourseId)
     formData.append("PaymentId", paymentId)
+    formData.append("Coupon", applycoupon ? applycoupon : '')
     payment.purchaseCourse(formData).then((data) => {
       navigate.push("/myProfile")
+    }).catch((error) => {
+      console.log(error);
     })
   }
 
@@ -41,6 +44,7 @@ function WidgetForm({ courseDetail, user, MyCourse }) {
     var options = {
       key: "rzp_test_n9RwaKTC23Vqz2",
       currency: "INR",
+      receipt: "receipt_order_74394",
       // key_secret: "AV6utSKOogRsoOMncWVq7T1r",
       amount: (courseDetail.Price + (0.02 * courseDetail.Price)) * 100,
       name: "Anand bulls trading acadamy",
@@ -75,13 +79,18 @@ function WidgetForm({ courseDetail, user, MyCourse }) {
       displayRazorpay()
     }
   }
+  const applyCoupon = () => {
+    if (!user) {
+      notice.warning("Please Sign in to check Validity of COUPON")
+    } else {
+      getCourseDetail();
+      setApplycoupon(coupon)
+    }
+  }
   return (
     <>
-      {!MyCourse ? <aside className="package-widget-style-2 widget-form mt-5">
+      {!MyCourse ? <aside className="package-widget-style-2 widget-search widget-form mt-5">
         <div className="widget-title text-center ">
-
-          {/* <h4>Join This Course</h4> */}
-
           <span className="widget-lavel">
             Payment Structure <h4>₹{courseDetail.Price}</h4> is Course Fees and <h4>2% i.e. ₹{0.02 * courseDetail.Price}</h4> is Payment Gateway Charge
           </span>
@@ -91,8 +100,13 @@ function WidgetForm({ courseDetail, user, MyCourse }) {
           <form
             onSubmit={(e) => e.preventDefault()}
           >
-            <div className="booking-form-wrapper">
-              <div className="custom-input-group">
+
+            <div className="booking-form-wrapper mt-2">
+              <div className="search-input-group">
+                <input type="search" placeholder="Apply your COUPON code here" value={coupon} onChange={(e) => setCoupon(e.target.value)} />
+                <button type="submit" onClick={applyCoupon} >APPLY</button>
+              </div>
+              <div className="custom-input-group mt-0">
                 <div className="submite-btn">
                   <button style={{ borderRadius: "0px" }} type="submit" onClick={checkout}> <h4>₹{courseDetail.Price + (0.02 * courseDetail.Price)}</h4>Check Out</button>
                 </div>

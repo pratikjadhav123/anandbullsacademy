@@ -74,7 +74,6 @@ const auth = {
                 })
                 .catch(({ response }) => {
                     this.destroyToken();
-                    notice.error(response.data.message);
                     reject(response);
                 });
         });

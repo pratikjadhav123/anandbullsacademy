@@ -6,6 +6,7 @@ import auth from "../../../utils/auth";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import useValidator from "../../../plugins/validator";
 import { AppContext } from "../../../plugins/AppContext";
+import Loading from "../../common/Loading";
 const reset = {
   FirstName: "",
   LastName: "",
@@ -18,6 +19,7 @@ function RegisterForm() {
   const [register, setRegister] = useState(reset);
   const [validator, showMessage] = useValidator();
   const [validator2, showMessage2] = useValidator();
+  const [isSubmit, setIsSubmit] = useState(false);
   const contextObj = useContext(AppContext);
   const [fakeOtp, setFakeOtp] = useState(false);
   const navigate = useHistory()
@@ -35,7 +37,7 @@ function RegisterForm() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
+
     handleSetData(name, value)
   }
   const handleOtp = (e) => {
@@ -58,13 +60,15 @@ function RegisterForm() {
   const handleRegister = (e) => {
     e.preventDefault()
     if (validator.allValid()) {
-      register.Mobile = "+91"+ register.Mobile
+      setIsSubmit(true)
       auth.register(register).then((data) => {
+        setIsSubmit(false);
         notice.success(data.message)
         setFakeOtp(true);
-      }).catch(error =>
+      }).catch((error) => {
+        setIsSubmit(false);
         console.log("error", error)
-      )
+      })
     }
     else {
       showMessage(true);
@@ -151,8 +155,8 @@ function RegisterForm() {
                 <div className="custom-input-group">
                   <input type="text" placeholder="OTP" id="OTP" name="OTP" value={otp.OTP} onChange={handleOtp} />
                   {error?.OTP &&
-                  <span className='error' style={{ color: "red" }}> {error?.OTP}</span>}
-              </div>
+                    <span className='error' style={{ color: "red" }}> {error?.OTP}</span>}
+                </div>
                 <div className="custom-input-group">
                   <div className="submite-btn">
                     <button type="submit" onClick={handleOtpSubmit}>Submit</button>
@@ -166,6 +170,7 @@ function RegisterForm() {
             </form>}
         </div>
       </aside>
+      {isSubmit && <Loading />}
     </>
   );
 }

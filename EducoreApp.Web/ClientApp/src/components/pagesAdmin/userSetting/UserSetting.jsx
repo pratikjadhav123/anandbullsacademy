@@ -1,11 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
-import { AppContext } from "../../../plugins/AppContext";
+import React, { useEffect, useState } from "react";
 import Loading from "../../common/Loading";
 import users from "../../../utils/users";
 import UserSettingWrapper from "./UserSettingWrapper";
 
 function UserSetting() {
-    const contextObj = useContext(AppContext);
     const [usersList, setUsersList] = useState([]);
     const [loading, setLoading] = useState(true);
     useEffect(() => {

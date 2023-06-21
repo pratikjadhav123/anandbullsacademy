@@ -1,12 +1,27 @@
 import axios from '../plugins/axios'
 import notice from '../plugins/notice';
 
-const payment = {
-    getCourse() {
+const coupon = {
+    list() {
         return new Promise((resolve, reject) => {
             axios.setToken();
             axios
-                .get('Payment/GetPurchasedCourses')
+                .get('Coupon/GetCoupons')
+                .then(({ data }) => {
+                    resolve(data);
+                })
+                .catch(({ response }) => {
+                    reject(response);
+                    notice.error(response.data.message);
+
+                });
+        });
+    },
+    get(id) {
+        return new Promise((resolve, reject) => {
+            axios.setToken();
+            axios
+                .get(`Coupon/GetCoupons/${id}`)
                 .then(({ data }) => {
                     resolve(data);
                 })
@@ -16,11 +31,11 @@ const payment = {
                 });
         });
     },
-    get(data) {
+    GetAmountByCoupon(data) {
         return new Promise((resolve, reject) => {
             axios.setToken();
             axios
-                .post(`Payment/SelectCourse`,data)
+                .get(`Coupon/GetAmountByCoupon?Coupon=${data?.Coupon}&CourseId=${data.CourseId}`)
                 .then(({ data }) => {
                     resolve(data);
                 })
@@ -30,10 +45,11 @@ const payment = {
                 });
         });
     },
-    applyDiscount(data) {
+    update(id,data) {
+        const formdata = new FormData();
         return new Promise((resolve, reject) => {
             axios
-                .post(`Payment/ApplyDiscount?Users=${data.Users}`, data)
+                .update('Coupon/UpdateCoupon',`${id}?Amount=${data.Amount}`, formdata)
                 .then(({ data }) => {
                     // notistack.success(data.message);
                     resolve(data);
@@ -43,22 +59,6 @@ const payment = {
                     notice.error(response.data.message);
                 });
         });
-
-    },
-    purchaseCourse(data) {
-        return new Promise((resolve, reject) => {
-            axios
-                .post('Payment/PurchaseCourse', data)
-                .then(({ data }) => {
-                    // notistack.success(data.message);
-                    resolve(data);
-                })
-                .catch(({ response }) => {
-                    reject(response);
-                    notice.error(response.data.message);
-                });
-        });
-    },
-
+    }
 };
-export default payment;
+export default coupon;

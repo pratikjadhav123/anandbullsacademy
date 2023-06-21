@@ -5,14 +5,13 @@ function CourseCard(props) {
   const scrollTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-  console.log(props);
   return (
     <>
       <div className="package-card-alpha">
         <div className="package-thumb">
           <Link
             onClick={scrollTop}
-            to={`${process.env.PUBLIC_URL}/course-details`}
+            to={`${process.env.PUBLIC_URL}/course-details/${props.course?.CourseId}`}
           >
             <img src={props.image} alt="images" />
           </Link>
@@ -24,7 +23,7 @@ function CourseCard(props) {
           <h3 className="p-card-title">
             <Link
               onClick={scrollTop}
-              to={`${process.env.PUBLIC_URL}/course-details`}
+              to={`${process.env.PUBLIC_URL}/course-details/${props.course?.CourseId}`}
             >
               {props.title}
             </Link>
