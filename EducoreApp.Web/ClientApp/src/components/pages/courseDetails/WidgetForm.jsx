@@ -33,7 +33,7 @@ function WidgetForm({ courseDetail, user, MyCourse, getCourseDetail, coupon, set
     })
   }
 
-  const displayRazorpay = async (amount) => {
+  const displayRazorpay = async () => {
     const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js')
 
     if (!res) {
@@ -44,8 +44,6 @@ function WidgetForm({ courseDetail, user, MyCourse, getCourseDetail, coupon, set
     var options = {
       key: "rzp_test_n9RwaKTC23Vqz2",
       currency: "INR",
-      receipt: "receipt_order_74394",
-      // key_secret: "AV6utSKOogRsoOMncWVq7T1r",
       amount: (courseDetail.Price + (0.02 * courseDetail.Price)) * 100,
       name: "Anand bulls trading acadamy",
       description: "for testing purpose",
@@ -67,6 +65,7 @@ function WidgetForm({ courseDetail, user, MyCourse, getCourseDetail, coupon, set
         email: user.Email,
         contact: user.Mobile
       },
+      capture: true, // Capture the payment immediately after authorization
     };
     var pay = new window.Razorpay(options);
     pay.open();

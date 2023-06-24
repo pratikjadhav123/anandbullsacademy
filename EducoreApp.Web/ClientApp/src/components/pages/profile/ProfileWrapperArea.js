@@ -6,6 +6,7 @@ import auth from "../../../utils/auth";
 import notice from "../../../plugins/notice";
 import { Table } from 'react-bootstrap';
 import payment from "../../../utils/payment";
+import course from "../../../utils/course";
 function ProfileWrapperArea({ user, setUser }) {
     const [courseData, setCourseData] = useState([]);
     const [detail, setDetail] = useState(user);
@@ -26,7 +27,7 @@ function ProfileWrapperArea({ user, setUser }) {
         })
     }
     const getCourse = () => {
-        payment.getCourse().then((data) => {
+        course.getCourse().then((data) => {
             setCourseData(data);
         }).catch((error) => {
             console.error("course", error);

@@ -2,25 +2,11 @@ import axios from '../plugins/axios'
 import notice from '../plugins/notice';
 
 const payment = {
-    getCourse() {
-        return new Promise((resolve, reject) => {
-            axios.setToken();
-            axios
-                .get('Payment/GetPurchasedCourses')
-                .then(({ data }) => {
-                    resolve(data);
-                })
-                .catch(({ response }) => {
-                    reject(response);
-                    notice.error(response.data.message);
-                });
-        });
-    },
     get(data) {
         return new Promise((resolve, reject) => {
             axios.setToken();
             axios
-                .post(`Payment/SelectCourse`,data)
+                .post(`Payment/SelectCourse`, data)
                 .then(({ data }) => {
                     resolve(data);
                 })
@@ -59,6 +45,7 @@ const payment = {
                 });
         });
     },
+
 
 };
 export default payment;

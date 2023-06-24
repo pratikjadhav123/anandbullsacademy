@@ -27,12 +27,12 @@ function AboutWrapperArea() {
                   <div className="row float-images g-4">
                     <div className="col-lg-6 col-md-6 col-sm-6">
                       <div className="about-image">
-                        <img src={process.env.PUBLIC_URL + "/images/chart1.png"} alt="aboutIMG" />
+                        <img src={process.env.PUBLIC_URL + "/images/slide-2.png"} alt="aboutIMG" />
                       </div>
                     </div>
                     <div className="col-lg-6 col-md-6 col-sm-6">
                       <div className="about-image">
-                        <img src={process.env.PUBLIC_URL + "/images/canddles1.png"} alt="aboutIMG" />
+                        <img src={process.env.PUBLIC_URL + "/images/slider1.jpg"} alt="aboutIMG" />
                       </div>
                     </div>
                   </div>

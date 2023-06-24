@@ -111,7 +111,7 @@ function Header() {
                 <h5>Video Setting</h5>
               </Link>
             </div>
-            <div className="col">
+            {/* <div className="col">
               <Link
                 className="category-box"
                 onClick={scrollTop}
@@ -122,7 +122,7 @@ function Header() {
                 </div>
                 <h5>Coupon Setting</h5>
               </Link>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

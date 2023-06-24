@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import VideoPlayer from "./VideoPlayer";
-import videos from "../../../../utils/videos";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
-import DailyCourseWrap from "../../courseDetails/DailyCourse/DailyCourseWrap";
+// import DailyCourseWrap from "../../courseDetails/DailyCourse/DailyCourseWrap";
+import course from "../../../../utils/course";
 function CourseVideo() {
     const [videosList, setVideosList] = useState([]);
     const { id } = useParams()
@@ -10,8 +10,10 @@ function CourseVideo() {
         getVideos()
     }, []);
     const getVideos = () => {
-        videos.list().then((data) => {
+        course.getCourseVideo(id).then((data) => {
             setVideosList(data);
+        }).catch((error) => {
+            console.log(error);
         })
     }
     return (
@@ -40,7 +42,7 @@ function CourseVideo() {
                                                 <h4>Video List</h4>
                                             </div>
                                         </li>
-                                        {id ===2 && <li className="nav-item" role="presentation">
+                                        {/* {id === "2" && <li className="nav-item" role="presentation">
                                             <div
                                                 className="nav-link"
                                                 id="pills-about2"
@@ -52,7 +54,7 @@ function CourseVideo() {
                                             >
                                                 <h4>Daily market update</h4>
                                             </div>
-                                        </li>}
+                                        </li>} */}
                                     </ul>
                                 </div>
                             </div>
@@ -70,22 +72,23 @@ function CourseVideo() {
                                 >
 
                                     <div className="row pt-3">
-                                        {videosList?.map((video, index) => (
+                                        {videosList.length ? videosList?.map((video, index) => (
                                             <div className="col-md-12" key={index}>
                                                 <VideoPlayer video={video} />
                                             </div>
-                                        ))}
-
+                                        )) : <div className="col-md-12" >
+                                            No Video Found in this Course
+                                        </div>}
                                     </div>
                                 </div>
-                                <div
+                                {/* <div
                                     className="tab-pane fade "
                                     id="about-pills2"
                                     role="tabpanel"
                                     aria-labelledby="pills-about2"
                                 >
-                                   <DailyCourseWrap/>
-                                </div>
+                                    <DailyCourseWrap />
+                                </div> */}
                             </div>
                         </div>
 

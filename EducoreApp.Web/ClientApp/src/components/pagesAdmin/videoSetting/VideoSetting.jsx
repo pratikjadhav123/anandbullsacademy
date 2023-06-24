@@ -16,6 +16,8 @@ function VideoSetting() {
         videos.list().then((data) => {
             setLoading(false)
             setVideoList(data);
+        }).catch((err)=>{
+            console.error(err)
         })
     }
 

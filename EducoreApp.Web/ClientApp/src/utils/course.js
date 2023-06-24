@@ -31,6 +31,34 @@ const course = {
                 });
         });
     },
+    getCourse() {
+        return new Promise((resolve, reject) => {
+            axios.setToken();
+            axios
+                .get('Course/GetPurchasedCourses')
+                .then(({ data }) => {
+                    resolve(data);
+                })
+                .catch(({ response }) => {
+                    reject(response);
+                    notice.error(response.data.message);
+                });
+        });
+    },
+    getCourseVideo(id) {
+        return new Promise((resolve, reject) => {
+            axios.setToken();
+            axios
+                .get(`Course/GetCourseVideos?CourseId=${id}`)
+                .then(({ data }) => {
+                    resolve(data);
+                })
+                .catch(({ response }) => {
+                    reject(response);
+                    notice.error(response.data.message);
+                });
+        });
+    },
     create(data) {
         return new Promise((resolve, reject) => {
             axios
