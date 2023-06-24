@@ -16,7 +16,7 @@ function CourseDetails() {
   const [myCourseData, setMyCourseData] = useState([]);
   const contextObj = useContext(AppContext);
   useEffect(() => {
-    getCourseDetail();
+    getCourseDetail()
     if (contextObj?.user) {
       getMyCourse()
     }
@@ -46,7 +46,7 @@ function CourseDetails() {
   }
 
   const getMyCourse = () => {
-    payment.getCourse().then((data) => {
+    course.getCourse().then((data) => {
       setMyCourseData(data);
     }).catch((error) => {
       console.error("course", error);

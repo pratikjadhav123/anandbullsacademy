@@ -38,7 +38,7 @@ function CourseGridWrapper() {
               {courseList?.map((item, index) => <div className="col-lg-4 col-md-6" key={index}>
                 <CourseCard
                   image={process.env.PUBLIC_URL + "/images/youtubeVideo.png"}
-                  hours=""
+                  hours="6 month from date of purches"
                   title={item.Title}
                   price={item.Price}
                   course={item}

@@ -10,13 +10,12 @@ const resete = {
   Price: ""
 }
 function CourseSettingWrapperArea({ courseList, getCourseList }) {
-  console.log("courseList", courseList);
   const [open, setOpen] = useState(false);
   const [data, setData] = useState(resete);
   const [validator, showMessage] = useValidator();
   const error = {
     Title: validator.message(('Title'), data.Title, "required|string"),
-    Description: validator.message(('Description'), data.Description, "required|string|max:200|min:5"),
+    Description: validator.message(('Description'), data.Description, "required|string"),
     Price: validator.message(('Price'), data.Price, "required|integer"),
   }
   const handleChange = (e) => {
@@ -86,7 +85,6 @@ function CourseSettingWrapperArea({ courseList, getCourseList }) {
                         <tr style={{ textAlign: "center" }}>
                           <th>#</th>
                           <th>Title</th>
-                          <th>Description</th>
                           <th>Price</th>
                           <th>Update</th>
                           <th>Delete</th>
@@ -96,7 +94,6 @@ function CourseSettingWrapperArea({ courseList, getCourseList }) {
                         {courseList.length ? courseList.map((data, index) => <tr key={index} style={{ textAlign: "center" }} >
                           <td>{index + 1}</td>
                           <td>{data.Title}</td>
-                          <td>{data.Description}</td>
                           <td>₹ {data.Price}</td>
                           <td><Button variant="light" onClick={() => { setOpen(true); setData(data) }}>Edit Course</Button></td>
                           <td><Button variant="light" onClick={() => { alertConfirm(data.CourseId) }}>Delete Course</Button></td>

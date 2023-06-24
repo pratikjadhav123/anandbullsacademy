@@ -1,6 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import BlogCardGama from "../blog/BlogGrid/BlogCardGama";
 
 function LetesBlogArea() {
   const scrollTop = () => {
