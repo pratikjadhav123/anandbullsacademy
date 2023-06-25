@@ -25,6 +25,13 @@ namespace EducoreApp.Web.Controllers
             get { return Convert.ToInt32(HttpContext.User.FindFirst("UserId").Value); }
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Videos>>> GetVideos()
+        {
+            IEnumerable<Videos> videos = await this.iVideos.GetVideos();
+            return Ok(videos);
+        }
+
         [Authorize]
         [HttpGet("{VideoUrl}")]
         public async Task<ActionResult<Videos>> GetLink(string VideoUrl)

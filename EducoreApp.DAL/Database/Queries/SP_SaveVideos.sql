@@ -15,7 +15,9 @@ AS
 BEGIN
 		BEGIN TRANSACTION Trans1
 		BEGIN TRY
-				
+
+			EXEC('delete Videos where CourseId='''+@CourseId+'''') ;
+
 			MERGE INTO[dbo].[Videos] AS target USING
 			(
 			SELECT id, title FROM OPENJSON(@json,'$.rows')
