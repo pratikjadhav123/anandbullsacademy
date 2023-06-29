@@ -11,4 +11,12 @@ namespace EducoreApp.DAL.Request
         public string? Coupon { get; set; }
 
     }
+    public class PurchaseRequest1
+    {
+        [Required]
+        public int CourseId { get; set; }
+        [Required]
+        public string UserId { get; set; } = string.Empty;
+
+    }
 }
