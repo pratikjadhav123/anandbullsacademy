@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import "react-modal-video/css/modal-video.css";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 
 function AuthWrap() {
-    const [isOpen, setOpen] = useState(false);
     const {path} = useParams();
     return (
         <>

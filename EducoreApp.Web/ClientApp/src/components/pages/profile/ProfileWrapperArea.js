@@ -5,8 +5,8 @@ import ChangePasswordPage from "./ChangePasswordPage";
 import auth from "../../../utils/auth";
 import notice from "../../../plugins/notice";
 import { Table } from 'react-bootstrap';
-import payment from "../../../utils/payment";
 import course from "../../../utils/course";
+import moment from "moment";
 function ProfileWrapperArea({ user, setUser }) {
     const [courseData, setCourseData] = useState([]);
     const [detail, setDetail] = useState(user);
@@ -206,16 +206,16 @@ function ProfileWrapperArea({ user, setUser }) {
                                                                 <thead>
                                                                     <tr style={{ textAlign: "center" }}>
                                                                         <th>Course Name</th>
-                                                                        <th>Price</th>
                                                                         <th>Purchase Date</th>
+                                                                        <th>item.ExpiredDate</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
                                                                     {courseData.map((item, index) =>
                                                                         <tr style={{ textAlign: "center" }} >
                                                                             <td>{item.Title}</td>
-                                                                            <td>{item.Price}</td>
-                                                                            <td>{item.CreatedAt}</td>
+                                                                            <td>{moment(item.CreatedAt).format("DD/MM/YYYY")}</td>
+                                                                            <td>{moment(item.ExpiredDate).format("DD/MM/YYYY")}</td>
                                                                         </tr>)}
                                                                 </tbody>
                                                             </Table> : <h6>No Purchase Record..!</h6>}

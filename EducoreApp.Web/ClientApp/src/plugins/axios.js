@@ -10,7 +10,6 @@ const api = axios.create({
     },
 });
 
-console.log(process.env.REACT_APP_URL);
 export function useAxiosLoader() {
     const [count, setCount] = useState(0);
     const interceptors = useMemo(() => {

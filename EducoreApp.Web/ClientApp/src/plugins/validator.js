@@ -2,7 +2,7 @@ import { useState } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
 import 'simple-react-validator/dist/locale/fr';
 
-const useValidator = (customMessage = {}, customValidator = {}) => {
+const useValidator = (customMessage = {in:"Confirm password must match Password field"}, customValidator = {}) => {
     const [show, setShow] = useState(false);
     const validators = {
         password: {

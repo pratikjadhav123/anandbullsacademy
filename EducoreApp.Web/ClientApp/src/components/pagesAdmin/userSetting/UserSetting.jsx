@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import Loading from "../../common/Loading";
 import users from "../../../utils/users";
 import UserSettingWrapper from "./UserSettingWrapper";
+import course from "../../../utils/course";
 
 function UserSetting() {
     const [usersList, setUsersList] = useState([]);
+    const [courseList, setCourseList] = useState([]);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
         getUserList();
+        getCourseList();
     }, []);
     const getUserList = () => {
         users.list().then((data) => {
@@ -15,10 +18,15 @@ function UserSetting() {
             setUsersList(data);
         })
     }
+    const getCourseList = () => {
+        course.list().then((data) => {
+            setCourseList(data);
+        })
+    }
     return (
         <>
             {loading ? <Loading /> :
-                <UserSettingWrapper usersList={usersList} getUserList={getUserList} />}
+                <UserSettingWrapper courseList={courseList} usersList={usersList} getUserList={getUserList} />}
         </>
     );
 }

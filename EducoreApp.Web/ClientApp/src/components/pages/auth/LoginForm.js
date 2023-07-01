@@ -11,6 +11,7 @@ const reset = {
 }
 function LoginForm() {
   const [login, setLogin] = useState(reset);
+  const [show, setShow] = useState(false);
   const navigate = useHistory()
   const [validator, showMessage] = useValidator();
   const [validator2, showMessage2] = useValidator();
@@ -84,7 +85,8 @@ function LoginForm() {
                   <span className='error' style={{ color: "red" }}> {error?.forgotEmail}</span>}
                </div>
               <div className="custom-input-group">
-                <input type="Password" placeholder="password" id="PassWord" name="Password" value={login.Password} onChange={handleChange} />
+                <input type={show ? "text":"password"} placeholder="password" id="PassWord" name="Password" value={login.Password} onChange={handleChange} />
+                <i onClick={()=>setShow(!show)}className={show ? 'bi-eye-slash' : 'bi-eye'}></i>
                 {error?.Password &&
                   <span className='error' style={{ color: "red" }}> {error?.Password}</span>}
                </div>

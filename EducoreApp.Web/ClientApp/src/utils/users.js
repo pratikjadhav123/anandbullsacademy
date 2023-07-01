@@ -42,6 +42,20 @@ const users = {
                     notice.error(response.data.message);
                 });
         });
+    },
+    PurchaseCourse(data){
+        return new Promise((resolve, reject) => {
+            axios
+                .post('Users/PurchaseCourse', data)
+                .then(({ data }) => {
+                    // notistack.success(data.message);
+                    resolve(data);
+                })
+                .catch(({ response }) => {
+                    reject(response);
+                    notice.error(response.data.message);
+                });
+        });
     }
 };
 export default users;

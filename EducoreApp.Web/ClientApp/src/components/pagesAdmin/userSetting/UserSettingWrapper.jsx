@@ -1,20 +1,21 @@
 import React, { useState } from "react";
-import { Button, Card, Dropdown, Table } from 'react-bootstrap';
+import { Button, Card, Table } from 'react-bootstrap';
 import useValidator from "../../../plugins/validator";
 import notice from "../../../plugins/notice";
 import Swal from 'sweetalert2';
 import users from "../../../utils/users";
-import payment from "../../../utils/payment";
 const resete = {
-  Users: ""
+  UserId: "",
+  CourseId: "",
 }
-function UserSettingWrapper({ usersList, getUserList }) {
+function UserSettingWrapper({ usersList, courseList, getUserList }) {
   const [data, setData] = useState(resete);
-  const [users, setUsers] = useState([]);
+  const [usersData, setUsersData] = useState([]);
   const [search, setSearch] = useState()
   const [validator, showMessage] = useValidator();
   const error = {
-    Users: validator.message(('Users'), data.Users, "required")
+    UserId: validator.message(('UserId'), data.UserId, "required"),
+    CourseId: validator.message(('Course'), data.CourseId, "required")
   }
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,14 +40,14 @@ function UserSettingWrapper({ usersList, getUserList }) {
   }
   const handleCheckbox = (e, index) => {
     const { value, checked } = e.target;
-    const arr = [...users];
+    const arr = [...usersData];
     if (checked) {
       arr.push(parseInt(value));
     } else {
       arr.splice(arr.indexOf(parseInt(value)), 1);
     }
-    setUsers(arr);
-    handleSetData("Users", JSON.stringify(arr))
+    setUsersData(arr);
+    handleSetData("UserId", JSON.stringify(arr))
   }
   const handleAllCheckbox = (e) => {
     const { checked } = e.target;
@@ -54,25 +55,29 @@ function UserSettingWrapper({ usersList, getUserList }) {
     if (checked) {
       usersList.map((item) => {
         arr.push(parseInt(item.UserId));
+        return item;
       })
     }
-    setUsers(arr);
-    handleSetData("Users", JSON.stringify(arr))
+    setUsersData(arr);
+    handleSetData("UserId", JSON.stringify(arr))
   }
-  console.log(data);
-  const handleCoupne = (e) => {
+  const handlePurchesCourse = (e) => {
     e.preventDefault()
-    if (validator.allValid()) {
-      payment.applyDiscount(data).then((data) => {
+    if (validator.allValid() && data.UserId.length) {
+      users.PurchaseCourse(data).then((data) => {
         setData(resete);
+        setUsersData([]);
         getUserList()
-        notice.success("Coupn Code sent to Users Email SuccessFully")
+        notice.success("Course Assign to Selected User ask user to refresh and continue learning")
+      }).catch((error) => {
+        console.log(error);
       })
     } else {
       showMessage(true)
+      notice.info("Select all neccesary field i.e. User and Course")
     }
   }
-  const alertConfirm = (CourseId) => {
+  const alertConfirm = (UserId) => {
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -81,7 +86,7 @@ function UserSettingWrapper({ usersList, getUserList }) {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.value) {
-        users.delete(CourseId).then(() => {
+        users.delete(UserId).then(() => {
           getUserList();
           Swal.fire('Deleted', 'User has been deleted.', 'success')
         });
@@ -107,24 +112,33 @@ function UserSettingWrapper({ usersList, getUserList }) {
                         method="post"
                         id="booking-form"
                       >
-                        <div className="col-lg-12 d-flex">
-                          <div className="col-lg-6 row">
-                            <div className="col-lg-5 mb-1">
+                        <div className="col-lg-12 row d-flex">
+                          {/* <div className="col-lg-12 row"> */}
+                          <div className="col-lg-3 d-flex justify-content-end">
 
-                              <div className="custom-input-group mt-0 mx-2 ">
-                                <div className="submite-btn">
-                                  <button type="submit" onClick={handleCoupne}>Send Coupne </button>
-                                </div>
-                              </div>
+                            <div className="custom-input-group mt-0 ">
+                              {/* <div className="submite-btn"> */}
+                              <button type="submit" onClick={handlePurchesCourse}>Assign Course </button>
+                              {/* </div> */}
                             </div>
-                            <div className="col-lg-7">
-
-                              <div className="custom-input-group m-0">
-                                <input type="text" className="m-0" placeholder="Search User" value={search} onChange={(e) => setSearch(e.target.value)} />
-                              </div>
-                            </div>
-
                           </div>
+                          <div className="col-lg-4">
+                            <div className="custom-input-group m-0">
+                              <select className="form-select m-0" aria-label="Default select example" name="CourseId" value={data.CourseId} onChange={handleChange}>
+                                <option value="">Select a course</option>
+                                {courseList?.map((item) => <option key={item.CourseId} value={item.CourseId}>{item.Title}</option>)}
+                              </select>
+                              {error?.CourseId &&
+                              <span className='CourseId' style={{ color: "red" }}> {error?.CourseId}</span>}
+                            </div>
+                          </div>
+                          <div className="col-lg-4">
+                            <div className="custom-input-group m-0">
+                              <input type="text" className="m-0" placeholder="Search User" value={search} onChange={(e) => setSearch(e.target.value)} />
+                            </div>
+                          </div>
+
+                          {/* </div> */}
                         </div>
                       </form>
                     </Card.Title>
@@ -161,7 +175,7 @@ function UserSettingWrapper({ usersList, getUserList }) {
                                 size="small"
                                 type="checkbox"
                                 value={parseInt(data.UserId)}
-                                checked={users.find((id) => id == data.UserId)}
+                                checked={usersData.find((id) => id === data.UserId)}
                                 onChange={(e) => handleCheckbox(e, index)}
                               />
                             </form>

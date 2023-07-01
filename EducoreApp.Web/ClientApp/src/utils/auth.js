@@ -79,7 +79,6 @@ const auth = {
         });
     },
     forgotPassword(data) {
-        console.log(data);
         return new Promise((resolve, reject) => {
             axios
                 .post(`Auth/ForgotPassword?Email=${data.Email}`, data)

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Card, Dropdown, Table } from 'react-bootstrap';
+import { Button, Card, Table } from 'react-bootstrap';
 import useValidator from "../../../plugins/validator";
 import notice from "../../../plugins/notice";
 import Swal from 'sweetalert2';
@@ -9,7 +9,6 @@ const resete = {
     CourseId: ""
 }
 function VideoSettingWrapperArea({ videoList, getVideoList, courseList }) {
-    console.log("videoList", videoList);
     const [open, setOpen] = useState(false);
     const [data, setData] = useState(resete);
     const [validator, showMessage] = useValidator();
@@ -96,7 +95,7 @@ function VideoSettingWrapperArea({ videoList, getVideoList, courseList }) {
                                                     <td>{data.VideoUrl}</td>
                                                     {/* <td><Button variant="light" onClick={() => { setOpen(true); setData(data) }}>Edit Video</Button></td> */}
                                                     <td><Button variant="light" onClick={() => { alertConfirm(data.VideoId) }}>Delete Video</Button></td>
-                                                </tr>) : <h2> Add new Video</h2>}
+                                                </tr>) : <h2> Add New Video</h2>}
                                             </tbody>
                                         </Table>
                                         <Button variant="primary" onClick={()=>setOpen(true)}>Synk Videos from Vdocipher</Button>
@@ -108,7 +107,7 @@ function VideoSettingWrapperArea({ videoList, getVideoList, courseList }) {
                                         method="post"
                                     >
                                         <div className="comment-form">
-                                            <h4>Add new Video</h4> 
+                                            <h4>Add New Video</h4> 
                                             <div className="row">
                                                 <div className="col-lg-6">
                                                     <div className="custom-input-group">

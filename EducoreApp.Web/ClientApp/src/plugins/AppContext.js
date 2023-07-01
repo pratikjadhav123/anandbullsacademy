@@ -28,12 +28,9 @@ export const ApplicationDataProvider = ({ children }) => {
     };
 
     const logout = () => {
-        console.log("abc");
         auth.logout().then((data) => {
             getUser();
-            console.log("xyzzz");
         }).catch((error) => {
-            console.log("xyz");
             console.log(error);
         })
     }

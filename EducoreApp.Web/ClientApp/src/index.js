@@ -8,7 +8,6 @@ import About from "./components/pages/about/About";
 import Contact from "./components/pages/contact/Contact";
 import Error from "./components/pages/error/Error";
 import FaqPage from "./components/pages/faq/FaqPage";
-import GuidePage from "./components/pages/guide/GuidePage";
 import CourseGrid from "./components/pages/courseGrid/CourseGrid";
 import SimpleReactLightbox from "simple-react-lightbox";
 
@@ -38,9 +37,15 @@ import DailyCourseDetail from './components/pages/courseDetails/DailyCourse/Dail
 
 function Root() {
   const contextObj = useContext(AppContext);
-  const [user, setUser] = useState()
+  const [user, setUser] = useState();
+  console.log(user);
   useEffect(() => {
-    contextObj.user ? setUser(contextObj.user) : contextObj.getAllData();
+    if (contextObj.user) {
+      setUser(contextObj.user)
+    } else {
+      contextObj.getAllData();
+      setUser()
+    }
   }, [contextObj.user])
   return (
     <>
@@ -68,11 +73,6 @@ function Root() {
               exact
               path={`${process.env.PUBLIC_URL}/dailyCourse`}
               component={DailyCourseDetail}
-            />
-            <Route
-              exact
-              path={`${process.env.PUBLIC_URL}/guide`}
-              component={GuidePage}
             />
             <Route
               exact

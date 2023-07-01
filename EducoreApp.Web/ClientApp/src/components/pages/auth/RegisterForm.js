@@ -19,6 +19,8 @@ function RegisterForm() {
   const [register, setRegister] = useState(reset);
   const [validator, showMessage] = useValidator();
   const [validator2, showMessage2] = useValidator();
+  const [show, setShow] = useState(false);
+  const [show1, setShow1] = useState(false);
   const [isSubmit, setIsSubmit] = useState(false);
   const contextObj = useContext(AppContext);
   const [fakeOtp, setFakeOtp] = useState(false);
@@ -126,19 +128,23 @@ function RegisterForm() {
                   <span className='error' style={{ color: "red" }}> {error?.Mobile}</span>}
               </div>
               <div className="custom-input-group">
-                <input type="password" placeholder="Set Your Password" id="Password" name="Password" value={register.Password} onChange={handleChange} />
+                <input type={show1 ? "text" : "password"} placeholder="Set Your Password" id="Password" name="Password" value={register.Password} onChange={handleChange} />
+                <i onClick={() => setShow1(!show1)} className={show1 ? 'bi-eye-slash' : 'bi-eye'}></i>
+
                 {error?.Password &&
                   <span className='error' style={{ color: "red" }}> {error?.Password}</span>}
               </div>
               <div className="custom-input-group">
-                <input type="password" placeholder="Confirm Your Password" id="ConfirmPassword" name="ConfirmPassword" value={register.ConfirmPassword} onChange={handleChange} />
+                <input type={show ? "text" : "password"} placeholder="Confirm Your Password" id="ConfirmPassword" name="ConfirmPassword" value={register.ConfirmPassword} onChange={handleChange} />
+                <i onClick={() => setShow(!show)} className={show ? 'bi-eye-slash' : 'bi-eye'}></i>
                 {error?.ConfirmPassword &&
                   <span className='error' style={{ color: "red" }}> {error?.ConfirmPassword}</span>}
               </div>
               <div className="custom-input-group">
                 <div className="submite-btn">
                   <button type="submit" onClick={handleRegister}>Sign up</button>
-                  <div className="d-flex justify-content-end p-2">
+                  <div className="d-flex justify-content-evenly p-2">
+                    <p className="d-flex justify-content-start"><Link to={"#"} type="button" className="px-2" onClick={() => setFakeOtp(true)}>Recived otp?</Link></p>
                     <p className="d-flex justify-content-end">Already have an account?<Link to={'/auth/Login'} type="button" className="px-2">Back to Login</Link></p>
                   </div>
                 </div>

@@ -1,9 +1,7 @@
 
 import { Link } from "react-router-dom";
-import { SRLWrapper } from "simple-react-lightbox";
 
 function Footer(props) {
-
   // smooth scrol
   const scrollTop = () => {
     window.scrollTo({
@@ -75,14 +73,6 @@ function Footer(props) {
                         to={`${process.env.PUBLIC_URL}/courses`}
                       >
                         Course List
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        onClick={scrollTop}
-                        to={`${process.env.PUBLIC_URL}/destination`}
-                      >
-                        My Video
                       </Link>
                     </li>
                     <li>

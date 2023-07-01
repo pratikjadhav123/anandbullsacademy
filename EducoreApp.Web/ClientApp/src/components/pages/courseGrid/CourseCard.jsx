@@ -34,7 +34,7 @@ function CourseCard(props) {
                 onClick={scrollTop}
                 to={`${process.env.PUBLIC_URL}/course-details/${props.course?.CourseId}`}
               >
-                Join Now <i className="bx bxs-right-arrow-alt" />
+                To Join Now Follow <i className="bx bxs-right-arrow-alt" />
               </Link>
             </div>
             <div className="p-card-info">
