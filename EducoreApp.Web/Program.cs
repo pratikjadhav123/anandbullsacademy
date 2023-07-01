@@ -17,11 +17,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
-//Hangfire services
-builder.Services.AddHangfire(x =>
-{
-    x.UseSqlServerStorage(builder.Configuration.GetConnectionString("Database"));
-});
 //JSON responce object in camel case
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
@@ -97,7 +92,6 @@ app.UseSwaggerUI(c =>
     c.DocExpansion(DocExpansion.None);
 });
 
-app.UseHangfireServer();
 app.UseRouting();
 app.UseCors("MyCorsPolicy");
 

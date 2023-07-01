@@ -51,13 +51,13 @@ namespace EducoreApp.DAL.Services
                 userEmailOptions.Body = GetEmailBody("EmailConfirm.html", userEmailOptions.PlaceHolders);
                 if (this.configuration["LiveEmail"] == "false")
                 {
-                    BackgroundJob.Enqueue(() => this.ConnectEmail(userEmailOptions));
-                    await Task.CompletedTask;
+                   await this.ConnectEmail(userEmailOptions);
+                    
                 }
                 else
                 {
-                    BackgroundJob.Enqueue(() => this.SendEmail(userEmailOptions));
-                    await Task.CompletedTask;
+                    await this.SendEmail(userEmailOptions);
+                    
                 }
             });
         }
@@ -83,13 +83,13 @@ namespace EducoreApp.DAL.Services
                 userEmailOptions.Body = GetEmailBody("Coupon.html", userEmailOptions.PlaceHolders);
                 if (this.configuration["LiveEmail"] == "false")
                 {
-                    BackgroundJob.Enqueue(() => this.ConnectEmail(userEmailOptions));
-                    await Task.CompletedTask;
+                    await this.ConnectEmail(userEmailOptions);
+                    
                 }
                 else
                 {
-                    BackgroundJob.Enqueue(() => this.SendEmail(userEmailOptions));
-                    await Task.CompletedTask;
+                    await this.SendEmail(userEmailOptions);
+                    
                 }
             });
         }
@@ -115,13 +115,13 @@ namespace EducoreApp.DAL.Services
                 userEmailOptions.Body = GetEmailBody("ResetPassword.html", userEmailOptions.PlaceHolders);
                 if (this.configuration["LiveEmail"] == "false")
                 {
-                    BackgroundJob.Enqueue(()=> this.ConnectEmail(userEmailOptions));
-                    await Task.CompletedTask;
+                    await this.ConnectEmail(userEmailOptions);
+                    
                 }
                 else
                 {
-                    BackgroundJob.Enqueue(() => this.SendEmail(userEmailOptions));
-                    await Task.CompletedTask;
+                   await this.SendEmail(userEmailOptions);
+                    
                 }
             });
         }
