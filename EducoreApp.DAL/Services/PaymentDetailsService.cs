@@ -100,7 +100,7 @@ namespace EducoreApp.DAL.Services
                 using (var con = this.connection.connection())
                 {
                     await con.ExecuteAsync(query);
-                    IEnumerable<Course> courses = (await con.QueryAsync<Course>("select c.CourseId, c.Title, c.Description, c.Price  from PaymentDetails p left join Courses c on p.CourseId=c.CourseId where p.UserId=@UserId and p.Status='Active'", new { UserId })).ToList();
+                    IEnumerable<Course> courses = (await con.QueryAsync<Course>("select c.CourseId, c.Title, c.Description, c.Price, p.PaymentDate, p.ExpiredDate, p.Status  from PaymentDetails p left join Courses c on p.CourseId=c.CourseId where p.UserId=@UserId and p.Status='Active'", new { UserId })).ToList();
                     return courses;
                 }
             });
