@@ -1,9 +1,6 @@
 import React from "react";
 
 function LetesBlogArea() {
-  const scrollTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
 
   return (
     <>
@@ -21,6 +18,15 @@ function LetesBlogArea() {
         <div className="hero-image-group">
           <img
             src={process.env.PUBLIC_URL + "/images/optionbuying.png"}
+            alt="HeroIMG"
+            className="img-fluid"
+          />
+        </div>
+      </div>
+      <div className="col-lg-12">
+        <div className="hero-image-group">
+          <img
+            src={process.env.PUBLIC_URL + "/images/AB Banner 5.png"}
             alt="HeroIMG"
             className="img-fluid"
           />

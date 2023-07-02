@@ -5277,7 +5277,7 @@ header .header-style-two {
     position: absolute;
     inset: 0;
     background-size: cover;
-    background-image: linear-gradient(rgba(0, 5, 15, 0.6), rgba(0, 5, 15, 0.6)), url(../../../public/images/shapes/testi-shape-group.png);
+    background-image: linear-gradient(rgba(0, 5, 15, 0.6), rgba(0, 5, 15, 0.6)), url(../../../public/images/canddles1.png);
 
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -7421,90 +7421,6 @@ header .header-style-two {
   }
 }
 
-.upcoming-tour-area{
-  background-image: linear-gradient(rgba(0, 5, 15, 0.6), rgba(0, 5, 15, 0.6)),url('../../../public/images/package/upcoming-bg.png');
-  background-size:cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-
-  .upcoming-btn{
-    display: inline-block;
-  }
-
-  .slider-arrows{
-
-    .testi-prev4{
-      color: var(--c-primary);
-      // border: 1px solid var(--c-primary);
-      border-radius: 50%;
-      background: rgba(#ff4838 ,0.6);
-      color: #fff;
-      height: 30px;
-      line-height: 30px;
-      width: 30px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      z-index: 9;
-      transition: all 0.4s ease-in;
-
-      &::before{
-        content:'';
-        position: absolute;
-        left: -1px;
-        top: -1px;
-        height: 31px;
-        width: 31px;
-        background: var(--c-primary);
-        transform: scale(0);
-        transition: all 0.4s ease-in;
-        border-radius: 50%;
-        z-index: -1;
-      }
-      &:hover{
-        color: #fff;
-        &::before{
-          transform: scale(1);
-        }
-      }
-    }
-    .testi-next4{
-      color: var(--c-primary);
-      // border: 1px solid var(--c-primary);
-      border-radius: 50%;
-      background: rgba(#ff4838 ,0.6);
-      color: #fff;
-      height: 30px;
-      line-height: 30px;
-      width: 30px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      z-index: 9;
-      transition: all 0.4s ease-in;
-
-      &::before{
-        content:'';
-        position: absolute;
-        right: -1px;
-        top: -1px;
-        height: 31px;
-        width: 31px;
-        background: var(--c-primary);
-        transform: scale(0);
-        transition: all 0.4s ease-in;
-        border-radius: 50%;
-        z-index: -1;
-      }
-      &:hover{
-        color: #fff;
-        &::before{
-          transform: scale(1);
-        }
-      }
-    }
-  }
-}
 // home-4 delta card
 
 .package-card-delta {

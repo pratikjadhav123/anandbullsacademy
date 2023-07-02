@@ -2,6 +2,7 @@ import React from "react";
 import WidgetForm from "./WidgetForm";
 import PackageHeader from "./PackageHeader";
 import PackageDetailsTab from "./PackageDetailsTab";
+import PaymentInformation from "./PaymentInformation";
 
 function CourseDetailsWrap({ courseDetail, user, myCourseData, getCourseDetail, coupon, setCoupon }) {
   let MyCourse = myCourseData?.find((item) => item.CourseId === courseDetail.CourseId);
@@ -26,6 +27,10 @@ function CourseDetailsWrap({ courseDetail, user, myCourseData, getCourseDetail, 
                   coupon={coupon}
                   setCoupon={setCoupon}
                 />
+              </div>
+              <div className="tour-package-details">
+                <PaymentInformation />
+
               </div>
             </div>
           </div>

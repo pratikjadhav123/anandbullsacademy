@@ -53,7 +53,6 @@ function LoginForm() {
     e.preventDefault()
     if (validator2.allValid()) {
       auth.forgotPassword(login).then((data) => {
-        console.log(data);
         notice.success("Reset Password link send to your Email")
       }).catch(error =>
         console.log("error", error)

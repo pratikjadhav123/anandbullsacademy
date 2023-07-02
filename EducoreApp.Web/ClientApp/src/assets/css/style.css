@@ -5878,8 +5878,8 @@ header .header-style-two .nav-right .nav-right-hotline .hotline-info h6 a {
   position: absolute;
   inset: 0;
   background-size: cover;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 5, 15, 0.6)), to(rgba(0, 5, 15, 0.6))), url(../../../public/images/shapes/testi-shape-group.png);
-  background-image: linear-gradient(rgba(0, 5, 15, 0.6), rgba(0, 5, 15, 0.6)), url(../../../public/images/shapes/testi-shape-group.png);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 5, 15, 0.6)), to(rgba(0, 5, 15, 0.6))), url(../../../public/images/canddles1.png);
+  background-image: linear-gradient(rgba(0, 5, 15, 0.6), rgba(0, 5, 15, 0.6)), url(../../../public/images/canddles1.png);
   background-repeat: no-repeat;
   background-attachment: fixed;
   padding-left: 10%;
@@ -8244,100 +8244,6 @@ header .header-style-two .nav-right .nav-right-hotline .hotline-info h6 a {
   font-size: 16px;
   text-transform: capitalize;
   color: #2d373c;
-}
-
-.upcoming-tour-area {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 5, 15, 0.6)), to(rgba(0, 5, 15, 0.6))), url("../../../public/images/package/upcoming-bg.png");
-  background-image: linear-gradient(rgba(0, 5, 15, 0.6), rgba(0, 5, 15, 0.6)), url("../../../public/images/package/upcoming-bg.png");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-}
-
-.upcoming-tour-area .upcoming-btn {
-  display: inline-block;
-}
-
-.upcoming-tour-area .slider-arrows .testi-prev4, .upcoming-tour-area .testimonial-style-three .slider-arrows .testi-next4, .testimonial-style-three .upcoming-tour-area .slider-arrows .testi-next4 {
-  color: var(--c-primary);
-  border-radius: 50%;
-  background: rgba(255, 72, 56, 0.6);
-  color: #fff;
-  height: 30px;
-  line-height: 30px;
-  width: 30px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  z-index: 9;
-  -webkit-transition: all 0.4s ease-in;
-  transition: all 0.4s ease-in;
-}
-
-.upcoming-tour-area .slider-arrows .testi-prev4::before, .upcoming-tour-area .testimonial-style-three .slider-arrows .testi-next4::before, .testimonial-style-three .upcoming-tour-area .slider-arrows .testi-next4::before {
-  content: '';
-  position: absolute;
-  left: -1px;
-  top: -1px;
-  height: 31px;
-  width: 31px;
-  background: var(--c-primary);
-  -webkit-transform: scale(0);
-          transform: scale(0);
-  -webkit-transition: all 0.4s ease-in;
-  transition: all 0.4s ease-in;
-  border-radius: 50%;
-  z-index: -1;
-}
-
-.upcoming-tour-area .slider-arrows .testi-prev4:hover, .upcoming-tour-area .testimonial-style-three .slider-arrows .testi-next4:hover, .testimonial-style-three .upcoming-tour-area .slider-arrows .testi-next4:hover {
-  color: #fff;
-}
-
-.upcoming-tour-area .slider-arrows .testi-prev4:hover::before, .upcoming-tour-area .testimonial-style-three .slider-arrows .testi-next4:hover::before, .testimonial-style-three .upcoming-tour-area .slider-arrows .testi-next4:hover::before {
-  -webkit-transform: scale(1);
-          transform: scale(1);
-}
-
-.upcoming-tour-area .slider-arrows .testi-next4 {
-  color: var(--c-primary);
-  border-radius: 50%;
-  background: rgba(255, 72, 56, 0.6);
-  color: #fff;
-  height: 30px;
-  line-height: 30px;
-  width: 30px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  z-index: 9;
-  -webkit-transition: all 0.4s ease-in;
-  transition: all 0.4s ease-in;
-}
-
-.upcoming-tour-area .slider-arrows .testi-next4::before {
-  content: '';
-  position: absolute;
-  right: -1px;
-  top: -1px;
-  height: 31px;
-  width: 31px;
-  background: var(--c-primary);
-  -webkit-transform: scale(0);
-          transform: scale(0);
-  -webkit-transition: all 0.4s ease-in;
-  transition: all 0.4s ease-in;
-  border-radius: 50%;
-  z-index: -1;
-}
-
-.upcoming-tour-area .slider-arrows .testi-next4:hover {
-  color: #fff;
-}
-
-.upcoming-tour-area .slider-arrows .testi-next4:hover::before {
-  -webkit-transform: scale(1);
-          transform: scale(1);
 }
 
 .package-card-delta {

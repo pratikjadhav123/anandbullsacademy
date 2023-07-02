@@ -11,7 +11,7 @@ function MyCourse({ courseData }) {
                     <div className="row g-4">
                         {courseData.length ? (courseData?.filter((item) => item.Status === "Active")?.map((item, index) => <div className="col-lg-4 col-md-6" key={index}>
                             <MyCourseCard
-                                image={process.env.PUBLIC_URL + "/images/package/p-alpha1.png"}
+                                image={process.env.PUBLIC_URL + "/images/myCourse.png"}
                                 title={item.Title}
                                 id={item.CourseId}
                                 data={item}
