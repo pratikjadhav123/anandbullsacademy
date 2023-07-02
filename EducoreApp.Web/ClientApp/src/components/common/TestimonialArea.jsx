@@ -196,7 +196,7 @@ function TestimonialArea() {
                     <div className="testimonial-thumb">
                       <img
                         src={
-                          process.env.PUBLIC_URL + "/images/reviewer/r-sm3.png"
+                          process.env.PUBLIC_URL + "/images/reviewer/r-sm1.png"
                         }
                         alt="images"
                       />

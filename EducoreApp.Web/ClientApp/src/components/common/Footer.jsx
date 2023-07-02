@@ -94,6 +94,9 @@ function Footer(props) {
                   <i className="bi bi-telephone-x" />{" "}
                   <a rel="noopener noreferrer" href="tel:+91 8208667300">
                     +91 8208667300
+                  </a>/
+                  <a rel="noopener noreferrer" href="tel:+91 9404855782">
+                    +91 9404855782
                   </a>
                 </li>
                 <li>

@@ -29,6 +29,13 @@ function ContactWrapperArea() {
                     >
                       WhatsApp No:+91 8208667300 
                     </a>
+                    <a
+                      rel="noopener noreferrer"
+                      target="_blank"
+                      href="tel:+91 9404855782"
+                    >
+                      Support No:+91 9404855782 
+                    </a>
                   </li>
                   <li>
                     <h6>Location.</h6>
