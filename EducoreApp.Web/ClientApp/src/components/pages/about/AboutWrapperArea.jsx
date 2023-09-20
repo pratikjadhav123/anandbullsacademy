@@ -10,6 +10,7 @@ function AboutWrapperArea() {
       <div className="about-main-wrappper pt-110">
         <div className="container">
           <div className="about-tab-wrapper">
+            
             <div className="row justify-content-center">
               <div className="col-lg-6">
                 <div className="about-tab-image-grid text-center">
